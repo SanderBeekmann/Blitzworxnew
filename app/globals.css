@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Palette */
+  --ink-black: #040711;
+  --ebony: #545c52;
+  --grey-olive: #8b8174;
+  --dry-sage: #cacaaa;
+  --cornsilk: #fefadc;
+
+  /* Semantic tokens */
+  --color-section-bg: var(--ink-black);
+
+  /* 60-30-10: 60% neutral, 30% secondary, 10% accent */
+  --color-neutral: var(--ink-black);
+  --color-neutral-bg: var(--cornsilk);
+  --color-secondary: var(--ebony);
+  --color-accent: var(--ebony);
+  --color-accent-hover: var(--ink-black);
+  --font-base: 16px;
+  --container-max: 1200px;
+  --gutter: 24px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 64px;
+}
+
+@layer base {
+  html {
+    font-size: var(--font-base);
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-ink text-cornsilk antialiased overflow-x-hidden;
+  }
+
+  /* Focus visible for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-dry-sage;
+  }
+}
+
+@layer components {
+  .container-narrow {
+    @apply mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply py-16;
+    background-color: var(--color-section-bg);
+  }
+
+  @media (min-width: 768px) {
+    .section {
+      @apply py-24;
+    }
+  }
+
+  /* Secondary/outline CTA: fill from bottom on hover */
+  .btn-outline-fill {
+    @apply relative overflow-hidden;
+  }
+
+  .btn-outline-fill::before {
+    content: '';
+    @apply absolute inset-x-0 bottom-0 h-0 bg-cornsilk transition-[height] duration-300 ease-out;
+    z-index: -1;
+  }
+
+  .btn-outline-fill:hover::before,
+  .btn-outline-fill:focus-visible::before {
+    height: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-outline-fill::before {
+      transition: none;
+    }
+  }
+}
