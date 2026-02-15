@@ -16,9 +16,9 @@ const variantStyles: Record<ButtonVariant, string> = {
   primary:
     'bg-dry-sage text-ink hover:bg-cornsilk focus-visible:ring-2 focus-visible:ring-dry-sage focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
   secondary:
-    'bg-ebony text-cornsilk hover:bg-grey-olive focus-visible:ring-2 focus-visible:ring-ebony focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
+    'btn-secondary-cta focus-visible:ring-2 focus-visible:ring-cornsilk focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
   outline:
-    'btn-outline-fill border-2 border-cornsilk text-cornsilk hover:text-ink focus-visible:ring-2 focus-visible:ring-cornsilk focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
+    'btn-secondary-cta focus-visible:ring-2 focus-visible:ring-cornsilk focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
 };
 
 const baseStyles =

@@ -42,7 +42,7 @@ export function HowItWorxSection() {
   const timelineRef = useRef<SVGPathElement>(null);
   const timelineContainerRef = useRef<HTMLDivElement>(null);
   const lastStepRef = useRef<HTMLDivElement>(null);
-  const scrollTriggerRef = useRef<ScrollTriggerRef | null>(null);
+  const timelineCleanupRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -88,38 +88,35 @@ export function HowItWorxSection() {
       path.style.strokeDasharray = `${pathLength}`;
       path.style.strokeDashoffset = `${pathLength}`;
 
-      Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
-        ([{ gsap }, { ScrollTrigger }]) => {
-          if (!isMounted) return;
-          gsap.registerPlugin(ScrollTrigger);
+      const timelineContainer = timelineContainerRef.current;
+      if (!timelineContainer) return;
 
-          scrollTriggerRef.current?.kill();
+      const viewportCenterY = () => window.innerHeight / 2;
 
-          const masterTl = gsap.timeline({
-            scrollTrigger: {
-              trigger: section,
-              start: 'top center',
-              end: 'bottom center',
-              scrub: 1,
-              invalidateOnRefresh: true,
-            },
-          });
+      const updateLine = () => {
+        if (!isMounted || !path) return;
+        const rect = timelineContainer.getBoundingClientRect();
+        const lineHeight = rect.bottom - rect.top;
+        const centerY = viewportCenterY();
+        const progress = lineHeight > 0
+          ? Math.max(0, Math.min(1, (centerY - rect.top) / lineHeight))
+          : 0;
+        path.style.strokeDashoffset = `${pathLength * (1 - progress)}`;
 
-          masterTl.to(path, {
-            strokeDashoffset: 0,
-            ease: 'none',
-            duration: 1,
-          });
+        dots.forEach((dot, i) => {
+          const dotProgress = dotProgresses[i];
+          (dot as HTMLElement).style.opacity = progress >= dotProgress ? '1' : '0';
+        });
+      };
 
-          dots.forEach((dot, i) => {
-            const progress = dotProgresses[i];
-            masterTl.to(dot, { opacity: 1, duration: 0 }, progress);
-          });
+      updateLine();
+      window.addEventListener('scroll', updateLine, { passive: true });
+      window.addEventListener('resize', updateLine);
 
-          scrollTriggerRef.current = masterTl.scrollTrigger ?? null;
-          ScrollTrigger.refresh();
-        }
-      );
+      timelineCleanupRef.current = () => {
+        window.removeEventListener('scroll', updateLine);
+        window.removeEventListener('resize', updateLine);
+      };
     };
 
     const timeoutId = setTimeout(() => initAnimation(0), 150);
@@ -138,7 +135,7 @@ export function HowItWorxSection() {
       clearTimeout(timeoutId);
       window.removeEventListener('resize', handleRefresh);
       window.removeEventListener('load', handleRefresh);
-      scrollTriggerRef.current?.kill();
+      timelineCleanupRef.current?.();
     };
   }, []);
 
@@ -281,7 +278,7 @@ export function HowItWorxSection() {
             </div>
           </div>
 
-          <div className="mt-16">
+          <div className="mt-16 flex justify-center">
             <FadeIn delay={0.4}>
               <Button href="/contact">Lees meer</Button>
             </FadeIn>

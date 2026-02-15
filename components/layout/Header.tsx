@@ -17,38 +17,64 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [showCta, setShowCta] = useState(false);
+  const [inAboutHero, setInAboutHero] = useState(false);
   const lastScrollY = useRef(0);
+  const hasScrolledUpRef = useRef(false);
+
+  const isAboutPage = pathname === '/about';
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
+    if (isAboutPage) {
+      setVisible(false);
+      setInAboutHero(window.scrollY < window.innerHeight);
+      hasScrolledUpRef.current = false;
+      lastScrollY.current = window.scrollY;
+    }
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      if (currentScrollY < SCROLL_THRESHOLD) {
-        setVisible(true);
-      } else if (currentScrollY > lastScrollY.current) {
-        setVisible(false);
-      } else {
-        setVisible(true);
-      }
-      if (pathname === '/') {
-        setShowCta(currentScrollY >= window.innerHeight);
-      } else {
+      const inHero = isAboutPage && currentScrollY < window.innerHeight;
+
+      if (isAboutPage) {
+        const inHero = currentScrollY < window.innerHeight;
+        setInAboutHero(inHero);
+        if (currentScrollY < lastScrollY.current && lastScrollY.current > SCROLL_THRESHOLD) {
+          hasScrolledUpRef.current = true;
+        }
+        const showNav =
+          hasScrolledUpRef.current &&
+          (currentScrollY < SCROLL_THRESHOLD || currentScrollY < lastScrollY.current);
+        setVisible(showNav);
         setShowCta(true);
+      } else {
+        if (currentScrollY < SCROLL_THRESHOLD) {
+          setVisible(true);
+        } else if (currentScrollY > lastScrollY.current) {
+          setVisible(false);
+        } else {
+          setVisible(true);
+        }
+        setShowCta(pathname === '/' ? currentScrollY >= window.innerHeight : true);
       }
+
       lastScrollY.current = currentScrollY;
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [pathname]);
+  }, [pathname, isAboutPage]);
+
+  const showBackground = showCta || mobileOpen;
+  const aboutHeroTransparent = isAboutPage && inAboutHero && !mobileOpen;
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ease-out motion-reduce:transition-none ${
-        showCta || mobileOpen ? 'bg-ink/95 backdrop-blur-sm border-b border-ebony' : 'bg-transparent border-b border-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out motion-reduce:transition-none ${
+        showBackground && !aboutHeroTransparent ? 'bg-ink/95 backdrop-blur-sm border-b border-ebony' : 'bg-transparent border-b border-transparent'
       }`}
       style={{ transform: visible || mobileOpen ? 'translateY(0)' : 'translateY(-100%)' }}
     >

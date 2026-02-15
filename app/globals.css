@@ -19,6 +19,12 @@
   --color-secondary: var(--ebony);
   --color-accent: var(--ebony);
   --color-accent-hover: var(--ink-black);
+
+  /* CTA tokens */
+  --cta-secondary-border: var(--cornsilk);
+  --cta-secondary-text: var(--cornsilk);
+  --cta-secondary-hover-bg: var(--cornsilk);
+  --cta-secondary-hover-text: var(--ink-black);
   --font-base: 16px;
   --container-max: 1200px;
   --gutter: 24px;
@@ -68,25 +74,60 @@
     }
   }
 
-  /* Secondary/outline CTA: fill from bottom on hover */
-  .btn-outline-fill {
+  /* Secondary CTA: outline with fill from bottom on hover */
+  .btn-secondary-cta {
     @apply relative overflow-hidden;
+    border: 2px solid var(--cta-secondary-border);
+    color: var(--cta-secondary-text);
+    transition: color 0.3s ease-out;
   }
 
-  .btn-outline-fill::before {
+  .btn-secondary-cta:hover,
+  .btn-secondary-cta:focus-visible {
+    color: var(--cta-secondary-hover-text);
+  }
+
+  .btn-secondary-cta::before {
     content: '';
-    @apply absolute inset-x-0 bottom-0 h-0 bg-cornsilk transition-[height] duration-300 ease-out;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background: var(--cta-secondary-hover-bg);
+    transition: height 0.3s ease-out;
     z-index: -1;
   }
 
-  .btn-outline-fill:hover::before,
-  .btn-outline-fill:focus-visible::before {
+  .btn-secondary-cta:hover::before,
+  .btn-secondary-cta:focus-visible::before {
     height: 100%;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .btn-outline-fill::before {
+    .btn-secondary-cta,
+    .btn-secondary-cta::before {
       transition: none;
+    }
+  }
+}
+
+@keyframes scroll-indicator {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes scroll-indicator {
+    0%,
+    100%,
+    50% {
+      transform: translateY(0);
     }
   }
 }

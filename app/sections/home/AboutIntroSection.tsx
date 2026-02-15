@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { useEffect, useRef, useState } from 'react';
 
@@ -145,6 +146,11 @@ export function AboutIntroSection() {
               </div>
             ))}
           </div>
+          <FadeIn delay={0.3}>
+            <Button href="/contact" variant="secondary">
+              Kennismaken?
+            </Button>
+          </FadeIn>
         </div>
       </section>
     </>

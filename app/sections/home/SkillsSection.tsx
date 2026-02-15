@@ -25,10 +25,10 @@ export function SkillsSection() {
         <h2 id="skills-title" className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16">
           Skills
         </h2>
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-12 md:items-stretch">
           {skills.map((skill, index) => (
-            <FadeIn key={skill.title} delay={index * 0.1}>
-              <article className="p-6 rounded-md bg-ink border border-ebony">
+            <FadeIn key={skill.title} delay={index * 0.1} className="h-full">
+              <article className="h-full p-6 rounded-md bg-ink border border-ebony flex flex-col">
                 <h3 className="text-h3 font-semibold text-cornsilk">{skill.title}</h3>
                 <p className="mt-4 text-body text-dry-sage max-w-prose leading-relaxed">
                   {skill.description}
