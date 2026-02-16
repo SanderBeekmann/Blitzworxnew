@@ -48,7 +48,9 @@ export function AnnouncementBar() {
           opacity: 0,
           duration: 0.35,
           ease: 'power2.in',
-          onComplete: () => gsap.set(outgoing, { x: 0, opacity: 0 }),
+          onComplete: () => {
+            gsap.set(outgoing, { x: 0, opacity: 0 });
+          },
         }
       );
       gsap.fromTo(
