@@ -29,14 +29,21 @@ export default function CasesPage() {
           {cases.map((caseItem, index) => (
             <li key={caseItem.slug}>
               <FadeIn delay={index * 0.1}>
-                <article className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <article className="group/case grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
                   <div className="relative aspect-video rounded-md overflow-hidden bg-ebony">
                     <Image
                       src={caseItem.image}
                       alt={caseItem.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover"
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover/case:scale-105"
+                    />
+                    <div
+                      className="absolute inset-0 pointer-events-none origin-center scale-100 opacity-100 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover/case:scale-150 group-hover/case:opacity-0 motion-reduce:transition-none"
+                      style={{
+                        background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.35) 45%, rgba(4,7,17,0.85) 100%)',
+                      }}
+                      aria-hidden
                     />
                   </div>
                   <div>

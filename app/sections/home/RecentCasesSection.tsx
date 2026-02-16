@@ -51,7 +51,7 @@ export function RecentCasesSection() {
         <TitleReveal
           as="h2"
           id="recent-cases-title"
-          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-12"
+          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-12 text-center"
         >
           Recent Cases
         </TitleReveal>

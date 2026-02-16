@@ -224,7 +224,7 @@ export function HowItWorxSection() {
         <TitleReveal
           as="h2"
           id="how-it-worx-title"
-          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16"
+          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16 text-center"
         >
           How It Worx
         </TitleReveal>

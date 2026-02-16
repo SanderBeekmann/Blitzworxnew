@@ -29,7 +29,7 @@ export function SkillsSection() {
         <TitleReveal
           as="h2"
           id="skills-title"
-          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16"
+          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16 text-center"
         >
           Skills
         </TitleReveal>

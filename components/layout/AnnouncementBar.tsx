@@ -13,7 +13,9 @@ export function AnnouncementBar() {
   const containerRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLParagraphElement[]>([]);
   const lastScrollY = useRef(0);
+  const prevIndexRef = useRef(0);
 
   useEffect(() => {
     if (projectsInProgress.length <= 1) return;
@@ -24,6 +26,39 @@ export function AnnouncementBar() {
     }, ROTATE_INTERVAL_MS);
     return () => clearInterval(id);
   }, []);
+
+  useEffect(() => {
+    if (projectsInProgress.length <= 1) return;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    const prevIndex = prevIndexRef.current;
+    if (prevIndex === index) return;
+    const outgoing = projectsRef.current[prevIndex];
+    const incoming = projectsRef.current[index];
+    if (!outgoing || !incoming) {
+      prevIndexRef.current = index;
+      return;
+    }
+    import('gsap').then(({ gsap }) => {
+      gsap.fromTo(
+        outgoing,
+        { x: 0, opacity: 1 },
+        {
+          x: '100%',
+          opacity: 0,
+          duration: 0.35,
+          ease: 'power2.in',
+          onComplete: () => gsap.set(outgoing, { x: 0, opacity: 0 }),
+        }
+      );
+      gsap.fromTo(
+        incoming,
+        { x: '-100%', opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }
+      );
+    });
+    prevIndexRef.current = index;
+  }, [index]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -106,12 +141,16 @@ export function AnnouncementBar() {
             {projectsInProgress.map((project, i) => (
               <p
                 key={`${project.company}-${project.type}`}
-                className={`absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-center truncate px-2 transition-opacity duration-500 ${
+                ref={(el) => {
+                  if (el) projectsRef.current[i] = el;
+                }}
+                className={`absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-center truncate px-2 ${
                   i === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
                 title={`${project.type}: ${project.company}`}
               >
-                {project.type}: <span className="font-semibold text-cornsilk">{project.company}</span>
+                {project.type}:{' '}
+                <span className="font-semibold text-cornsilk">{project.company}</span>
               </p>
             ))}
           </div>

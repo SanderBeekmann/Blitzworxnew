@@ -115,6 +115,13 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
                   />
                 </div>
               ))}
+              <div
+                className="absolute inset-0 pointer-events-none z-20"
+                style={{
+                  background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
+                }}
+                aria-hidden
+              />
             </div>
           </div>
         </div>
@@ -128,6 +135,13 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
               sizes="100vw"
               className="object-cover"
               priority
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
+              }}
+              aria-hidden
             />
           </div>
         </div>

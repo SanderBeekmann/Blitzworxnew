@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
+import { FooterBars } from '@/components/animations/FooterBars';
 
 const footerLinks = [
   { href: '/', label: 'Home' },
@@ -44,7 +44,7 @@ export function Footer() {
           </p>
         </div>
       </div>
-      <SectionBottomBars />
+      <FooterBars />
     </footer>
   );
 }

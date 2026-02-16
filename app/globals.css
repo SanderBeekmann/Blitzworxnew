@@ -135,6 +135,16 @@
       box-shadow: none;
     }
   }
+
+  /* Creator image: symmetric diagonal cuts on mobile, left-only on desktop */
+  .creator-image {
+    clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+  }
+  @media (min-width: 768px) {
+    .creator-image {
+      clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }
 }
 
 @keyframes scroll-indicator {

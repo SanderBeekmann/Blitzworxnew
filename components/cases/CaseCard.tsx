@@ -20,7 +20,7 @@ export function CaseCard({ caseItem }: CaseCardProps) {
           alt={caseItem.title}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover"
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105"
         />
         {caseItem.imageHover && (
           <Image
@@ -28,12 +28,15 @@ export function CaseCard({ caseItem }: CaseCardProps) {
             alt=""
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out delay-200 group-hover:delay-0 absolute inset-0"
+            className="object-cover opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] absolute inset-0"
             aria-hidden
           />
         )}
         <div
-          className="absolute inset-0 bg-ink/0 group-hover:bg-ink/10 transition-colors duration-500 ease-in-out delay-200 group-hover:delay-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none origin-center scale-100 opacity-100 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-150 group-hover:opacity-0 motion-reduce:transition-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.35) 45%, rgba(4,7,17,0.85) 100%)',
+          }}
           aria-hidden
         />
       </div>

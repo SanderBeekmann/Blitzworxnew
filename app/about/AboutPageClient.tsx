@@ -95,6 +95,28 @@ export function AboutPageClient() {
         </div>
       </section>
 
+      <section className="section relative z-20 bg-transparent min-h-screen h-screen flex flex-col justify-center py-0" aria-labelledby="selling-solutions-title">
+        <div className="container-narrow relative z-20">
+          <TitleReveal
+            as="h2"
+            id="selling-solutions-title"
+            className="text-h2 md:text-h2-lg font-bold text-cornsilk text-left mb-12"
+          >
+            Selling solutions
+          </TitleReveal>
+          <FadeIn delay={0.2}>
+            <div className="max-w-prose space-y-6 text-body text-dry-sage leading-relaxed text-left">
+              <p>
+                Bij Blitzworx kijken we verder dan alleen de voorkant van een website. We ontwerpen en bouwen complete digitale oplossingen die jouw bedrijf echt ondersteunen. Denk aan compacte CRM systemen, overzichtelijke dashboards en maatwerk backends die processen vereenvoudigen en inzicht geven.
+              </p>
+              <p>
+                Alles wat we bouwen is afgestemd op jouw manier van werken. Geen overbodige complexiteit, maar slimme functies die tijd besparen en meegroeien met je onderneming. Zo ontstaat een solide technische basis achter een sterke, overtuigende online uitstraling.
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       <section className="section relative z-20 bg-transparent overflow-visible min-h-screen h-screen flex flex-col justify-center py-0" aria-labelledby="creator-title">
         <div className="relative z-20 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_1fr] gap-8 md:gap-12 lg:gap-16 items-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-container mx-auto w-full md:mx-0 md:max-w-none md:pr-12 lg:pr-16 order-2 md:order-1">
@@ -124,10 +146,7 @@ export function AboutPageClient() {
           </div>
           <FadeIn delay={0.2} className="flex justify-center md:contents order-1 md:order-2">
             <div
-              className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px]"
-              style={{
-                clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0 100%)',
-              }}
+              className="creator-image relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px]"
             >
               <Image
                 src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop"
