@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { FadeIn } from '@/components/animations/FadeIn';
-import { ContactForm } from '@/components/contact/ContactForm';
+import { TitleReveal } from '@/components/animations/TitleReveal';
+import { ContactOnboarding } from '@/components/contact/ContactOnboarding';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -13,11 +14,13 @@ export default function ContactPage() {
   return (
     <section className="section" aria-labelledby="contact-title">
       <div className="container-narrow">
-        <FadeIn>
-          <h1 id="contact-title" className="text-hero md:text-hero-lg font-bold text-cornsilk mb-16">
-            Contact
-          </h1>
-        </FadeIn>
+        <TitleReveal
+          as="h1"
+          id="contact-title"
+          className="text-hero md:text-hero-lg font-bold text-cornsilk mb-16"
+        >
+          Contact
+        </TitleReveal>
         <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
           <FadeIn delay={0.1}>
             <div>
@@ -44,7 +47,7 @@ export default function ContactPage() {
             </div>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <ContactForm />
+            <ContactOnboarding />
           </FadeIn>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { TitleReveal } from '@/components/animations/TitleReveal';
 import { useEffect, useRef } from 'react';
 
 const SLIDE_OFFSET = '30vw';
@@ -220,15 +221,19 @@ export function HowItWorxSection() {
   return (
     <section ref={sectionRef} className="section relative overflow-x-hidden" aria-labelledby="how-it-worx-title">
       <div className="container-narrow">
-        <h2 id="how-it-worx-title" className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16">
+        <TitleReveal
+          as="h2"
+          id="how-it-worx-title"
+          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16"
+        >
           How It Worx
-        </h2>
+        </TitleReveal>
 
         <div className="relative">
           <div className="relative overflow-x-hidden">
             <div
               ref={timelineContainerRef}
-              className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2"
+              className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px md:-translate-x-1/2"
             >
               <svg className="w-full h-full" viewBox="0 0 1 100" preserveAspectRatio="none">
                 <path
@@ -247,17 +252,17 @@ export function HowItWorxSection() {
                 <div
                   key={step.number}
                   ref={index === steps.length - 1 ? lastStepRef : undefined}
-                  className={`relative flex ${
+                  className={`relative flex pl-12 md:pl-0 ${
                     index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'
-                  } md:pl-0 md:pr-0`}
+                  } md:pr-0`}
                 >
                   <div
-                    className="timeline-dot hidden md:block absolute left-1/2 top-1/2 w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cornsilk border-2 border-ink z-10 opacity-0"
+                    className="timeline-dot absolute left-4 md:left-1/2 top-1/2 w-3 h-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cornsilk border-2 border-ink z-10 opacity-0"
                     data-dot-index={index}
                     aria-hidden
                   />
                   <div
-                    className={`step-content w-full md:max-w-[calc(50%-2rem)] opacity-0 ${
+                    className={`step-content w-full max-w-[calc(100%-2rem)] md:max-w-[calc(50%-2rem)] opacity-0 ${
                       index % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8 md:text-left'
                     }`}
                   >

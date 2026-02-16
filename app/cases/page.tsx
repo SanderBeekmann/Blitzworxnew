@@ -3,23 +3,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cases } from '@/lib/cases';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { TitleReveal } from '@/components/animations/TitleReveal';
 
 export const metadata: Metadata = {
   title: 'Cases',
   alternates: { canonical: '/cases' },
   description:
-    'Bekijk onze recente projecten. Van webdesign tot development en branding – cases die laten zien wat Blitzworx kan.',
+    'Bekijk onze recente projecten. Van webdesign tot development en branding: cases die laten zien wat Blitzworx kan.',
 };
 
 export default function CasesPage() {
   return (
     <section className="section" aria-labelledby="cases-title">
       <div className="container-narrow">
-        <FadeIn>
-          <h1 id="cases-title" className="text-hero md:text-hero-lg font-bold text-cornsilk mb-16">
+        <header className="py-24 md:py-36">
+          <TitleReveal
+            as="h1"
+            id="cases-title"
+            className="text-hero md:text-hero-xl font-bold text-cornsilk mb-24"
+          >
             Cases
-          </h1>
-        </FadeIn>
+          </TitleReveal>
+        </header>
         <ul className="space-y-16">
           {cases.map((caseItem, index) => (
             <li key={caseItem.slug}>

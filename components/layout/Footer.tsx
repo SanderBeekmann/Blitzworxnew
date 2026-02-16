@@ -19,7 +19,7 @@ export function Footer() {
               BLITZWORX
             </Link>
             <p className="mt-2 text-small max-w-prose">
-              Webdesign That Worx! – Creative agency voor ondernemers die online willen groeien.
+              Webdesign That Worx! Creative agency voor ondernemers die online willen groeien.
             </p>
           </div>
           <nav aria-label="Footer navigatie">

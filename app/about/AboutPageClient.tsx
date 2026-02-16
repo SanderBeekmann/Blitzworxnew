@@ -3,7 +3,10 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { TitleReveal } from '@/components/animations/TitleReveal';
+import { SubtitleReveal } from '@/components/animations/SubtitleReveal';
 import { AboutScrollLine } from '@/components/animations/AboutScrollLine';
+import { Button } from '@/components/ui/Button';
 
 const SCROLL_HIDE_THRESHOLD = 60;
 
@@ -31,16 +34,14 @@ export function AboutPageClient() {
         aria-labelledby="about-hero-title"
       >
         <div className="container-narrow relative z-20">
-          <FadeIn>
-            <h1
-              id="about-hero-title"
-              className="text-hero md:text-hero-lg font-bold text-cornsilk tracking-tight"
-            >
-              Introducing
-              <br />
-              Blitzworx!
-            </h1>
-          </FadeIn>
+          <TitleReveal
+            as="h1"
+            id="about-hero-title"
+            className="text-hero md:text-hero-lg font-bold text-cornsilk tracking-tight block"
+            triggerOnMount
+          >
+            Introducing Blitzworx!
+          </TitleReveal>
         </div>
         <FadeIn delay={0.5} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
           <div
@@ -67,61 +68,98 @@ export function AboutPageClient() {
         </FadeIn>
       </section>
 
-      <section className="section relative z-20 bg-transparent" aria-labelledby="vision-title">
+      <section className="section relative z-20 bg-transparent min-h-screen h-screen flex flex-col justify-center py-0" aria-labelledby="vision-title">
         <div className="container-narrow relative z-20">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div />
-            <FadeIn className="max-w-prose">
-              <h2 id="vision-title" className="text-h2 md:text-h2-lg font-bold text-cornsilk text-left">
-                Webdesign That Worx!
-              </h2>
-              <div className="mt-6 space-y-4 text-body text-dry-sage leading-relaxed text-left">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+            <div className="hidden md:block" aria-hidden />
+            <div className="max-w-prose text-center md:text-left">
+              <SubtitleReveal
+                as="h2"
+                id="vision-title"
+                className="text-h2 md:text-h2-lg font-bold text-cornsilk text-center md:text-left"
+              />
+              <FadeIn delay={0.2}>
+                <div className="mt-6 space-y-4 text-body text-dry-sage leading-relaxed text-center md:text-left">
                 <p>
                   Blitzworx gelooft in kwaliteit, creativiteit en resultaat. Onze visie is simpel:
                   ondernemers helpen groeien met een online omgeving die past bij hun ambities.
                 </p>
                 <p>
                   We werken nauw samen, denken mee en leveren maatwerk. Geen standaard templates,
-                  maar oplossingen die echt werken. Van eerste idee tot live website – en daarna.
+                  maar oplossingen die echt werken. Van eerste idee tot live website, en daarna.
                 </p>
-              </div>
-            </FadeIn>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section relative z-20 bg-transparent" aria-labelledby="creator-title">
-        <div className="container-narrow relative z-20">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <FadeIn>
-              <h2 id="creator-title" className="text-h2 md:text-h2-lg font-bold text-cornsilk">
+      <section className="section relative z-20 bg-transparent overflow-visible min-h-screen h-screen flex flex-col justify-center py-0" aria-labelledby="creator-title">
+        <div className="relative z-20 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_1fr] gap-8 md:gap-12 lg:gap-16 items-center px-4 sm:px-6 lg:px-8">
+          <div className="max-w-container mx-auto w-full md:mx-0 md:max-w-none md:pr-12 lg:pr-16 order-2 md:order-1">
+            <div>
+              <TitleReveal
+                as="h2"
+                id="creator-title"
+                className="text-h2 md:text-h2-lg font-bold text-cornsilk text-center md:text-left"
+              >
                 Meet the Creator
-              </h2>
-              <p className="mt-4 text-h3 text-dry-sage">Sander</p>
-              <div className="mt-6 space-y-4 text-body text-dry-sage leading-relaxed">
+              </TitleReveal>
+              <FadeIn delay={0.2}>
+                <p className="mt-4 text-h3 text-dry-sage text-center md:text-left">Sander</p>
+                <div className="mt-6 space-y-4 text-body text-dry-sage leading-relaxed text-center md:text-left">
                 <p>
                   Als oprichter van Blitzworx combineer ik creativiteit met technische kennis. Mijn
                   motivatie? Ondernemers helpen hun online doelen te bereiken met websites die
                   echt werken.
                 </p>
                 <p>
-                  Van concept tot code – ik begeleid het hele traject en zorg ervoor dat het
+                  Van concept tot code. Ik begeleid het hele traject en zorg ervoor dat het
                   resultaat past bij jouw visie en je doelgroep.
                 </p>
-              </div>
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <div className="relative aspect-square rounded-md overflow-hidden bg-ebony">
-                <Image
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop"
-                  alt="Sander - Oprichter Blitzworx"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-            </FadeIn>
+                </div>
+              </FadeIn>
+            </div>
           </div>
+          <FadeIn delay={0.2} className="flex justify-center md:contents order-1 md:order-2">
+            <div
+              className="relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px]"
+              style={{
+                clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 0 100%)',
+              }}
+            >
+              <Image
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop"
+                alt="Sander - Oprichter Blitzworx"
+                fill
+                sizes="(max-width: 640px) 320px, (max-width: 768px) 360px, 480px"
+                className="object-cover object-top"
+              />
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      <section className="section relative z-20 bg-transparent min-h-screen h-screen flex flex-col justify-center py-0" aria-labelledby="about-cta-title">
+        <div className="container-narrow relative z-20 flex flex-col items-center text-center gap-8">
+          <TitleReveal
+            as="h2"
+            id="about-cta-title"
+            className="text-h2 md:text-h2-lg font-bold text-cornsilk"
+          >
+            Klaar om te starten?
+          </TitleReveal>
+          <FadeIn delay={0.2}>
+            <p className="mt-4 text-body text-dry-sage max-w-prose mx-auto">
+              Laten we kennismaken en samen ontdekken hoe we jouw online doelen kunnen bereiken.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.4}>
+            <Button href="/contact" variant="primary">
+              Neem contact op
+            </Button>
+          </FadeIn>
         </div>
       </section>
     </div>

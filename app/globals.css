@@ -40,6 +40,13 @@
   html {
     font-size: var(--font-base);
     scroll-behavior: smooth;
+    /* Hide scrollbar, keep scroll functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -50,6 +57,12 @@
 
   body {
     @apply bg-ink text-cornsilk antialiased overflow-x-hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
   }
 
   /* Focus visible for accessibility */
@@ -61,6 +74,13 @@
 @layer components {
   .container-narrow {
     @apply mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8;
+  }
+
+  .hero-title-depth {
+    text-shadow:
+      0 1px 2px rgba(4, 7, 17, 0.2),
+      0 2px 12px rgba(4, 7, 17, 0.12),
+      0 0 40px rgba(254, 250, 220, 0.035);
   }
 
   .section {
@@ -79,12 +99,13 @@
     @apply relative overflow-hidden;
     border: 2px solid var(--cta-secondary-border);
     color: var(--cta-secondary-text);
-    transition: color 0.3s ease-out;
+    transition: color 0.3s ease-out, box-shadow 0.3s ease-out;
   }
 
   .btn-secondary-cta:hover,
   .btn-secondary-cta:focus-visible {
     color: var(--cta-secondary-hover-text);
+    box-shadow: 0 0 24px rgba(254, 250, 220, 0.1);
   }
 
   .btn-secondary-cta::before {
@@ -108,6 +129,10 @@
     .btn-secondary-cta,
     .btn-secondary-cta::before {
       transition: none;
+    }
+    .btn-secondary-cta:hover,
+    .btn-secondary-cta:focus-visible {
+      box-shadow: none;
     }
   }
 }

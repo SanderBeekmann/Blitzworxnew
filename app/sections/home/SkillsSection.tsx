@@ -1,4 +1,7 @@
+'use client';
+
 import { FadeIn } from '@/components/animations/FadeIn';
+import { TitleReveal } from '@/components/animations/TitleReveal';
 
 const skills = [
   {
@@ -22,9 +25,13 @@ export function SkillsSection() {
   return (
     <section className="section" aria-labelledby="skills-title">
       <div className="container-narrow">
-        <h2 id="skills-title" className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16">
+        <TitleReveal
+          as="h2"
+          id="skills-title"
+          className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16"
+        >
           Skills
-        </h2>
+        </TitleReveal>
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12 md:items-stretch">
           {skills.map((skill, index) => (
             <FadeIn key={skill.title} delay={index * 0.1} className="h-full">

@@ -44,7 +44,7 @@ export function ContactForm() {
     setStatus('submitting');
 
     try {
-      // Mock submit – in productie: POST naar API
+      // Mock submit: in productie: POST naar API
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setStatus('success');
       form.reset();

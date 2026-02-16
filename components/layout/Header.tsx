@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { AnnouncementBar } from './AnnouncementBar';
 
-const navLinks = [
+const navLinks: { href: string; label: string }[] = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/cases', label: 'Cases' },
@@ -71,15 +72,138 @@ export function Header() {
   const showBackground = showCta || mobileOpen;
   const aboutHeroTransparent = isAboutPage && inAboutHero && !mobileOpen;
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<HTMLUListElement>(null);
+
+  const closeMenu = useCallback(() => {
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setMobileOpen(false);
+      return;
+    }
+    import('gsap').then(({ gsap }) => {
+      const overlay = menuRef.current;
+      const panel = panelRef.current;
+      const items = itemsRef.current?.querySelectorAll('li');
+      if (!overlay || !items?.length) {
+        setMobileOpen(false);
+        return;
+      }
+      gsap.to(items, { opacity: 0, duration: 0.12, ease: 'power2.in' });
+      const finishClose = () => {
+        gsap.to(overlay, { opacity: 0, duration: 0.08, ease: 'power2.in', onComplete: () => setMobileOpen(false) });
+      };
+      if (panel) {
+        gsap.to(panel, { x: '100%', duration: 0.25, ease: 'power2.in', onComplete: finishClose });
+      } else {
+        finishClose();
+      }
+    }).catch(() => setMobileOpen(false));
+  }, []);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.body.style.overflow = 'hidden';
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeMenu();
+    };
+    window.addEventListener('keydown', handleEscape);
+    if (prefersReducedMotion) return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleEscape);
+    };
+    import('gsap').then(({ gsap }) => {
+      const panel = panelRef.current;
+      const items = itemsRef.current?.querySelectorAll('li');
+      if (!items?.length) return;
+      if (panel) {
+        gsap.set(panel, { x: '100%' });
+        gsap.to(panel, { x: 0, duration: 0.4, ease: 'power3.out' });
+      }
+      gsap.set(items, { opacity: 0, x: 32 });
+      gsap.to(items, {
+        opacity: 1,
+        x: 0,
+        duration: 0.45,
+        stagger: 0.06,
+        delay: 0.1,
+        ease: 'power3.out',
+      });
+    });
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [mobileOpen, closeMenu]);
+
+  const handleMenuLinkClick = () => {
+    closeMenu();
+  };
+
+  const handleToggleClick = () => {
+    if (mobileOpen) {
+      closeMenu();
+    } else {
+      setMobileOpen(true);
+    }
+  };
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out motion-reduce:transition-none ${
-        showBackground && !aboutHeroTransparent ? 'bg-ink/95 backdrop-blur-sm border-b border-ebony' : 'bg-transparent border-b border-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out motion-reduce:transition-none bg-transparent border-b border-transparent ${
+        showBackground && !aboutHeroTransparent ? 'md:bg-ink/95 md:backdrop-blur-sm md:border-b md:border-ebony' : ''
       }`}
       style={{ transform: visible || mobileOpen ? 'translateY(0)' : 'translateY(-100%)' }}
     >
+      <AnnouncementBar showBackground={showBackground} aboutHeroTransparent={aboutHeroTransparent} />
+      {mobileOpen && (
+        <div
+          ref={menuRef}
+          className="md:hidden fixed inset-0 top-0 z-[100] min-h-screen overflow-hidden"
+          aria-label="Navigatiemenu"
+          onClick={closeMenu}
+        >
+          <div className="absolute inset-0 backdrop-blur-xl bg-ink/25 cursor-pointer" aria-hidden />
+          <div
+            ref={panelRef}
+            className="absolute right-0 top-0 bottom-0 w-1/2 bg-ink flex flex-col items-start justify-center translate-x-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <nav className="flex flex-col items-start justify-center w-full px-6 sm:px-8 py-8">
+              <ul ref={itemsRef} className="flex flex-col items-start gap-6 sm:gap-8 w-full">
+                {navLinks.map((link) => (
+                  <li key={link.href} className="w-full text-left">
+                    <Link
+                      href={link.href}
+                      onClick={handleMenuLinkClick}
+                      className={`block py-3 text-2xl font-medium tracking-tight transition-colors w-full ${
+                        pathname === link.href
+                          ? 'text-dry-sage'
+                          : 'text-cornsilk hover:text-dry-sage'
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+                <li className="pt-4 w-full text-left">
+                  <Link
+                    href="/contact"
+                    onClick={handleMenuLinkClick}
+                    className="inline-flex items-center justify-start min-h-[52px] w-full px-6 py-4 bg-dry-sage text-ink font-semibold rounded-md hover:bg-cornsilk hover:shadow-[0_0_24px_rgba(254,250,220,0.12)] transition-all duration-300"
+                  >
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      )}
       <nav
-        className="w-full max-w-full px-4 sm:px-6 lg:px-8 flex md:grid md:grid-cols-[1fr_auto_1fr] items-center justify-between md:justify-items-stretch h-16 md:h-20"
+        className="relative z-[110] w-full max-w-full px-4 sm:px-6 lg:px-8 flex md:grid md:grid-cols-[1fr_auto_1fr] items-center justify-between md:justify-items-stretch h-16 md:h-20"
         aria-label="Hoofdnavigatie"
       >
         <Link
@@ -118,7 +242,7 @@ export function Header() {
           <button
             type="button"
             className="md:hidden flex flex-col justify-center items-center w-11 h-11 gap-1.5"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={handleToggleClick}
             aria-expanded={mobileOpen}
             aria-label="Menu openen"
           >
@@ -140,35 +264,6 @@ export function Header() {
           </button>
         </div>
       </nav>
-
-      {mobileOpen && (
-        <div className="md:hidden border-t border-ebony bg-ink">
-          <ul className="w-full max-w-full px-4 sm:px-6 lg:px-8 py-4 flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={`block py-2 text-body font-medium ${
-                    pathname === link.href ? 'text-dry-sage' : 'text-grey-olive'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link
-                href="/contact"
-                onClick={() => setMobileOpen(false)}
-                className="inline-flex items-center justify-center min-h-[44px] w-full px-6 py-3 bg-dry-sage text-ink font-medium rounded-md"
-              >
-                Contact
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
     </header>
   );
 }

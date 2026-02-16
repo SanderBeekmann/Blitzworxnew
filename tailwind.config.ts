@@ -41,6 +41,8 @@ const config: Config = {
       fontSize: {
         'hero': ['3rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
         'hero-lg': ['4rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'hero-xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
+        'hero-2xl': ['5.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
         'h2': ['2rem', { lineHeight: '1.25', letterSpacing: '-0.01em' }],
         'h2-lg': ['2.5rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
         'h3': ['1.5rem', { lineHeight: '1.3' }],

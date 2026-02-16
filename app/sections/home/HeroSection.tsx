@@ -2,6 +2,8 @@
 
 import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { TitleReveal } from '@/components/animations/TitleReveal';
+import { SubtitleReveal } from '@/components/animations/SubtitleReveal';
 import { HeroBars } from '@/components/animations/HeroBars';
 import { useEffect, useRef } from 'react';
 
@@ -60,25 +62,30 @@ export function HeroSection() {
           aria-labelledby="hero-title"
         >
           <div className="container-narrow flex flex-col items-center text-center">
-            <FadeIn className="flex flex-col items-center text-center">
-              <h1
+            <div className="flex flex-col items-center text-center">
+              <TitleReveal
+                as="h1"
                 id="hero-title"
-                className="text-hero md:text-hero-lg font-bold text-cornsilk tracking-tight"
+                className="text-hero md:text-hero-lg font-bold text-cornsilk tracking-tight hero-title-depth"
+                triggerOnMount
               >
                 BLITZWORX
-              </h1>
-              <p className="mt-4 text-h3 md:text-h3-lg text-dry-sage max-w-prose mx-auto">
-                Webdesign That Worx!
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4 justify-center">
-                <Button href="/contact" variant="primary">
-                  Contact
-                </Button>
-                <Button href="/cases" variant="outline">
-                  Cases
-                </Button>
-              </div>
-            </FadeIn>
+              </TitleReveal>
+              <SubtitleReveal
+                className="mt-4 text-h3 md:text-h3-lg text-dry-sage max-w-prose mx-auto"
+                triggerOnMount
+              />
+              <FadeIn delay={0.8}>
+                <div className="mt-8 flex flex-wrap gap-4 justify-center">
+                  <Button href="/contact" variant="primary">
+                    Contact
+                  </Button>
+                  <Button href="/cases" variant="outline">
+                    Cases
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
           </div>
         </section>
       </div>

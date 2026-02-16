@@ -3,6 +3,7 @@ import { gilroy } from '@/app/fonts';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { ScrollProgressIndicator } from '@/components/ui/ScrollProgressIndicator';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blitzworx.nl';
 
@@ -35,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="nl" className={gilroy.variable}>
       <body className={`${gilroy.className} min-h-screen flex flex-col font-sans`}>
+        <ScrollProgressIndicator />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
