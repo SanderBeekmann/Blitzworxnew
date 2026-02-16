@@ -120,19 +120,21 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
                 <>
                   {images.map((src, i) => (
                     <div
-                      key={src}
+                      key={src ?? i}
                       className={`absolute inset-0 transition-opacity duration-500 ${
                         i === imageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
                       }`}
                     >
-                      <Image
-                        src={src}
-                        alt={`${caseItem.title} - afbeelding ${i + 1}`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 420px"
-                        className="object-cover"
-                        priority={i === 0}
-                      />
+                      {src && (
+                        <Image
+                          src={src}
+                          alt={`${caseItem.title} - afbeelding ${i + 1}`}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 420px"
+                          className="object-cover"
+                          priority={i === 0}
+                        />
+                      )}
                     </div>
                   ))}
                   <div
@@ -156,14 +158,16 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
               </div>
             ) : (
               <>
-                <Image
-                  src={images[imageIndex]}
-                  alt={caseItem.title}
-                  fill
-                  sizes="100vw"
-                  className="object-cover"
-                  priority
-                />
+                {images[imageIndex] && (
+                  <Image
+                    src={images[imageIndex]}
+                    alt={caseItem.title}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    priority
+                  />
+                )}
                 <div
                   className="absolute inset-0 pointer-events-none"
                   style={{
