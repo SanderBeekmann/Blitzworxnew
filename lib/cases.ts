@@ -8,6 +8,10 @@ export interface Case {
   imageHover?: string;
   /** Images shown during scroll on case detail page. Falls back to [image, imageHover].filter(Boolean) */
   images?: string[];
+  /** Optional website URL for case CTA */
+  websiteUrl?: string;
+  /** Show placeholder with "Coming soon" instead of images */
+  imagePlaceholder?: boolean;
   year: string;
 }
 
@@ -18,13 +22,9 @@ export const cases: Case[] = [
     client: 'FleetCare Connect',
     description:
       'Vlotte website voor een startend LEV-Fleetcare onderneming.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-    imageHover: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop',
-    ],
+    image: '',
+    imagePlaceholder: true,
+    images: [],
     year: '2026',
   },
   {
@@ -38,13 +38,15 @@ export const cases: Case[] = [
 De samenwerking verliep soepel: door hun concrete input kon ik snel schakelen en iteratief tot het gewenste resultaat komen. Na de oplevering hebben zij een abonnement afgenomen, waardoor we de samenwerking hebben voortgezet.
 
 Maandelijks help ik BlueShipment nu met het doorvoeren van nieuwe ideeën en verbeteringen. Of het nu gaat om kleine aanpassingen of grotere uitbreidingen, we blijven samen de oplossing verder ontwikkelen zodat deze meegroeit met hun bedrijf.`,
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
-    imageHover: 'https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&h=600&fit=crop',
+    image: '/assets/images/blueshipmentmockup.png',
+    imageHover: '/assets/images/iphonemockupblueship.png',
     images: [
-      'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
+      '/assets/images/blueshipmentmockup.png',
+      '/assets/images/iphonemockupblueship.png',
       'https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&h=600&fit=crop',
       'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
     ],
+    websiteUrl: 'https://blueshipment.nl',
     year: '2026',
   },
   {

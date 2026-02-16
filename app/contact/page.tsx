@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { ContactOnboarding } from '@/components/contact/ContactOnboarding';
+import { PhoneLink } from '@/components/contact/PhoneLink';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -30,19 +31,13 @@ export default function ContactPage() {
                   <strong className="text-cornsilk">E-mail</strong>
                   <br />
                   <a
-                    href="mailto:info@blitzworx.nl"
+                    href="mailto:sander@blitzworx.nl"
                     className="text-dry-sage hover:text-cornsilk hover:underline"
                   >
-                    info@blitzworx.nl
+                    sander@blitzworx.nl
                   </a>
                 </p>
-                <p className="text-body text-dry-sage">
-                  <strong className="text-cornsilk">Telefoon</strong>
-                  <br />
-                  <a href="tel:+31612345678" className="text-dry-sage hover:text-cornsilk hover:underline">
-                    +31 6 12 34 56 78
-                  </a>
-                </p>
+                <PhoneLink />
               </address>
             </div>
           </FadeIn>

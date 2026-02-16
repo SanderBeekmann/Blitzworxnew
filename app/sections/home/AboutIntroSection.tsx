@@ -92,7 +92,7 @@ export function AboutIntroSection() {
             <div
               key={skill.name}
               data-skill-direction={skill.direction}
-              className="skill-card flex items-center gap-3 p-4 rounded-md bg-ink/0 w-fit opacity-0"
+              className="skill-card flex items-center gap-3 p-4 rounded-md bg-ink/0 w-fit opacity-0 transition-shadow duration-300 hover:shadow-[0_0_20px_rgba(254,250,220,0.2),0_0_40px_rgba(254,250,220,0.1)]"
             >
               <span className="w-2 h-8 bg-dry-sage rounded-full shrink-0" aria-hidden />
               <span className="text-h3 font-medium text-cornsilk">{skill.name}</span>

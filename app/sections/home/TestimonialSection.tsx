@@ -7,13 +7,6 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 const testimonials = [
   {
     quote:
-      'Blitzworx heeft onze visie perfect vertaald naar een website die zowel functioneel als visueel sterk is. De samenwerking verliep soepel en het resultaat overtreft onze verwachtingen.',
-    author: 'Jan de Vries',
-    role: 'Ondernemer',
-    company: 'FleetCare Connect',
-  },
-  {
-    quote:
       'Sander van Blitzworx heeft voor ons fulfilment center een hele mooie website gebouwd (blueshipment.nl). We zijn erg tevreden met het eindresultaat. Naast het bouwen van de website dacht Sander ook actief mee over de opzet en uitstraling, wat voor ons echt meerwaarde had. De samenwerking verliep prettig en duidelijk. Al met al zeer tevreden en we zullen in de toekomst zeker weer bij Blitzworx aankloppen.',
     author: 'Reitze Douma',
     role: 'Co-founder',
@@ -32,10 +25,10 @@ export function TestimonialSection() {
         >
           Wat anderen zeggen
         </TitleReveal>
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="flex justify-center">
           {testimonials.map((testimonial, index) => (
-            <FadeIn key={testimonial.author} delay={index * 0.1}>
-              <blockquote className="p-6 rounded-md bg-dry-sage border border-ebony flex flex-col h-full transition-all duration-500 ease-out hover:border-dry-sage/80 hover:shadow-[0_0_48px_rgba(254,250,220,0.08),0_0_24px_rgba(202,202,170,0.12)] hover:-translate-y-0.5">
+            <FadeIn key={testimonial.author} delay={index * 0.1} className="w-full max-w-2xl">
+              <blockquote className="p-6 rounded-md bg-dry-sage border border-ebony flex flex-col h-full transition-all duration-600 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:border-dry-sage/60 hover:shadow-[0_0_32px_rgba(254,250,220,0.12),0_0_64px_rgba(202,202,170,0.18),0_0_96px_rgba(254,250,220,0.06)] hover:-translate-y-0.5">
                 <p className="text-body text-ink leading-relaxed flex-1">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>

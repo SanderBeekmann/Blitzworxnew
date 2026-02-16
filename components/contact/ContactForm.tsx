@@ -126,7 +126,7 @@ export function ContactForm() {
         )}
         {status === 'error' && (
           <p className="text-body text-red-600" role="alert">
-            Er ging iets mis. Probeer het later opnieuw of mail direct naar info@blitzworx.nl.
+            Er ging iets mis. Probeer het later opnieuw of mail direct naar sander@blitzworx.nl.
           </p>
         )}
         <button

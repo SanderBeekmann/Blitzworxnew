@@ -36,7 +36,7 @@ export function SkillsSection() {
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12 md:items-stretch">
           {skills.map((skill, index) => (
             <FadeIn key={skill.title} delay={index * 0.1} className="h-full">
-              <article className="h-full p-6 rounded-md bg-ink border border-ebony flex flex-col">
+              <article className="h-full p-6 rounded-md bg-ink border border-ebony flex flex-col transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)]">
                 <h3 className="text-h3 font-semibold text-cornsilk">{skill.title}</h3>
                 <p className="mt-4 text-body text-dry-sage max-w-prose leading-relaxed">
                   {skill.description}

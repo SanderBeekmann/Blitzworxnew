@@ -14,7 +14,8 @@ interface CaseDetailContentProps {
 export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [imageIndex, setImageIndex] = useState(0);
-  const images = caseItem.images ?? [caseItem.image, caseItem.imageHover].filter(Boolean);
+  const images = caseItem.imagePlaceholder ? [] : (caseItem.images ?? [caseItem.image, caseItem.imageHover].filter(Boolean));
+  const showPlaceholder = caseItem.imagePlaceholder || images.length === 0;
   const paragraphs = (caseItem.fullStory ?? caseItem.description).split(/\n\n+/);
 
   useEffect(() => {
@@ -92,57 +93,86 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
                     {paragraph}
                   </p>
                 ))}
+                {caseItem.websiteUrl && (
+                  <div className="mt-8">
+                    <a
+                      href={caseItem.websiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk hover:shadow-[0_0_32px_rgba(254,250,220,0.18)] transition-colors transition-shadow duration-300"
+                      aria-label="Bezoek de website (opent in nieuw tabblad)"
+                    >
+                      Bezoek de website
+                    </a>
+                  </div>
+                )}
               </div>
             </FadeIn>
           </div>
 
           <div className="hidden lg:block sticky top-24">
             <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-ebony">
-              {images.map((src, i) => (
-                <div
-                  key={src}
-                  className={`absolute inset-0 transition-opacity duration-500 ${
-                    i === imageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                  }`}
-                >
-                  <Image
-                    src={src}
-                    alt={`${caseItem.title} - afbeelding ${i + 1}`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 420px"
-                    className="object-cover"
-                    priority={i === 0}
-                  />
+              {showPlaceholder ? (
+                <div className="absolute inset-0 flex items-center justify-center bg-ink">
+                  <span className="text-body font-medium text-grey-olive">Coming soon</span>
                 </div>
-              ))}
-              <div
-                className="absolute inset-0 pointer-events-none z-20"
-                style={{
-                  background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
-                }}
-                aria-hidden
-              />
+              ) : (
+                <>
+                  {images.map((src, i) => (
+                    <div
+                      key={src}
+                      className={`absolute inset-0 transition-opacity duration-500 ${
+                        i === imageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                      }`}
+                    >
+                      <Image
+                        src={src}
+                        alt={`${caseItem.title} - afbeelding ${i + 1}`}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 420px"
+                        className="object-cover"
+                        priority={i === 0}
+                      />
+                    </div>
+                  ))}
+                  <div
+                    className="absolute inset-0 pointer-events-none z-20"
+                    style={{
+                      background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
+                    }}
+                    aria-hidden
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>
 
         <div className="mt-16 lg:hidden">
           <div className="relative aspect-video rounded-md overflow-hidden bg-ebony">
-            <Image
-              src={images[imageIndex]}
-              alt={caseItem.title}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-            />
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
-              }}
-              aria-hidden
-            />
+            {showPlaceholder ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-ink">
+                <span className="text-body font-medium text-grey-olive">Coming soon</span>
+              </div>
+            ) : (
+              <>
+                <Image
+                  src={images[imageIndex]}
+                  alt={caseItem.title}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority
+                />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
+                  }}
+                  aria-hidden
+                />
+              </>
+            )}
           </div>
         </div>
       </div>

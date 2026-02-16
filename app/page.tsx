@@ -8,8 +8,13 @@ import { TestimonialSection } from './sections/home/TestimonialSection';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 
 export const metadata: Metadata = {
+  description:
+    'Blitzworx - Webdesign That Worx! Creative agency voor ondernemers die online willen groeien. Webdesign, development en branding.',
   alternates: {
     canonical: '/',
+  },
+  openGraph: {
+    url: '/',
   },
 };
 
