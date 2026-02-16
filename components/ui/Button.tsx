@@ -14,7 +14,7 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-dry-sage text-ink hover:bg-cornsilk hover:shadow-[0_0_24px_rgba(254,250,220,0.12)] focus-visible:ring-2 focus-visible:ring-dry-sage focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
+    'bg-dry-sage text-ink hover:bg-cornsilk hover:shadow-[0_0_32px_rgba(254,250,220,0.18)] focus-visible:ring-2 focus-visible:ring-dry-sage focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
   secondary:
     'btn-secondary-cta focus-visible:ring-2 focus-visible:ring-cornsilk focus-visible:ring-offset-2 focus-visible:ring-offset-ink',
   outline:

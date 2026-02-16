@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
 
 const footerLinks = [
   { href: '/', label: 'Home' },
@@ -11,8 +12,8 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative z-20 bg-neutral-900 text-dry-sage">
-      <div className="container-narrow py-16">
+    <footer className="relative z-20 bg-neutral-900 text-dry-sage overflow-hidden">
+      <div className="container-narrow pt-16 pb-32">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
             <Link href="/" className="text-xl font-semibold text-cornsilk">
@@ -43,6 +44,7 @@ export function Footer() {
           </p>
         </div>
       </div>
+      <SectionBottomBars />
     </footer>
   );
 }

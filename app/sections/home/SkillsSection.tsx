@@ -2,6 +2,7 @@
 
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
+import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
 
 const skills = [
   {
@@ -23,7 +24,7 @@ const skills = [
 
 export function SkillsSection() {
   return (
-    <section className="section" aria-labelledby="skills-title">
+    <section className="section relative overflow-hidden" aria-labelledby="skills-title">
       <div className="container-narrow">
         <TitleReveal
           as="h2"
@@ -45,6 +46,7 @@ export function SkillsSection() {
           ))}
         </div>
       </div>
+      <SectionBottomBars />
     </section>
   );
 }

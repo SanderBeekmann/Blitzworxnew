@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AnnouncementBar } from './AnnouncementBar';
-
 const navLinks: { href: string; label: string }[] = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
@@ -157,7 +155,6 @@ export function Header() {
       }`}
       style={{ transform: visible || mobileOpen ? 'translateY(0)' : 'translateY(-100%)' }}
     >
-      <AnnouncementBar showBackground={showBackground} aboutHeroTransparent={aboutHeroTransparent} />
       {mobileOpen && (
         <div
           ref={menuRef}
@@ -192,7 +189,7 @@ export function Header() {
                   <Link
                     href="/contact"
                     onClick={handleMenuLinkClick}
-                    className="inline-flex items-center justify-start min-h-[52px] w-full px-6 py-4 bg-dry-sage text-ink font-semibold rounded-md hover:bg-cornsilk hover:shadow-[0_0_24px_rgba(254,250,220,0.12)] transition-all duration-300"
+                    className="inline-flex items-center justify-start min-h-[52px] w-full px-6 py-4 bg-dry-sage text-ink font-semibold rounded-md hover:bg-cornsilk hover:shadow-[0_0_32px_rgba(254,250,220,0.18)] transition-all duration-300"
                   >
                     Contact
                   </Link>

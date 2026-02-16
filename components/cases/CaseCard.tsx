@@ -12,9 +12,9 @@ export function CaseCard({ caseItem }: CaseCardProps) {
   return (
     <Link
       href={`/cases/${caseItem.slug}`}
-      className="group block overflow-hidden rounded-md bg-ink border border-transparent hover:border-grey-olive transition-all duration-500 ease-in-out delay-200 hover:delay-0"
+      className="group flex flex-col h-full overflow-hidden rounded-md bg-ink border border-transparent hover:border-grey-olive transition-all duration-500 ease-in-out delay-200 hover:delay-0"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-[4/3] overflow-hidden shrink-0">
         <Image
           src={caseItem.image}
           alt={caseItem.title}
@@ -37,7 +37,7 @@ export function CaseCard({ caseItem }: CaseCardProps) {
           aria-hidden
         />
       </div>
-      <div className="p-6">
+      <div className="p-6 flex-1 flex flex-col min-h-0">
         <h3 className="text-h3 font-semibold text-cornsilk group-hover:text-dry-sage transition-colors duration-500 ease-in-out delay-200 group-hover:delay-0">
           {caseItem.title}
         </h3>

@@ -3,6 +3,7 @@
 import { cases } from '@/lib/cases';
 import { CaseCard } from '@/components/cases/CaseCard';
 import { TitleReveal } from '@/components/animations/TitleReveal';
+import { SectionTopBars } from '@/components/animations/SectionTopBars';
 import { useEffect, useRef } from 'react';
 
 const recentCases = cases.slice(0, 2);
@@ -44,7 +45,8 @@ export function RecentCasesSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="section" aria-labelledby="recent-cases-title">
+    <section ref={sectionRef} className="section relative overflow-hidden" aria-labelledby="recent-cases-title">
+      <SectionTopBars />
       <div className="container-narrow">
         <TitleReveal
           as="h2"
@@ -53,9 +55,9 @@ export function RecentCasesSection() {
         >
           Recent Cases
         </TitleReveal>
-        <div ref={cardsRef} className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <div ref={cardsRef} className="grid md:grid-cols-2 gap-8 lg:gap-12 items-stretch">
           {recentCases.map((caseItem) => (
-            <div key={caseItem.slug} className="recent-case-card opacity-0 motion-reduce:opacity-100">
+            <div key={caseItem.slug} className="recent-case-card opacity-0 motion-reduce:opacity-100 h-full">
               <CaseCard caseItem={caseItem} />
             </div>
           ))}
