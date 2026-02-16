@@ -158,9 +158,8 @@ export function AboutScrollLine() {
     window.addEventListener('scroll', updateLine, { passive: true });
     window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', handleResize);
-    if (typeof window.visualViewport !== 'undefined') {
-      window.visualViewport.addEventListener('resize', handleResize);
-    }
+    const vv = window.visualViewport;
+    vv?.addEventListener('resize', handleResize);
 
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(document.body);
@@ -175,9 +174,7 @@ export function AboutScrollLine() {
       window.removeEventListener('scroll', updateLine);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
-      if (typeof window.visualViewport !== 'undefined') {
-        window.visualViewport.removeEventListener('resize', handleResize);
-      }
+      vv?.removeEventListener('resize', handleResize);
       resizeObserver.disconnect();
     };
   }, []);
