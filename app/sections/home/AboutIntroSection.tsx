@@ -63,7 +63,7 @@ export function AboutIntroSection() {
 
   return (
     <section
-      className="section h-screen min-h-screen flex flex-col justify-center items-center border-t border-ebony overflow-hidden transition-none relative"
+      className="section h-screen min-h-[100dvh] md:min-h-screen flex flex-col justify-center items-center border-t border-ebony overflow-visible md:overflow-hidden touch-pan-y transition-none relative"
       aria-labelledby="about-intro-title"
     >
       <div className="container-narrow w-full max-w-4xl flex flex-col items-center gap-12 lg:gap-16">

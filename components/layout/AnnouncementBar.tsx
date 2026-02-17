@@ -5,6 +5,7 @@ import { projectsInProgress } from '@/lib/announcements';
 
 const ROTATE_INTERVAL_MS = 4000;
 const SCROLL_THRESHOLD = 10;
+const MOBILE_SCROLL_THRESHOLD = 20;
 
 export function AnnouncementBar() {
   const [index, setIndex] = useState(0);
@@ -101,6 +102,9 @@ export function AnnouncementBar() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
+    const isMobile = () => window.innerWidth < 768;
+    let rafId: number | null = null;
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const spacerRect = spacer.getBoundingClientRect();
@@ -109,18 +113,31 @@ export function AnnouncementBar() {
       setIsFixed(hasReachedTop);
 
       if (hasReachedTop) {
-        const scrollingDown = currentScrollY > lastScrollY.current;
-        setIsVisible(scrollingDown);
+        const delta = currentScrollY - lastScrollY.current;
+        const threshold = isMobile() ? MOBILE_SCROLL_THRESHOLD : SCROLL_THRESHOLD;
+        if (Math.abs(delta) >= threshold) {
+          setIsVisible(delta < 0);
+        }
       } else {
         setIsVisible(true);
       }
-
       lastScrollY.current = currentScrollY;
     };
 
+    const throttledScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        handleScroll();
+        rafId = null;
+      });
+    };
+
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', throttledScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', throttledScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   if (projectsInProgress.length === 0) return null;
@@ -130,7 +147,7 @@ export function AnnouncementBar() {
       <div
         ref={containerRef}
         className={`w-full overflow-hidden transition-transform duration-300 ease-out border-y-2 border-cornsilk ${
-          isFixed ? 'fixed top-0 left-0 right-0 z-[60] bg-ink' : 'relative bg-ink'
+          isFixed ? 'fixed top-0 left-0 right-0 z-[60] bg-ink transform-gpu' : 'relative bg-ink'
         } ${!isVisible && isFixed ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div

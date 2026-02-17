@@ -61,6 +61,13 @@
     -ms-overflow-style: none;
   }
 
+  @media (max-width: 767px) {
+    html,
+    body {
+      touch-action: pan-y;
+    }
+  }
+
   body::-webkit-scrollbar {
     display: none;
   }
