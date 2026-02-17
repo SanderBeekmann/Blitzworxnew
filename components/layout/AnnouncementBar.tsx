@@ -158,7 +158,7 @@ export function AnnouncementBar() {
       <div
         ref={containerRef}
         className={`w-full overflow-hidden transition-transform duration-300 ease-out border-y-2 border-cornsilk ${
-          isFixedOnDesktop ? 'fixed top-16 md:top-20 left-0 right-0 z-[60] bg-ink' : 'relative bg-ink'
+          isFixedOnDesktop ? 'fixed top-0 left-0 right-0 z-[60] bg-ink' : 'relative bg-ink'
         } ${(!effectiveVisible && isFixedOnDesktop) ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div
