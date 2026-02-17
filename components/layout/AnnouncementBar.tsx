@@ -4,13 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import { projectsInProgress } from '@/lib/announcements';
 
 const ROTATE_INTERVAL_MS = 4000;
-const SCROLL_THRESHOLD = 10;
-const MOBILE_SCROLL_THRESHOLD = 20;
 
 export function AnnouncementBar() {
   const [index, setIndex] = useState(0);
   const [isFixed, setIsFixed] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [navbarVisible, setNavbarVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
@@ -102,9 +102,6 @@ export function AnnouncementBar() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    const isMobile = () => window.innerWidth < 768;
-    let rafId: number | null = null;
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const spacerRect = spacer.getBoundingClientRect();
@@ -113,32 +110,38 @@ export function AnnouncementBar() {
       setIsFixed(hasReachedTop);
 
       if (hasReachedTop) {
-        const delta = currentScrollY - lastScrollY.current;
-        const threshold = isMobile() ? MOBILE_SCROLL_THRESHOLD : SCROLL_THRESHOLD;
-        if (Math.abs(delta) >= threshold) {
-          setIsVisible(delta < 0);
-        }
+        const scrollingDown = currentScrollY > lastScrollY.current;
+        setIsVisible(scrollingDown);
       } else {
         setIsVisible(true);
       }
+
       lastScrollY.current = currentScrollY;
     };
 
-    const throttledScroll = () => {
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => {
-        handleScroll();
-        rafId = null;
-      });
-    };
-
     handleScroll();
-    window.addEventListener('scroll', throttledScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', throttledScroll);
-      if (rafId !== null) cancelAnimationFrame(rafId);
-    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handler = (e: CustomEvent<{ visible: boolean }>) => {
+      setNavbarVisible(e.detail.visible);
+    };
+    window.addEventListener('navbar-visibility-change', handler as EventListener);
+    return () => window.removeEventListener('navbar-visibility-change', handler as EventListener);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = () => setIsMobile(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const shouldHideForNavbar = isMobile && navbarVisible;
+  const effectiveVisible = shouldHideForNavbar ? false : isVisible;
 
   if (projectsInProgress.length === 0) return null;
 
@@ -147,8 +150,8 @@ export function AnnouncementBar() {
       <div
         ref={containerRef}
         className={`w-full overflow-hidden transition-transform duration-300 ease-out border-y-2 border-cornsilk ${
-          isFixed ? 'fixed top-0 left-0 right-0 z-[60] bg-ink transform-gpu' : 'relative bg-ink'
-        } ${!isVisible && isFixed ? '-translate-y-full' : 'translate-y-0'}`}
+          isFixed ? 'fixed top-16 md:top-20 left-0 right-0 z-[60] bg-ink' : 'relative bg-ink'
+        } ${(!effectiveVisible && isFixed) ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div
           ref={barRef}

@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export function ScrollProgressIndicator() {
   const [progress, setProgress] = useState(0);
+  const rafId = useRef<number | null>(null);
 
   useEffect(() => {
     const updateProgress = () => {
@@ -11,14 +12,21 @@ export function ScrollProgressIndicator() {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrolled = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setProgress(scrolled);
+      rafId.current = null;
+    };
+
+    const onScroll = () => {
+      if (rafId.current !== null) return;
+      rafId.current = requestAnimationFrame(updateProgress);
     };
 
     updateProgress();
-    window.addEventListener('scroll', updateProgress, { passive: true });
-    window.addEventListener('resize', updateProgress);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     return () => {
-      window.removeEventListener('scroll', updateProgress);
-      window.removeEventListener('resize', updateProgress);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
     };
   }, []);
 

@@ -70,6 +70,10 @@ export function Header() {
   const showBackground = showCta || mobileOpen;
   const aboutHeroTransparent = isAboutPage && inAboutHero && !mobileOpen;
 
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('navbar-visibility-change', { detail: { visible: visible || mobileOpen } }));
+  }, [visible, mobileOpen]);
+
   const menuRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLUListElement>(null);
