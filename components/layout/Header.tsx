@@ -10,6 +10,8 @@ const navLinks: { href: string; label: string }[] = [
 ];
 
 const SCROLL_THRESHOLD = 10;
+const MOBILE_DIRECTION_THRESHOLD = 15;
+const MOBILE_SHOW_DELAY_MS = 120;
 
 export function Header() {
   const pathname = usePathname();
@@ -19,6 +21,7 @@ export function Header() {
   const [inAboutHero, setInAboutHero] = useState(false);
   const lastScrollY = useRef(0);
   const hasScrolledUpRef = useRef(false);
+  const showDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isAboutPage = pathname === '/about';
 
@@ -35,7 +38,8 @@ export function Header() {
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      const inHero = isAboutPage && currentScrollY < window.innerHeight;
+      const delta = currentScrollY - lastScrollY.current;
+      const isMobile = window.innerWidth < 768;
 
       if (isAboutPage) {
         const inHero = currentScrollY < window.innerHeight;
@@ -50,11 +54,34 @@ export function Header() {
         setShowCta(true);
       } else {
         if (currentScrollY < SCROLL_THRESHOLD) {
+          if (showDelayRef.current) {
+            clearTimeout(showDelayRef.current);
+            showDelayRef.current = null;
+          }
           setVisible(true);
-        } else if (currentScrollY > lastScrollY.current) {
-          setVisible(false);
+        } else if (isMobile) {
+          if (Math.abs(delta) >= MOBILE_DIRECTION_THRESHOLD) {
+            if (delta > 0) {
+              if (showDelayRef.current) {
+                clearTimeout(showDelayRef.current);
+                showDelayRef.current = null;
+              }
+              setVisible(false);
+            } else {
+              if (!showDelayRef.current) {
+                showDelayRef.current = setTimeout(() => {
+                  showDelayRef.current = null;
+                  setVisible(true);
+                }, MOBILE_SHOW_DELAY_MS);
+              }
+            }
+          }
         } else {
-          setVisible(true);
+          if (delta > 0) {
+            setVisible(false);
+          } else {
+            setVisible(true);
+          }
         }
         setShowCta(pathname === '/' ? currentScrollY >= window.innerHeight : true);
       }
@@ -64,7 +91,12 @@ export function Header() {
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (showDelayRef.current) {
+        clearTimeout(showDelayRef.current);
+      }
+    };
   }, [pathname, isAboutPage]);
 
   const showBackground = showCta || mobileOpen;

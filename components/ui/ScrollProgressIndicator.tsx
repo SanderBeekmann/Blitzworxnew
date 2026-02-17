@@ -32,12 +32,12 @@ export function ScrollProgressIndicator() {
 
   return (
     <div
-      className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] h-20 w-[3px] pointer-events-none"
+      className="hidden md:block fixed right-4 top-1/2 -translate-y-1/2 z-[100] h-20 w-[3px] pointer-events-none"
       aria-hidden
     >
       <div
-        className="absolute left-0 top-0 w-full bg-cornsilk"
-        style={{ height: `${progress}%` }}
+        className="absolute left-0 top-0 w-full h-full bg-cornsilk origin-top"
+        style={{ transform: `scaleY(${progress / 100})` }}
       >
         {progress > 0 && (
           <div
