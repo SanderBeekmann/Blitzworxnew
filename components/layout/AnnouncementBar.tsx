@@ -102,7 +102,10 @@ export function AnnouncementBar() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
+    const mq = window.matchMedia('(max-width: 767px)');
+
     const handleScroll = () => {
+      if (mq.matches) return;
       const currentScrollY = window.scrollY;
       const spacerRect = spacer.getBoundingClientRect();
       const hasReachedTop = spacerRect.top <= 0;
@@ -134,14 +137,19 @@ export function AnnouncementBar() {
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
-    setIsMobile(mq.matches);
-    const handler = () => setIsMobile(mq.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
+    const update = () => {
+      const mobile = mq.matches;
+      setIsMobile(mobile);
+      if (mobile) setIsFixed(false);
+    };
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
   }, []);
 
   const shouldHideForNavbar = isMobile && navbarVisible;
   const effectiveVisible = shouldHideForNavbar ? false : isVisible;
+  const isFixedOnDesktop = isFixed && !isMobile;
 
   if (projectsInProgress.length === 0) return null;
 
@@ -150,33 +158,33 @@ export function AnnouncementBar() {
       <div
         ref={containerRef}
         className={`w-full overflow-hidden transition-transform duration-300 ease-out border-y-2 border-cornsilk ${
-          isFixed ? 'fixed top-16 md:top-20 left-0 right-0 z-[60] bg-ink' : 'relative bg-ink'
-        } ${(!effectiveVisible && isFixed) ? '-translate-y-full' : 'translate-y-0'}`}
+          isFixedOnDesktop ? 'fixed top-16 md:top-20 left-0 right-0 z-[60] bg-ink' : 'relative bg-ink'
+        } ${(!effectiveVisible && isFixedOnDesktop) ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div
           ref={barRef}
-          className="w-full px-4 sm:px-6 lg:px-8 py-2.5 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 text-small bg-ink text-cornsilk origin-left"
+          className="w-full px-4 sm:px-6 lg:px-8 py-2.5 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-4 flex flex-row justify-between items-center gap-3 text-small bg-ink text-cornsilk origin-left"
           style={{ transform: 'scaleX(0)' }}
         >
           <span className="shrink-0">Lopende projecten</span>
-          <div className="relative min-h-[1.25rem] flex items-center justify-center min-w-0 overflow-hidden">
+          <div className="relative min-h-[1.25rem] flex items-center justify-end md:justify-center min-w-0 min-h-0 flex-1 md:flex-none overflow-visible md:overflow-hidden">
             {projectsInProgress.map((project, i) => (
               <p
                 key={`${project.company}-${project.type}`}
                 ref={(el) => {
                   if (el) projectsRef.current[i] = el;
                 }}
-                className={`absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-center truncate px-2 ${
+                className={`absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-end md:justify-center text-right md:text-center px-2 md:px-2 py-0.5 ${
                   i === index ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}
                 title={`${project.type}: ${project.company}`}
               >
                 {project.type}:{' '}
-                <span className="font-semibold text-cornsilk">{project.company}</span>
+                <span className="font-semibold text-cornsilk break-words">{project.company}</span>
               </p>
             ))}
           </div>
-          <span className="shrink-0 invisible" aria-hidden>Lopende projecten</span>
+          <span className="hidden md:inline shrink-0 invisible" aria-hidden>Lopende projecten</span>
         </div>
       </div>
     </div>
