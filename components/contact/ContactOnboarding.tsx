@@ -76,12 +76,28 @@ export function ContactOnboarding() {
     if (step > 1) setStep(step - 1);
   }
 
+  async function fetchWithRetry(
+    url: string,
+    options: RequestInit,
+    retries = 3,
+    delay = 1500
+  ): Promise<Response> {
+    let lastError: Error | null = null;
+    for (let i = 0; i < retries; i++) {
+      const res = await fetch(url, options);
+      if (res.status !== 503) return res;
+      lastError = new Error(`Service tijdelijk niet beschikbaar (503). Poging ${i + 1}/${retries}.`);
+      if (i < retries - 1) await new Promise((r) => setTimeout(r, delay));
+    }
+    throw lastError ?? new Error('Verzenden mislukt');
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!validateStep()) return;
     setStatus('submitting');
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetchWithRetry('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -94,7 +110,7 @@ export function ContactOnboarding() {
           preferredTime,
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? 'Verzenden mislukt');
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });

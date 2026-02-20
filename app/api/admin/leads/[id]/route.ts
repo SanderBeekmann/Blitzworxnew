@@ -27,7 +27,7 @@ export async function PATCH(
   const body = await request.json();
   const { status, phase, notes } = body;
 
-  const phases = ['lead', 'contact_opgenomen', 'offerte_aangevraagd', 'offerte_verzonden', 'onderhandeling', 'gewonnen', 'verloren'];
+  const phases = ['lead', 'contact_opgenomen', 'offerte_verzonden', 'gewonnen', 'verloren'];
   const statuses = ['new', 'contacted', 'completed'];
 
   const updates: Record<string, unknown> = {};

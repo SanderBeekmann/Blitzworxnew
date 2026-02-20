@@ -5,9 +5,7 @@ import { useState, useEffect, FormEvent } from 'react';
 type Phase =
   | 'lead'
   | 'contact_opgenomen'
-  | 'offerte_aangevraagd'
   | 'offerte_verzonden'
-  | 'onderhandeling'
   | 'gewonnen'
   | 'verloren';
 
@@ -36,9 +34,7 @@ const PROJECT_LABELS: Record<string, string> = {
 const PHASE_LABELS: Record<Phase, string> = {
   lead: 'Nieuw',
   contact_opgenomen: 'Contact opgenomen',
-  offerte_aangevraagd: 'Offerte aangevraagd',
   offerte_verzonden: 'Offerte verzonden',
-  onderhandeling: 'Onderhandeling',
   gewonnen: 'Gewonnen',
   verloren: 'Verloren',
 };

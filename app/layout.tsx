@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { gilroy } from '@/app/fonts';
 import './globals.css';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
-import { ScrollProgressIndicator } from '@/components/ui/ScrollProgressIndicator';
+import { SiteShell } from '@/components/layout/SiteShell';
 import { siteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -79,10 +77,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <ScrollProgressIndicator />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
