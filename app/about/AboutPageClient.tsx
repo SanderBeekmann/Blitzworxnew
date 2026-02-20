@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { SubtitleReveal } from '@/components/animations/SubtitleReveal';
@@ -12,9 +13,35 @@ const SCROLL_HIDE_THRESHOLD = 60;
 export function AboutPageClient() {
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const creatorImageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }, []);
+
+  useEffect(() => {
+    const el = creatorImageRef.current;
+    if (!el) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
+      ([{ gsap }, { ScrollTrigger }]) => {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.set(el, { x: '100%' });
+        gsap.to(el, {
+          x: 0,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'bottom bottom',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -143,15 +170,28 @@ export function AboutPageClient() {
               </FadeIn>
             </div>
           </div>
-          <FadeIn delay={0.2} className="flex justify-center md:contents order-1 md:order-2">
+          <div className="flex justify-center md:contents order-1 md:order-2">
             <div
-              className="creator-image relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px] flex items-center justify-center"
-              role="img"
-              aria-label="Placeholder voor foto oprichter"
+              ref={creatorImageRef}
+              className="creator-image group relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px] flex items-center justify-center isolate"
             >
-              <span className="text-dry-sage/40 text-sm uppercase tracking-wider">Placeholder</span>
+              <Image
+                src="/assets/images/sander.webp"
+                alt="Sander, oprichter van Blitzworx"
+                fill
+                className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105"
+                sizes="(max-width: 768px) 360px, 38vw"
+              />
+              <div
+                className="absolute inset-0 pointer-events-none origin-center scale-100 opacity-100 transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-150 group-hover:opacity-0 motion-reduce:transition-none"
+                style={{
+                  background:
+                    'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.35) 45%, rgba(4,7,17,0.85) 100%)',
+                }}
+                aria-hidden
+              />
             </div>
-          </FadeIn>
+          </div>
         </div>
       </section>
 

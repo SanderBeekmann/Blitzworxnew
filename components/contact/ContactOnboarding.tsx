@@ -33,6 +33,8 @@ export function ContactOnboarding() {
   const [availability, setAvailability] = useState<Record<string, string[]>>({});
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [direction, setDirection] = useState<'forward' | 'back'>('forward');
+  const [hasNavigated, setHasNavigated] = useState(false);
 
   useEffect(() => {
     if (step === 4) {
@@ -69,10 +71,14 @@ export function ContactOnboarding() {
   function handleNext() {
     if (step === 1 && !projectType) return;
     if ((step === 2 || step === 3 || step === 4) && !validateStep()) return;
+    setDirection('forward');
+    setHasNavigated(true);
     if (step < STEPS) setStep(step + 1);
   }
 
   function handleBack() {
+    setDirection('back');
+    setHasNavigated(true);
     if (step > 1) setStep(step - 1);
   }
 
@@ -138,32 +144,27 @@ export function ContactOnboarding() {
 
   return (
     <div>
-      <h2 className="text-h3 font-semibold text-cornsilk">Stuur een bericht</h2>
+      <h2 className="text-h3 font-semibold text-cornsilk">Waar kunnen we je mee helpen?</h2>
 
-      <div className="mt-6 flex gap-2 mb-8" aria-hidden>
-        {Array.from({ length: STEPS }).map((_, i) => (
-          <div
-            key={i}
-            className={`h-0.5 flex-1 rounded-full transition-colors ${
-              i + 1 <= step ? 'bg-dry-sage' : 'bg-ebony/50'
-            }`}
-          />
-        ))}
+      <div className="mt-6 h-0.5 rounded-full bg-ebony/50 overflow-hidden mb-8" aria-hidden>
+        <div
+          className="h-full bg-dry-sage rounded-full transition-[width] duration-500 ease-out"
+          style={{ width: `${(step / STEPS) * 100}%` }}
+        />
       </div>
 
       <form onSubmit={handleSubmit} noValidate>
         {step === 1 && (
-          <div className="space-y-6">
-            <p className="text-body text-dry-sage">Waar kunnen we je mee helpen?</p>
+          <div key="step-1" className={`space-y-6 ${hasNavigated ? (direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left') : ''}`}>
             <div className="flex flex-wrap gap-3">
               {PROJECT_TYPES.map(({ id, label }) => (
                 <button
                   key={id}
                   type="button"
                   onClick={() => setProjectType(id)}
-                  className={`px-4 py-3 rounded-md border font-medium transition-colors ${
+                  className={`px-4 py-3 rounded-md border font-medium transition-all duration-300 ease-out ${
                     projectType === id
-                      ? 'border-dry-sage bg-dry-sage/10 text-cornsilk'
+                      ? 'border-cornsilk bg-cornsilk text-ink'
                       : 'border-ebony text-dry-sage hover:border-grey-olive hover:text-cornsilk'
                   }`}
                 >
@@ -175,7 +176,7 @@ export function ContactOnboarding() {
         )}
 
         {step === 2 && (
-          <div className="space-y-4">
+          <div key="step-2" className={`space-y-4 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <div>
               <label htmlFor="onboard-name" className="block text-small font-medium text-dry-sage">
                 Naam
@@ -234,7 +235,7 @@ export function ContactOnboarding() {
         )}
 
         {step === 3 && (
-          <div className="space-y-4">
+          <div key="step-3" className={`space-y-4 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <div>
               <label htmlFor="onboard-message" className="block text-small font-medium text-dry-sage">
                 Bericht
@@ -256,7 +257,7 @@ export function ContactOnboarding() {
         )}
 
         {step === 4 && (
-          <div className="space-y-4">
+          <div key="step-4" className={`space-y-4 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <p className="text-body text-dry-sage">
               Kies een datum en tijd voor een vrijblijvend gesprek. Avonden (18:00–22:00) en weekenden.
             </p>
@@ -284,9 +285,9 @@ export function ContactOnboarding() {
                               setPreferredDate(dateKey);
                               setPreferredTime(time);
                             }}
-                            className={`px-3 py-2 rounded-md border text-small font-medium transition-colors ${
+                            className={`px-3 py-2 rounded-md border text-small font-medium transition-all duration-300 ease-out ${
                               isSelected
-                                ? 'border-dry-sage bg-dry-sage/20 text-cornsilk'
+                                ? 'border-cornsilk bg-cornsilk text-ink'
                                 : 'border-ebony text-dry-sage hover:border-grey-olive hover:text-cornsilk'
                             }`}
                           >
@@ -303,7 +304,7 @@ export function ContactOnboarding() {
         )}
 
         {step === 5 && (
-          <div className="space-y-6">
+          <div key="step-5" className={`space-y-6 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Project:</span>{' '}
