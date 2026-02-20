@@ -53,12 +53,34 @@ export async function GET(request: Request) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blitzworx.nl';
     const now = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
 
+    const vtimezone = [
+      'BEGIN:VTIMEZONE',
+      'TZID:Europe/Amsterdam',
+      'BEGIN:STANDARD',
+      'DTSTART:19701025T030000',
+      'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU',
+      'TZOFFSETFROM:+0200',
+      'TZOFFSETTO:+0100',
+      'TZNAME:CET',
+      'END:STANDARD',
+      'BEGIN:DAYLIGHT',
+      'DTSTART:19700329T020000',
+      'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU',
+      'TZOFFSETFROM:+0100',
+      'TZOFFSETTO:+0200',
+      'TZNAME:CEST',
+      'END:DAYLIGHT',
+      'END:VTIMEZONE',
+    ].join('\r\n');
+
     let ics = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
       'PRODID:-//Blitzworx//Agenda//NL',
       'CALSCALE:GREGORIAN',
       'X-WR-CALNAME:Blitzworx Gesprekken',
+      'X-WR-TIMEZONE:Europe/Amsterdam',
+      vtimezone,
     ].join('\r\n');
 
     for (const lead of leads ?? []) {

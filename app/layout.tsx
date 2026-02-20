@@ -67,6 +67,30 @@ export default function RootLayout({
         publisher: { '@id': `${siteUrl}/#organization` },
         inLanguage: 'nl-NL',
       },
+      {
+        '@type': 'Service',
+        serviceType: 'Webdesign',
+        name: 'Webdesign',
+        description: 'Professioneel webdesign voor ondernemers. Van concept tot visueel ontwerp dat past bij jouw merk.',
+        provider: { '@id': `${siteUrl}/#organization` },
+        areaServed: 'NL',
+      },
+      {
+        '@type': 'Service',
+        serviceType: 'Web Development',
+        name: 'Webdevelopment',
+        description: 'Op maat gemaakte websites en webapplicaties. Van eenvoudige sites tot complexe dashboards en backends.',
+        provider: { '@id': `${siteUrl}/#organization` },
+        areaServed: 'NL',
+      },
+      {
+        '@type': 'Service',
+        serviceType: 'Branding',
+        name: 'Branding',
+        description: 'Merkidentiteit en huisstijl. Van logo tot complete visuele identiteit voor jouw onderneming.',
+        provider: { '@id': `${siteUrl}/#organization` },
+        areaServed: 'NL',
+      },
     ],
   };
 

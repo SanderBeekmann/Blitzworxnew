@@ -224,29 +224,29 @@ AI-zoekmachines (ChatGPT, Perplexity, Google AI Overviews) gebruiken andere sign
 
 ### Fase 1 – Quick wins (1–2 weken)
 
-| Actie | Impact |
-|-------|--------|
-| LocalBusiness/Service schema toevoegen | Lokale SEO, rich results |
-| Robots.txt: `/_next/data/` disallowen | Voorkom dubbele content |
-| Case-3 hernoemen of verwijderen | Betere E-E-A-T |
-| OG image homepage: aparte branded afbeelding | Hogere CTR bij delen |
+| Actie | Impact | Status |
+|-------|--------|--------|
+| LocalBusiness/Service schema toevoegen | Lokale SEO, rich results | ✅ Service schema toegevoegd |
+| Robots.txt: `/_next/data/` disallowen | Voorkom dubbele content | ✅ |
+| Case-3 hernoemen of verwijderen | Betere E-E-A-T | ✅ Verwijderd |
+| OG image homepage: aparte branded afbeelding | Hogere CTR bij delen | ⏳ Voeg `og-home.png` (1200×630) toe in `/assets/images/` en pas layout aan |
 
 ### Fase 2 – Content (2–4 weken)
 
-| Actie | Impact |
-|-------|--------|
-| Eerste servicepagina (bijv. /diensten/webdesign) | Nieuwe keywords |
-| CreativeWork schema op cases | Rijkere resultaten |
-| FAQ-sectie op contact + FAQPage schema | Featured snippets |
+| Actie | Impact | Status |
+|-------|--------|--------|
+| Eerste servicepagina (bijv. /diensten/webdesign) | Nieuwe keywords | ✅ |
+| CreativeWork schema op cases | Rijkere resultaten | ✅ |
+| FAQ-sectie op contact + FAQPage schema | Featured snippets | ✅ |
 
 ### Fase 3 – Uitbreiding (1–3 maanden)
 
-| Actie | Impact |
-|-------|--------|
-| Blog/kennisbank opzetten | Long-tail, GEO |
-| Google Bedrijfsprofiel optimaliseren | Lokale vindbaarheid |
-| 2–3 blogposts publiceren | Authority, backlinks |
-| Nieuwe cases toevoegen | Meer indexeerbare pagina's |
+| Actie | Impact | Status |
+|-------|--------|--------|
+| Blog/kennisbank opzetten | Long-tail, GEO | ✅ `/blog` + Article schema |
+| Google Bedrijfsprofiel optimaliseren | Lokale vindbaarheid | ✅ Zie `docs/GOOGLE_BEDRIJFSPROFIEL.md` |
+| 2–3 blogposts publiceren | Authority, backlinks | ✅ 3 artikelen live |
+| Servicepagina's development & branding | Nieuwe keywords | ✅ `/diensten/development`, `/diensten/branding` |
 
 ### Fase 4 – Doorlopend
 

@@ -63,3 +63,13 @@ Apple Calendar haalt de feed periodiek op (vaak elk uur). Je kunt handmatig vern
 - De token is geheim – deel de URL niet
 - Zet `CALENDAR_FEED_TOKEN` als **secret** in Netlify
 - Zonder token krijg je een 401 Unauthorized
+
+## Troubleshooting: geen events zichtbaar
+
+Als je het abonnement ziet maar geen events:
+
+1. **Vernieuwen** – Agenda → Instellingen → Accounts → [jouw abonnement] → Vernieuw nu
+2. **Kalender aan** – Controleer of "Blitzworx Gesprekken" aanstaat in de zijbalk (vinkje)
+3. **Datumweergave** – Zoom in op de juiste week (20–21 feb 2026)
+4. **Abonnement opnieuw** – Verwijder het abonnement en voeg de feed-URL opnieuw toe
+5. **Deploy** – Na wijzigingen aan de feed: opnieuw deployen, daarna in Agenda vernieuwen

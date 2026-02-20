@@ -5,6 +5,8 @@ import { FooterLogo } from '@/components/animations/FooterLogo';
 const footerLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
+  { href: '/diensten', label: 'Diensten' },
+  { href: '/blog', label: 'Blog' },
   { href: '/cases', label: 'Cases' },
   { href: '/contact', label: 'Contact' },
 ];

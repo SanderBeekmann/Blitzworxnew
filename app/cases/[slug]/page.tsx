@@ -61,11 +61,27 @@ export default async function CaseDetailPage({ params }: CasePageProps) {
     ],
   };
 
+  const hasImage = !caseItem.imagePlaceholder && caseItem.image;
+  const creativeWorkJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: caseItem.title,
+    description: caseItem.description,
+    author: { '@id': `${siteUrl}/#organization` },
+    datePublished: caseItem.year,
+    url: `${siteUrl}/cases/${slug}`,
+    ...(hasImage && { image: absoluteImageUrl(caseItem.image) }),
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkJsonLd) }}
       />
       <CaseDetailContent caseItem={caseItem} />
     </>

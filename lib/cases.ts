@@ -49,17 +49,4 @@ Maandelijks help ik BlueShipment nu met het doorvoeren van nieuwe ideeën en ver
     websiteUrl: 'https://blueshipment.nl',
     year: '2026',
   },
-  {
-    slug: 'case-3',
-    title: 'Branding & Website voor Startup',
-    client: 'Client C',
-    description:
-      'Van concept tot live: merkidentiteit, huisstijl en website.',
-    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop',
-    ],
-    year: '2023',
-  },
 ];

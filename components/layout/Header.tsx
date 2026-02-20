@@ -6,6 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 const navLinks: { href: string; label: string }[] = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
+  { href: '/diensten', label: 'Diensten' },
   { href: '/cases', label: 'Cases' },
 ];
 
