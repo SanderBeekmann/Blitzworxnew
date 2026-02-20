@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { SubtitleReveal } from '@/components/animations/SubtitleReveal';
@@ -146,15 +145,11 @@ export function AboutPageClient() {
           </div>
           <FadeIn delay={0.2} className="flex justify-center md:contents order-1 md:order-2">
             <div
-              className="creator-image relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px]"
+              className="creator-image relative w-full max-w-[320px] sm:max-w-[360px] aspect-[4/3] overflow-hidden bg-ebony mx-auto md:mx-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:w-[38vw] md:max-w-[480px] md:min-w-[280px] flex items-center justify-center"
+              role="img"
+              aria-label="Placeholder voor foto oprichter"
             >
-              <Image
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop"
-                alt="Sander - Oprichter Blitzworx"
-                fill
-                sizes="(max-width: 640px) 320px, (max-width: 768px) 360px, 480px"
-                className="object-cover object-top"
-              />
+              <span className="text-dry-sage/40 text-sm uppercase tracking-wider">Placeholder</span>
             </div>
           </FadeIn>
         </div>

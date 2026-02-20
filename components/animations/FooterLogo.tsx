@@ -72,7 +72,7 @@ export function FooterLogo() {
   return (
     <Link
       href="/"
-      className="inline-block text-[6rem] font-semibold text-cornsilk tracking-tight hover:text-dry-sage transition-colors leading-tight"
+      className="inline-block text-[clamp(2.5rem,18vw,6rem)] md:text-[6rem] font-semibold text-cornsilk tracking-tight hover:text-dry-sage transition-colors leading-tight"
     >
       <span ref={containerRef} className="inline-flex">
         {LOGO_TEXT.split('').map((letter, i) => (

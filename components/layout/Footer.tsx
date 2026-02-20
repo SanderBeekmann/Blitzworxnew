@@ -19,13 +19,15 @@ export function Footer() {
       <div className="w-full max-w-full mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-32">
         <div className="grid grid-cols-1 md:grid-cols-3 md:items-start gap-12">
           <div>
-            <FooterLogo />
-            <p className="mt-2 text-small max-w-prose">
+            <div className="w-screen max-w-[100vw] -ml-4 sm:ml-0 md:ml-0 sm:max-w-none md:max-w-none">
+              <FooterLogo />
+            </div>
+            <p className="mt-2 text-small max-w-prose px-4 sm:px-0 md:px-0">
               Webdesign That Worx! Creative agency voor ondernemers die online willen groeien.
             </p>
           </div>
           <div />
-          <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-left">
+          <div className="flex flex-row gap-6 sm:gap-16 text-left">
             <nav aria-label="Footer navigatie">
               <h3 className="text-small font-semibold text-cornsilk mb-4">Pagina&apos;s</h3>
               <ul className="flex flex-col gap-3">

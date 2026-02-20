@@ -75,7 +75,7 @@ export function FooterBars() {
   return (
     <div
       ref={containerRef}
-      className="absolute inset-x-0 bottom-0 h-32 md:h-40 overflow-hidden pointer-events-none z-0"
+      className="absolute inset-x-0 bottom-0 h-32 md:h-40 overflow-hidden pointer-events-none z-[9999]"
       aria-hidden
     >
       {FOOTER_BAR_GROUPS.map((group, groupIndex) => (

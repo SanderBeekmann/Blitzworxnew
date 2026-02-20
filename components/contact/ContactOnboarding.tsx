@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 
-const STEPS = 4;
+const STEPS = 5;
 const PROJECT_TYPES = [
   { id: 'website', label: 'Nieuwe website' },
   { id: 'redesign', label: 'Website redesign' },
@@ -12,25 +12,55 @@ const PROJECT_TYPES = [
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
+const DUTCH_DAY_NAMES: Record<number, string> = {
+  0: 'Zo', 1: 'Ma', 2: 'Di', 3: 'Wo', 4: 'Do', 5: 'Vr', 6: 'Za',
+};
+
+function formatDisplayDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T12:00:00');
+  const day = DUTCH_DAY_NAMES[d.getDay()];
+  const date = d.getDate();
+  const month = d.getMonth() + 1;
+  return `${day} ${date} ${month}`;
+}
+
 export function ContactOnboarding() {
   const [step, setStep] = useState(1);
   const [projectType, setProjectType] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [preferredDate, setPreferredDate] = useState<string | null>(null);
+  const [preferredTime, setPreferredTime] = useState<string | null>(null);
+  const [availability, setAvailability] = useState<Record<string, string[]>>({});
   const [status, setStatus] = useState<FormStatus>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (step === 4) {
+      fetch('/api/availability')
+        .then((r) => r.json())
+        .then(setAvailability)
+        .catch(() => setAvailability({}));
+    }
+  }, [step]);
 
   function validateStep(): boolean {
     const err: Record<string, string> = {};
     if (step === 2) {
       const name = formData.name.trim();
       const email = formData.email.trim();
+      const phone = formData.phone.trim();
       if (!name || name.length < 2) err.name = 'Vul een geldige naam in (min. 2 tekens)';
       if (!email) err.email = 'Vul een e-mailadres in';
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) err.email = 'Vul een geldig e-mailadres in';
+      const digitsOnly = phone.replace(/\D/g, '');
+      if (!phone || digitsOnly.length < 9) err.phone = 'Vul een geldig telefoonnummer in (min. 9 cijfers)';
     }
     if (step === 3) {
       const msg = formData.message.trim();
       if (!msg || msg.length < 10) err.message = 'Vul een bericht in (min. 10 tekens)';
+    }
+    if (step === 4) {
+      if (!preferredDate || !preferredTime) err.slot = 'Kies een datum en tijd voor je gesprek';
     }
     setErrors(err);
     return Object.keys(err).length === 0;
@@ -38,7 +68,7 @@ export function ContactOnboarding() {
 
   function handleNext() {
     if (step === 1 && !projectType) return;
-    if ((step === 2 || step === 3) && !validateStep()) return;
+    if ((step === 2 || step === 3 || step === 4) && !validateStep()) return;
     if (step < STEPS) setStep(step + 1);
   }
 
@@ -57,15 +87,20 @@ export function ContactOnboarding() {
         body: JSON.stringify({
           name: formData.name.trim(),
           email: formData.email.trim(),
+          phone: formData.phone.trim(),
           message: formData.message.trim(),
           projectType,
+          preferredDate,
+          preferredTime,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Verzenden mislukt');
       setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', message: '' });
       setProjectType(null);
+      setPreferredDate(null);
+      setPreferredTime(null);
       setStep(1);
     } catch {
       setStatus('error');
@@ -83,11 +118,12 @@ export function ContactOnboarding() {
     );
   }
 
+  const dates = Object.keys(availability).sort();
+
   return (
     <div>
       <h2 className="text-h3 font-semibold text-cornsilk">Stuur een bericht</h2>
 
-      {/* Progress */}
       <div className="mt-6 flex gap-2 mb-8" aria-hidden>
         {Array.from({ length: STEPS }).map((_, i) => (
           <div
@@ -100,7 +136,6 @@ export function ContactOnboarding() {
       </div>
 
       <form onSubmit={handleSubmit} noValidate>
-        {/* Step 1: Project type */}
         {step === 1 && (
           <div className="space-y-6">
             <p className="text-body text-dry-sage">Waar kunnen we je mee helpen?</p>
@@ -123,7 +158,6 @@ export function ContactOnboarding() {
           </div>
         )}
 
-        {/* Step 2: Name & Email */}
         {step === 2 && (
           <div className="space-y-4">
             <div>
@@ -141,9 +175,7 @@ export function ContactOnboarding() {
                 placeholder="Je naam"
               />
               {errors.name && (
-                <p className="mt-1 text-small text-red-600" role="alert">
-                  {errors.name}
-                </p>
+                <p className="mt-1 text-small text-red-600" role="alert">{errors.name}</p>
               )}
             </div>
             <div>
@@ -161,15 +193,30 @@ export function ContactOnboarding() {
                 placeholder="je@email.nl"
               />
               {errors.email && (
-                <p className="mt-1 text-small text-red-600" role="alert">
-                  {errors.email}
-                </p>
+                <p className="mt-1 text-small text-red-600" role="alert">{errors.email}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="onboard-phone" className="block text-small font-medium text-dry-sage">
+                Telefoonnummer
+              </label>
+              <input
+                id="onboard-phone"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => setFormData((d) => ({ ...d, phone: e.target.value }))}
+                autoComplete="tel"
+                aria-invalid={!!errors.phone}
+                className="mt-2 block w-full min-h-[44px] px-4 py-3 rounded-md border border-ebony bg-ink text-cornsilk placeholder:text-grey-olive focus:border-dry-sage focus:ring-2 focus:ring-dry-sage/30 focus:outline-none"
+                placeholder="06-12345678"
+              />
+              {errors.phone && (
+                <p className="mt-1 text-small text-red-600" role="alert">{errors.phone}</p>
               )}
             </div>
           </div>
         )}
 
-        {/* Step 3: Message */}
         {step === 3 && (
           <div className="space-y-4">
             <div>
@@ -186,16 +233,60 @@ export function ContactOnboarding() {
                 placeholder="Vertel over je project..."
               />
               {errors.message && (
-                <p className="mt-1 text-small text-red-600" role="alert">
-                  {errors.message}
-                </p>
+                <p className="mt-1 text-small text-red-600" role="alert">{errors.message}</p>
               )}
             </div>
           </div>
         )}
 
-        {/* Step 4: Review & Submit */}
         {step === 4 && (
+          <div className="space-y-4">
+            <p className="text-body text-dry-sage">
+              Kies een datum en tijd voor een vrijblijvend gesprek. Avonden (18:00–22:00) en weekenden.
+            </p>
+            {errors.slot && (
+              <p className="text-small text-red-600" role="alert">{errors.slot}</p>
+            )}
+            <div className="space-y-4 max-h-[320px] overflow-y-auto">
+              {dates.length === 0 ? (
+                <p className="text-small text-grey-olive">Laden...</p>
+              ) : (
+                dates.map((dateKey) => (
+                  <div key={dateKey} className="space-y-2">
+                    <p className="text-small font-medium text-cornsilk">
+                      {formatDisplayDate(dateKey)}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {(availability[dateKey] ?? []).map((time) => {
+                        const isSelected =
+                          preferredDate === dateKey && preferredTime === time;
+                        return (
+                          <button
+                            key={time}
+                            type="button"
+                            onClick={() => {
+                              setPreferredDate(dateKey);
+                              setPreferredTime(time);
+                            }}
+                            className={`px-3 py-2 rounded-md border text-small font-medium transition-colors ${
+                              isSelected
+                                ? 'border-dry-sage bg-dry-sage/20 text-cornsilk'
+                                : 'border-ebony text-dry-sage hover:border-grey-olive hover:text-cornsilk'
+                            }`}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
           <div className="space-y-6">
             <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
               <p className="text-small text-grey-olive">
@@ -209,9 +300,18 @@ export function ContactOnboarding() {
                 <span className="text-dry-sage">E-mail:</span> {formData.email}
               </p>
               <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Telefoon:</span> {formData.phone}
+              </p>
+              <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Bericht:</span>
                 <br />
                 <span className="text-cornsilk">{formData.message}</span>
+              </p>
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Gesprek:</span>{' '}
+                {preferredDate && preferredTime
+                  ? `${formatDisplayDate(preferredDate)} om ${preferredTime}`
+                  : '-'}
               </p>
             </div>
             {status === 'error' && (
@@ -222,7 +322,6 @@ export function ContactOnboarding() {
           </div>
         )}
 
-        {/* Navigation */}
         <div className="mt-8 flex gap-4">
           {step > 1 ? (
             <button
