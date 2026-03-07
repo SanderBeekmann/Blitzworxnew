@@ -27,7 +27,7 @@ function formatDisplayDate(dateStr: string): string {
 export function ContactOnboarding() {
   const [step, setStep] = useState(1);
   const [projectType, setProjectType] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', message: '' });
   const [preferredDate, setPreferredDate] = useState<string | null>(null);
   const [preferredTime, setPreferredTime] = useState<string | null>(null);
   const [availability, setAvailability] = useState<Record<string, string[]>>({});
@@ -54,6 +54,8 @@ export function ContactOnboarding() {
       if (!name || name.length < 2) err.name = 'Vul een geldige naam in (min. 2 tekens)';
       if (!email) err.email = 'Vul een e-mailadres in';
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) err.email = 'Vul een geldig e-mailadres in';
+      const company = formData.company.trim();
+      if (!company || company.length < 2) err.company = 'Vul een bedrijfsnaam in (min. 2 tekens)';
       const digitsOnly = phone.replace(/\D/g, '');
       if (!phone || digitsOnly.length < 9) err.phone = 'Vul een geldig telefoonnummer in (min. 9 cijfers)';
     }
@@ -110,6 +112,7 @@ export function ContactOnboarding() {
           name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
+          company: formData.company.trim(),
           message: formData.message.trim(),
           projectType,
           preferredDate,
@@ -119,7 +122,7 @@ export function ContactOnboarding() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? 'Verzenden mislukt');
       setStatus('success');
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', company: '', message: '' });
       setProjectType(null);
       setPreferredDate(null);
       setPreferredTime(null);
@@ -193,6 +196,24 @@ export function ContactOnboarding() {
               />
               {errors.name && (
                 <p className="mt-1 text-small text-red-600" role="alert">{errors.name}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="onboard-company" className="block text-small font-medium text-dry-sage">
+                Bedrijfsnaam
+              </label>
+              <input
+                id="onboard-company"
+                type="text"
+                value={formData.company}
+                onChange={(e) => setFormData((d) => ({ ...d, company: e.target.value }))}
+                autoComplete="organization"
+                aria-invalid={!!errors.company}
+                className="mt-2 block w-full min-h-[44px] px-4 py-3 rounded-md border border-ebony bg-ink text-cornsilk placeholder:text-grey-olive focus:border-dry-sage focus:ring-2 focus:ring-dry-sage/30 focus:outline-none"
+                placeholder="Je bedrijf"
+              />
+              {errors.company && (
+                <p className="mt-1 text-small text-red-600" role="alert">{errors.company}</p>
               )}
             </div>
             <div>
@@ -312,6 +333,9 @@ export function ContactOnboarding() {
               </p>
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Naam:</span> {formData.name}
+              </p>
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Bedrijf:</span> {formData.company}
               </p>
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">E-mail:</span> {formData.email}

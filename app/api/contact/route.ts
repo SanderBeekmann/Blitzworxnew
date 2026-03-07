@@ -72,7 +72,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { name, email, phone, message, projectType, preferredDate, preferredTime } = body;
+    const { name, email, phone, company, message, projectType, preferredDate, preferredTime } = body;
 
     if (!name?.trim() || !email?.trim() || !phone?.trim() || !message?.trim()) {
       return NextResponse.json(
@@ -145,6 +145,49 @@ export async function POST(request: Request) {
           { error: 'Kon aanvraag niet opslaan. Probeer het later opnieuw.' },
           { status: 500 }
         );
+      }
+
+      // Sync to AgencyOS contacts table (same database)
+      try {
+        const { data: existingContact } = await supabase
+          .from('contacts')
+          .select('id')
+          .eq('email', emailNorm)
+          .single();
+
+        if (!existingContact) {
+          const { data: newContact } = await supabase.from('contacts').insert({
+            naam: name.trim(),
+            email: emailNorm,
+            bedrijf: company?.trim() || '-',
+            telefoon: phone.trim(),
+            status: 'lead',
+            bron: 'formulier',
+            notities: `${projectLabel} — ${message.trim()}`,
+          }).select('id').single();
+
+          if (newContact) {
+            // Create follow-up task in AgencyOS
+            await supabase.from('tasks').insert({
+              titel: `Follow-up: ${name.trim()} — ${company?.trim() || 'blitzworx.nl'}`,
+              type: 'follow_up',
+              prioriteit: 'hoog',
+              status: 'open',
+              contact_id: newContact.id,
+              deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+            });
+
+            // Log activity
+            await supabase.from('activities').insert({
+              type: 'notitie',
+              inhoud: `Nieuwe lead via blitzworx.nl contactformulier: ${name.trim()}`,
+              contact_id: newContact.id,
+            });
+          }
+        }
+      } catch (syncErr) {
+        // Non-blocking: don't fail the form submission if AgencyOS sync fails
+        console.error('AgencyOS contacts sync error:', syncErr);
       }
     }
 
