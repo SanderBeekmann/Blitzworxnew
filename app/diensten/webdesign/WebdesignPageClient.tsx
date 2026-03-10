@@ -481,14 +481,14 @@ export function WebdesignPageClient() {
               Van idee tot ontwerp
             </TitleReveal>
             <FadeIn>
-              <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
+              <p className="hidden md:block text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
                 Scroll door mijn ontwerpproces en zie hoe een website tot leven komt.
               </p>
             </FadeIn>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
               {/* Monitor frame */}
-              <div className="relative">
+              <div className="hidden md:block relative">
                 <div className="process-monitor bg-ink border border-ebony overflow-hidden">
                   {/* Monitor top bar */}
                   <div className="flex items-center gap-2 px-4 py-2.5 border-b border-ebony">
@@ -763,12 +763,12 @@ export function WebdesignPageClient() {
             </div>
           </div>
         </div>
-        <SectionBottomBars />
+        <div className="hidden md:block"><SectionBottomBars /></div>
       </section>
 
       {/* ── Tools & Technologieen ── */}
       <section className="section relative" aria-labelledby="tech-title">
-        <SectionTopBars />
+        <div className="hidden md:block"><SectionTopBars /></div>
         <div className="container-narrow">
           <TitleReveal
             as="h2"
