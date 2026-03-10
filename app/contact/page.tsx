@@ -5,10 +5,16 @@ import { ContactOnboarding } from '@/components/contact/ContactOnboarding';
 import { PhoneLink } from '@/components/contact/PhoneLink';
 
 export const metadata: Metadata = {
-  title: 'Contact',
-  alternates: { canonical: '/contact' },
+  title: 'Contact — Plan een Vrijblijvend Gesprek',
   description:
-    'Neem contact op met Blitzworx. E-mail, telefoon of vul het formulier in voor een vrijblijvend gesprek.',
+    'Neem contact op met Blitzworx. E-mail, telefoon of vul het formulier in voor een vrijblijvend gesprek over je website of merk.',
+  openGraph: {
+    title: 'Contact Blitzworx',
+    description:
+      'Neem contact op voor een vrijblijvend gesprek over je website of merk.',
+    url: '/contact',
+  },
+  alternates: { canonical: '/contact' },
 };
 
 const FAQ_ITEMS = [
@@ -63,7 +69,7 @@ export default function ContactPage() {
           >
             Contact
           </TitleReveal>
-          <div className="grid md:grid-cols-2 gap-12 md:gap-24 lg:gap-32">
+          <div className="grid md:grid-cols-[1.4fr_0.6fr] gap-12 md:gap-16 lg:gap-20">
             <FadeIn delay={0.1}>
               <ContactOnboarding />
             </FadeIn>
@@ -93,14 +99,28 @@ export default function ContactPage() {
             <h2 id="faq-title" className="text-h2 font-bold text-cornsilk mb-12">
               Veelgestelde vragen
             </h2>
-            <dl className="space-y-8">
+            <div className="space-y-4">
               {FAQ_ITEMS.map((item) => (
-                <div key={item.question}>
-                  <dt className="text-h3 font-semibold text-cornsilk">{item.question}</dt>
-                  <dd className="mt-2 text-body text-dry-sage leading-relaxed">{item.answer}</dd>
-                </div>
+                <details
+                  key={item.question}
+                  className="group border border-ebony rounded-sm"
+                >
+                  <summary className="cursor-pointer p-5 text-body font-bold text-cornsilk flex items-center justify-between list-none [&::-webkit-details-marker]:hidden">
+                    {item.question}
+                    <span className="text-grey-olive group-open:rotate-45 transition-transform duration-300 text-h3 shrink-0 ml-4">
+                      +
+                    </span>
+                  </summary>
+                  <div className="grid grid-rows-[0fr] group-open:grid-rows-[1fr] transition-[grid-template-rows] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                    <div className="overflow-hidden">
+                      <p className="px-5 pb-5 text-body text-dry-sage leading-relaxed">
+                        {item.answer}
+                      </p>
+                    </div>
+                  </div>
+                </details>
               ))}
-            </dl>
+            </div>
           </section>
         </div>
       </section>

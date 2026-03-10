@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect, useMemo } from 'react';
+import Image from 'next/image';
 
 const STEPS = 5;
 const PROJECT_TYPES = [
@@ -12,16 +13,41 @@ const PROJECT_TYPES = [
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
-const DUTCH_DAY_NAMES: Record<number, string> = {
-  0: 'Zo', 1: 'Ma', 2: 'Di', 3: 'Wo', 4: 'Do', 5: 'Vr', 6: 'Za',
-};
+const DUTCH_DAY_HEADERS = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
+const DUTCH_MONTH_NAMES = [
+  'Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni',
+  'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December',
+];
+
+function formatDateKey(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 
 function formatDisplayDate(dateStr: string): string {
   const d = new Date(dateStr + 'T12:00:00');
-  const day = DUTCH_DAY_NAMES[d.getDay()];
-  const date = d.getDate();
-  const month = d.getMonth() + 1;
-  return `${day} ${date} ${month}`;
+  const day = d.getDate();
+  const month = DUTCH_MONTH_NAMES[d.getMonth()];
+  return `${day} ${month}`;
+}
+
+function getCalendarDays(year: number, month: number) {
+  const firstDay = new Date(year, month, 1);
+  // Monday = 0, Sunday = 6
+  let startOffset = firstDay.getDay() - 1;
+  if (startOffset < 0) startOffset = 6;
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const days: (number | null)[] = [];
+
+  for (let i = 0; i < startOffset; i++) days.push(null);
+  for (let i = 1; i <= daysInMonth; i++) days.push(i);
+  // Pad to complete last row
+  while (days.length % 7 !== 0) days.push(null);
+
+  return days;
 }
 
 export function ContactOnboarding() {
@@ -35,15 +61,23 @@ export function ContactOnboarding() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [direction, setDirection] = useState<'forward' | 'back'>('forward');
   const [hasNavigated, setHasNavigated] = useState(false);
+  const [confirmedDate, setConfirmedDate] = useState<string | null>(null);
+  const now = useMemo(() => new Date(), []);
+  const [calendarMonth, setCalendarMonth] = useState({ year: now.getFullYear(), month: now.getMonth() });
 
   useEffect(() => {
     if (step === 4) {
-      fetch('/api/availability')
+      const { year, month } = calendarMonth;
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const from = `${firstDay.getFullYear()}-${String(firstDay.getMonth() + 1).padStart(2, '0')}-${String(firstDay.getDate()).padStart(2, '0')}`;
+      const to = `${lastDay.getFullYear()}-${String(lastDay.getMonth() + 1).padStart(2, '0')}-${String(lastDay.getDate()).padStart(2, '0')}`;
+      fetch(`/api/availability?from=${from}&to=${to}`)
         .then((r) => r.json())
-        .then(setAvailability)
-        .catch(() => setAvailability({}));
+        .then((data) => setAvailability((prev) => ({ ...prev, ...data })))
+        .catch(() => {});
     }
-  }, [step]);
+  }, [step, calendarMonth]);
 
   function validateStep(): boolean {
     const err: Record<string, string> = {};
@@ -121,6 +155,7 @@ export function ContactOnboarding() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? 'Verzenden mislukt');
+      setConfirmedDate(preferredDate && preferredTime ? `${formatDisplayDate(preferredDate)} om ${preferredTime}` : null);
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });
       setProjectType(null);
@@ -134,11 +169,32 @@ export function ContactOnboarding() {
 
   if (status === 'success') {
     return (
-      <div className="p-8 rounded-md border border-ebony bg-ink/50 text-center">
-        <p className="text-h3 font-semibold text-cornsilk mb-2">Bedankt!</p>
-        <p className="text-body text-dry-sage">
-          Je bericht is verzonden. Ik neem zo snel mogelijk contact op.
-        </p>
+      <div className="relative p-8 rounded-lg border border-dry-sage/30 text-center overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(ellipse at 50% 0%, rgba(202,202,170,0.08) 0%, transparent 70%)',
+          }}
+        />
+        <div className="relative">
+          <Image
+            src="/assets/images/sander1.png"
+            alt="Sander"
+            width={80}
+            height={80}
+            className="mx-auto mb-4 rounded-full object-cover object-top brightness-[0.85]"
+          />
+          <p className="text-h3 font-semibold text-cornsilk mb-2">Bedankt!</p>
+          {confirmedDate && (
+            <p className="text-body text-cornsilk">
+              Ik kijk er naar uit om met je in gesprek te gaan op {confirmedDate}!
+            </p>
+          )}
+          <p className="mt-2 text-small italic text-grey-olive">
+            Er is een bevestigingsmail verstuurd naar het ingevulde e-mailadres.
+          </p>
+        </div>
       </div>
     );
   }
@@ -146,15 +202,38 @@ export function ContactOnboarding() {
   const dates = Object.keys(availability).sort();
 
   return (
-    <div>
-      <h2 className="text-h3 font-semibold text-cornsilk">Waar kan ik je mee helpen?</h2>
+    <div className="relative p-6 md:p-8 rounded-lg border border-dry-sage/20 overflow-hidden">
+      {/* Accent glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+        }}
+        aria-hidden
+      />
 
-      <div className="mt-6 h-0.5 rounded-full bg-ebony/50 overflow-hidden mb-8" aria-hidden>
-        <div
-          className="h-full bg-dry-sage rounded-full transition-[width] duration-500 ease-out"
-          style={{ width: `${(step / STEPS) * 100}%` }}
-        />
-      </div>
+      {/* Decorative corner accents */}
+      <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-dry-sage/30 rounded-tl-lg pointer-events-none" aria-hidden />
+      <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-dry-sage/30 rounded-br-lg pointer-events-none" aria-hidden />
+
+      <div className="relative">
+        <p className="text-caption font-mono tracking-[0.2em] uppercase text-dry-sage/50 mb-2">
+          Start je project
+        </p>
+        <h2 className="text-h2 md:text-h2-lg font-bold text-cornsilk">
+          Waar kan ik je mee helpen?
+        </h2>
+
+        <div className="mt-6 h-1 rounded-full bg-ebony/40 overflow-hidden mb-8" aria-hidden>
+          <div
+            className="h-full rounded-full transition-[width] duration-500 ease-out"
+            style={{
+              width: `${(step / STEPS) * 100}%`,
+              background: 'linear-gradient(90deg, rgba(202,202,170,0.6) 0%, rgba(254,250,220,1) 100%)',
+            }}
+          />
+        </div>
 
       <form onSubmit={handleSubmit} noValidate>
         {step === 1 && (
@@ -277,52 +356,151 @@ export function ContactOnboarding() {
           </div>
         )}
 
-        {step === 4 && (
-          <div key="step-4" className={`space-y-4 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
-            <p className="text-body text-dry-sage">
-              Kies een datum en tijd voor een vrijblijvend gesprek. Avonden (18:00–22:00) en weekenden.
-            </p>
-            {errors.slot && (
-              <p className="text-small text-red-600" role="alert">{errors.slot}</p>
-            )}
-            <div className="space-y-4 max-h-[320px] overflow-y-auto">
+        {step === 4 && (() => {
+          const { year, month } = calendarMonth;
+          const calDays = getCalendarDays(year, month);
+          const todayKey = formatDateKey(new Date());
+          const availableDates = new Set(Object.keys(availability));
+          const canGoPrev = year > now.getFullYear() || (year === now.getFullYear() && month > now.getMonth());
+          const maxMonth = now.getMonth() + 2;
+          const maxYear = now.getFullYear() + (maxMonth > 11 ? 1 : 0);
+          const canGoNext = year < maxYear || (year === maxYear && month < maxMonth % 12);
+          const slotsForSelected = preferredDate ? (availability[preferredDate] ?? []) : [];
+
+          return (
+            <div key="step-4" className={`space-y-4 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
+              <p className="text-body text-dry-sage">
+                Kies een datum en tijd voor een vrijblijvend gesprek.
+              </p>
+              {errors.slot && (
+                <p className="text-small text-red-600" role="alert">{errors.slot}</p>
+              )}
+
               {dates.length === 0 ? (
                 <p className="text-small text-grey-olive">Laden...</p>
               ) : (
-                dates.map((dateKey) => (
-                  <div key={dateKey} className="space-y-2">
-                    <p className="text-small font-medium text-cornsilk">
-                      {formatDisplayDate(dateKey)}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {(availability[dateKey] ?? []).map((time) => {
-                        const isSelected =
-                          preferredDate === dateKey && preferredTime === time;
-                        return (
-                          <button
-                            key={time}
-                            type="button"
-                            onClick={() => {
-                              setPreferredDate(dateKey);
-                              setPreferredTime(time);
-                            }}
-                            className={`px-3 py-2 rounded-md border text-small font-medium transition-all duration-300 ease-out ${
-                              isSelected
-                                ? 'border-cornsilk bg-cornsilk text-ink'
-                                : 'border-ebony text-dry-sage hover:border-grey-olive hover:text-cornsilk'
-                            }`}
-                          >
-                            {time}
-                          </button>
-                        );
-                      })}
-                    </div>
+                <div className="space-y-4">
+                  {/* Calendar header */}
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const prev = month === 0 ? 11 : month - 1;
+                        const prevYear = month === 0 ? year - 1 : year;
+                        setCalendarMonth({ year: prevYear, month: prev });
+                      }}
+                      disabled={!canGoPrev}
+                      className="p-2 text-dry-sage hover:text-cornsilk disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Vorige maand"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
+                    <span className="text-body font-semibold text-cornsilk">
+                      {DUTCH_MONTH_NAMES[month]} {year}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = month === 11 ? 0 : month + 1;
+                        const nextYear = month === 11 ? year + 1 : year;
+                        setCalendarMonth({ year: nextYear, month: next });
+                      }}
+                      disabled={!canGoNext}
+                      className="p-2 text-dry-sage hover:text-cornsilk disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                      aria-label="Volgende maand"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                   </div>
-                ))
+
+                  {/* Day headers */}
+                  <div className="grid grid-cols-7 gap-1">
+                    {DUTCH_DAY_HEADERS.map((d) => (
+                      <div key={d} className="text-center text-caption font-mono text-grey-olive/50 py-1">
+                        {d}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Calendar grid */}
+                  <div className="grid grid-cols-7 gap-1">
+                    {calDays.map((day, i) => {
+                      if (day === null) return <div key={`empty-${i}`} />;
+
+                      const dateKey = formatDateKey(new Date(year, month, day));
+                      const isAvailable = availableDates.has(dateKey);
+                      const isPast = dateKey < todayKey;
+                      const isSelected = preferredDate === dateKey;
+
+                      return (
+                        <button
+                          key={dateKey}
+                          type="button"
+                          disabled={!isAvailable || isPast}
+                          onClick={() => {
+                            setPreferredDate(dateKey);
+                            setPreferredTime(null);
+                          }}
+                          className={`
+                            relative aspect-square flex items-center justify-center rounded-md text-small font-medium transition-all duration-200
+                            ${isSelected
+                              ? 'bg-cornsilk text-ink ring-2 ring-cornsilk/50'
+                              : isAvailable && !isPast
+                                ? 'text-cornsilk hover:bg-dry-sage/15 hover:text-cornsilk'
+                                : 'text-grey-olive/30 cursor-not-allowed'
+                            }
+                          `}
+                          style={!isAvailable || isPast ? {
+                            backgroundImage:
+                              'repeating-linear-gradient(135deg, transparent, transparent 3px, rgba(84,92,82,0.15) 3px, rgba(84,92,82,0.15) 4px)',
+                            backgroundColor: 'rgba(84,92,82,0.06)',
+                          } : undefined}
+                        >
+                          {day}
+                          {isAvailable && !isPast && !isSelected && (
+                            <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-dry-sage/60" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Time slots for selected date */}
+                  {preferredDate && (
+                    <div className="pt-4 border-t border-ebony/40">
+                      <p className="text-small font-medium text-dry-sage mb-3">
+                        Beschikbare tijden op {formatDisplayDate(preferredDate)}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {slotsForSelected.length === 0 ? (
+                          <p className="text-small text-grey-olive">Geen tijden beschikbaar</p>
+                        ) : (
+                          slotsForSelected.map((time) => {
+                            const isTimeSelected = preferredTime === time;
+                            return (
+                              <button
+                                key={time}
+                                type="button"
+                                onClick={() => setPreferredTime(time)}
+                                className={`px-4 py-2 rounded-md border text-small font-medium transition-all duration-200 ${
+                                  isTimeSelected
+                                    ? 'border-cornsilk bg-cornsilk text-ink'
+                                    : 'border-ebony text-dry-sage hover:border-dry-sage/50 hover:text-cornsilk'
+                                }`}
+                              >
+                                {time}
+                              </button>
+                            );
+                          })
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {step === 5 && (
           <div key="step-5" className={`space-y-6 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
@@ -396,6 +574,7 @@ export function ContactOnboarding() {
           )}
         </div>
       </form>
+      </div>
     </div>
   );
 }

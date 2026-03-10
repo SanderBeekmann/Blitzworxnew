@@ -3,9 +3,15 @@ import { siteUrl } from '@/lib/site';
 import { WebdesignPageClient } from './WebdesignPageClient';
 
 export const metadata: Metadata = {
-  title: 'Webdesign',
+  title: 'Webdesign — Professioneel Ontwerp voor Ondernemers',
   description:
     'Professioneel webdesign voor ondernemers. Van concept tot visueel ontwerp dat past bij jouw merk. Blitzworx maakt websites die werken.',
+  openGraph: {
+    title: 'Webdesign — Blitzworx',
+    description:
+      'Van concept tot visueel ontwerp dat past bij jouw merk. Websites die werken.',
+    url: '/diensten/webdesign',
+  },
   alternates: { canonical: '/diensten/webdesign' },
 };
 

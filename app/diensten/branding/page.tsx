@@ -3,9 +3,15 @@ import { siteUrl } from '@/lib/site';
 import { BrandingPageClient } from './BrandingPageClient';
 
 export const metadata: Metadata = {
-  title: 'Branding',
+  title: 'Branding — Merkidentiteit & Huisstijl',
   description:
     'Merkidentiteit en huisstijl voor ondernemers. Van logo tot complete visuele identiteit. Blitzworx helpt je merk herkenbaar en onderscheidend te maken.',
+  openGraph: {
+    title: 'Branding — Blitzworx',
+    description:
+      'Van logo tot complete visuele identiteit. Herkenbaar en onderscheidend.',
+    url: '/diensten/branding',
+  },
   alternates: { canonical: '/diensten/branding' },
 };
 

@@ -50,6 +50,12 @@ export async function generateMetadata({ params }: BlogPostProps): Promise<Metad
       tags: post.tags,
       images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      images: [ogImage],
+    },
   };
 }
 
@@ -195,15 +201,19 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
                         key={i}
                         className="group border border-ebony rounded-sm"
                       >
-                        <summary className="cursor-pointer p-5 text-body font-bold text-cornsilk flex items-center justify-between">
+                        <summary className="cursor-pointer p-5 text-body font-bold text-cornsilk flex items-center justify-between list-none [&::-webkit-details-marker]:hidden">
                           {faq.question}
-                          <span className="text-grey-olive group-open:rotate-45 transition-transform text-h3">
+                          <span className="text-grey-olive group-open:rotate-45 transition-transform duration-300 text-h3 shrink-0 ml-4">
                             +
                           </span>
                         </summary>
-                        <p className="px-5 pb-5 text-body text-dry-sage leading-relaxed">
-                          {faq.answer}
-                        </p>
+                        <div className="grid grid-rows-[0fr] group-open:grid-rows-[1fr] transition-[grid-template-rows] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                          <div className="overflow-hidden">
+                            <p className="px-5 pb-5 text-body text-dry-sage leading-relaxed">
+                              {faq.answer}
+                            </p>
+                          </div>
+                        </div>
                       </details>
                     ))}
                   </div>

@@ -9,8 +9,15 @@ import { WhyBlitzworxSection } from './sections/home/WhyBlitzworxSection';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 
 export const metadata: Metadata = {
+  title: 'Webdesign, Development & Branding voor Ondernemers',
   description:
-    'Blitzworx - Webdesign That Worx! Creative agency voor ondernemers die online willen groeien. Webdesign, development en branding.',
+    'Blitzworx is een creative agency voor ondernemers die online willen groeien. Professioneel webdesign, development en branding vanuit Zwolle.',
+  openGraph: {
+    title: 'Blitzworx | Webdesign That Worx!',
+    description:
+      'Creative agency voor ondernemers die online willen groeien. Webdesign, development en branding.',
+    url: '/',
+  },
   alternates: {
     canonical: '/',
   },

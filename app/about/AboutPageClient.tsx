@@ -776,7 +776,7 @@ export function AboutPageClient() {
                 {/* Caption below image — right-aligned */}
                 <div className="mt-4 flex items-center gap-3 justify-end max-w-[440px] mx-auto md:mx-0">
                   <span className="text-[11px] font-mono tracking-[0.15em] uppercase text-grey-olive/50">
-                    Den Haag, NL
+                    Zwolle, NL
                   </span>
                   <div className="w-8 h-px bg-dry-sage/20" aria-hidden />
                 </div>

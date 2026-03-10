@@ -7,10 +7,16 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 
 export const metadata: Metadata = {
-  title: 'Cases',
-  alternates: { canonical: '/cases' },
+  title: 'Cases — Webdesign & Development Portfolio',
   description:
     'Bekijk onze recente projecten. Van webdesign tot development en branding: cases die laten zien wat Blitzworx kan.',
+  openGraph: {
+    title: 'Cases — Blitzworx Portfolio',
+    description:
+      'Van webdesign tot development en branding: cases die laten zien wat Blitzworx kan.',
+    url: '/cases',
+  },
+  alternates: { canonical: '/cases' },
 };
 
 export default function CasesPage() {

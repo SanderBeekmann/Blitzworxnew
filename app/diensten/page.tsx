@@ -4,9 +4,15 @@ import { siteUrl } from '@/lib/site';
 import { FadeIn } from '@/components/animations/FadeIn';
 
 export const metadata: Metadata = {
-  title: 'Diensten',
+  title: 'Diensten — Webdesign, Development & Branding',
   description:
     'Webdesign, webdevelopment en branding voor ondernemers. Blitzworx helpt je online groeien met maatwerk dat werkt.',
+  openGraph: {
+    title: 'Diensten — Blitzworx',
+    description:
+      'Webdesign, development en branding voor ondernemers. Maatwerk dat werkt.',
+    url: '/diensten',
+  },
   alternates: { canonical: '/diensten' },
 };
 

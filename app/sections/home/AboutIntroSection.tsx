@@ -122,19 +122,19 @@ export function AboutIntroSection() {
         }
 
         // ── Step 2: Person rises out of the rectangle ──
-        // Bottom clip always stays at 5% (= rectangle bottom edge)
-        // Figure starts pushed down and small, hidden below the clip line
+        // Image starts fully below the rectangle, slides up and grows
+        // Rectangle's overflow-hidden clips at the bottom edge
         gsap.set(photoInner, {
           opacity: 1,
-          y: '70%',
-          scale: 0.75,
-          clipPath: 'inset(0 0 5% 0)',
+          y: '100%',
+          scale: 0.8,
           filter: 'grayscale(100%) brightness(0.6)',
         });
+
+        // Rise up inside the clipped rectangle
         gsap.to(photoInner, {
           y: '0%',
           scale: 1,
-          clipPath: 'inset(0 0 5% 0)',
           filter: 'grayscale(0%) brightness(1)',
           duration: 2,
           delay: 0.7,
@@ -145,6 +145,21 @@ export function AboutIntroSection() {
             toggleActions: 'play none none none',
           },
         });
+
+        // Smoothly expand the clip to reveal the full figure beyond the rectangle
+        if (backdrop) {
+          gsap.to(backdrop, {
+            clipPath: 'inset(-40% -25% 0 -25%)',
+            duration: 1.2,
+            delay: 0.4,
+            ease: 'power2.inOut',
+            scrollTrigger: {
+              trigger: photo,
+              start: 'top 80%',
+              toggleActions: 'play none none none',
+            },
+          });
+        }
 
         // ── Dot grid: typewriter-style reveal ──
         if (dotGrid) {
@@ -438,9 +453,8 @@ export function AboutIntroSection() {
                 aria-hidden
               />
 
-              {/* Backdrop rectangle as portal — image lives inside it */}
+              {/* Backdrop rectangle as portal — image emerges from it */}
               <div className="relative aspect-[3/4]">
-                {/* The rectangle backdrop (visual only) */}
                 <div
                   ref={backdropRef}
                   className="absolute top-[25%] left-[15%] right-[15%] bottom-[5%] rounded-[2px] opacity-0"
@@ -448,26 +462,29 @@ export function AboutIntroSection() {
                     background:
                       'linear-gradient(160deg, rgba(84,92,82,0.12) 0%, rgba(84,92,82,0.04) 100%)',
                     border: '1px solid rgba(202,202,170,0.08)',
-                  }}
-                  aria-hidden
-                />
-
-                {/* Image — clipped only at the bottom to match rectangle edge */}
-                <div
-                  ref={photoInnerRef}
-                  className="absolute inset-0"
-                  style={{
-                    opacity: 0,
-                    clipPath: 'inset(0 0 5% 0)',
+                    clipPath: 'inset(0 0 0 0)',
                   }}
                 >
-                  <Image
-                    src="/assets/images/sander1.png"
-                    alt="Sander, oprichter en creative developer bij Blitzworx"
-                    fill
-                    className="object-contain object-bottom drop-shadow-[0_8px_32px_rgba(4,7,17,0.5)] brightness-[0.85]"
-                    sizes="(max-width: 768px) 100vw, 45vw"
-                  />
+                  {/* Image inside rectangle — overflows left/right/top but clipped at bottom */}
+                  <div
+                    ref={photoInnerRef}
+                    className="absolute"
+                    style={{
+                      top: '-36%',
+                      left: '-22%',
+                      right: '-22%',
+                      bottom: '0%',
+                      opacity: 0,
+                    }}
+                  >
+                    <Image
+                      src="/assets/images/sander1.png"
+                      alt="Sander, oprichter en creative developer bij Blitzworx"
+                      fill
+                      className="object-contain object-bottom drop-shadow-[0_8px_32px_rgba(4,7,17,0.5)] brightness-[0.85]"
+                      sizes="(max-width: 768px) 100vw, 45vw"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -482,7 +499,7 @@ export function AboutIntroSection() {
                   </span>
                 </div>
                 <span className="name-tag-item text-[10px] font-mono tracking-[0.15em] uppercase text-grey-olive/40 opacity-0">
-                  Wapenveld, NL
+                  Zwolle, NL
                 </span>
               </div>
             </div>

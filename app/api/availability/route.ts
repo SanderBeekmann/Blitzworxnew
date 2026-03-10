@@ -50,7 +50,7 @@ export async function GET(request: Request) {
   try {
 
     const result: Record<string, string[]> = {};
-    const daysCount = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    const daysCount = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     const dates = getDateRange(Math.max(1, daysCount), startDate);
 
     for (const date of dates) {
