@@ -51,23 +51,25 @@ export function FooterBars() {
             }
           });
         }
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: container,
-            start: 'top 95%',
-            end: 'top 40%',
-            scrub: 1.2,
-          },
-        });
-        barsOrdered.forEach(({ el, from, barIdx, groupIdx }) => {
-          const stagger = groupIdx === 1 ? (BAR_COUNT - 1 - barIdx) * 0.15 : barIdx * 0.15;
-          tl.fromTo(
-            el,
-            { x: from.x, y: from.y },
-            { x: 0, y: 0, duration: 0.4, ease: 'none' },
-            stagger
-          );
-        });
+        if (window.matchMedia('(min-width: 768px)').matches) {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: container,
+              start: 'top 95%',
+              end: 'top 40%',
+              scrub: 1.2,
+            },
+          });
+          barsOrdered.forEach(({ el, from, barIdx, groupIdx }) => {
+            const stagger = groupIdx === 1 ? (BAR_COUNT - 1 - barIdx) * 0.15 : barIdx * 0.15;
+            tl.fromTo(
+              el,
+              { x: from.x, y: from.y },
+              { x: 0, y: 0, duration: 0.4, ease: 'none' },
+              stagger
+            );
+          });
+        }
       });
     });
   }, []);

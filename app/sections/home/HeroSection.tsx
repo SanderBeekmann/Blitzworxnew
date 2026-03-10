@@ -26,23 +26,25 @@ export function HeroSection() {
 
         scrollTriggerRef.current?.kill();
 
-        const tl = gsap.fromTo(
-          hero,
-          { filter: 'blur(0px)', scale: 1 },
-          {
-            filter: 'blur(12px)',
-            scale: 0.92,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: spacer,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: 1.2,
-            },
-          }
-        );
+        if (window.matchMedia('(min-width: 768px)').matches) {
+          const tl = gsap.fromTo(
+            hero,
+            { filter: 'blur(0px)', scale: 1 },
+            {
+              filter: 'blur(12px)',
+              scale: 0.92,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: spacer,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1.2,
+              },
+            }
+          );
 
-        scrollTriggerRef.current = tl.scrollTrigger ?? null;
+          scrollTriggerRef.current = tl.scrollTrigger ?? null;
+        }
       }
     );
 

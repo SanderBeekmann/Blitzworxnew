@@ -173,6 +173,19 @@ export function Header() {
     };
   }, [mobileOpen, closeMenu]);
 
+  // Close mobile menu on route change and ensure overflow is always reset
+  useEffect(() => {
+    setMobileOpen(false);
+    document.body.style.overflow = '';
+  }, [pathname]);
+
+  // Safety guard: always reset overflow on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   const handleMenuLinkClick = () => {
     closeMenu();
   };

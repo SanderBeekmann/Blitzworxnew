@@ -244,39 +244,42 @@ export function AboutIntroSection() {
           );
         }
 
-        // ── Parallax: photo floats up, backdrop drifts slower ──
-        gsap.to(photo, {
-          y: -50,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1.2,
-          },
-        });
-
-        if (backdrop) {
-          gsap.to(backdrop, {
-            y: -25,
+        // ── Parallax: photo floats up, backdrop drifts slower (desktop only) ──
+        if (window.matchMedia('(min-width: 768px)').matches) {
+          gsap.to(photo, {
+            y: -50,
+            willChange: 'transform',
             scrollTrigger: {
               trigger: section,
               start: 'top bottom',
               end: 'bottom top',
-              scrub: 1.5,
+              scrub: 1.2,
             },
           });
-        }
 
-        if (dotGrid) {
-          gsap.to(dotGrid, {
-            y: -15,
-            scrollTrigger: {
-              trigger: section,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 2,
-            },
-          });
+          if (backdrop) {
+            gsap.to(backdrop, {
+              y: -25,
+              scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.5,
+              },
+            });
+          }
+
+          if (dotGrid) {
+            gsap.to(dotGrid, {
+              y: -15,
+              scrollTrigger: {
+                trigger: section,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 2,
+              },
+            });
+          }
         }
 
         // ── Disciplines: stagger reveal with border draw ──
@@ -428,7 +431,7 @@ export function AboutIntroSection() {
           <div className="relative order-1 md:order-2 md:mt-8 lg:mt-0">
             <div
               ref={photoRef}
-              className="relative w-full max-w-[500px] mx-auto md:mx-0 md:ml-auto will-change-transform"
+              className="relative w-full max-w-[500px] mx-auto md:mx-0 md:ml-auto"
             >
               {/* Subtle dot grid accent */}
               <div

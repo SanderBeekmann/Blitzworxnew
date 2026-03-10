@@ -79,7 +79,7 @@ export function HeroBars() {
           { x: RETREAT_OFFSET, y: RETREAT_OFFSET },
         ];
 
-        if (groups.length && spacer) {
+        if (groups.length && spacer && window.matchMedia('(min-width: 768px)').matches) {
           groups.forEach((group, i) => {
             const dir = retreatDirections[i];
             if (!dir) return;
