@@ -150,6 +150,42 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
           </div>
         </div>
 
+        {/* Testimonial */}
+        {caseItem.testimonial && (
+          <div className="mt-16 md:mt-24">
+            <FadeIn delay={0.2}>
+              <blockquote className="relative p-6 md:p-8 rounded-md bg-dry-sage border border-ebony">
+                <p className="text-body text-ink leading-relaxed">
+                  &ldquo;{caseItem.testimonial.quote}&rdquo;
+                </p>
+                <div className="flex gap-1 mt-4" aria-hidden>
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <svg
+                      key={i}
+                      className="w-4 h-4 text-ink shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden
+                    >
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  ))}
+                </div>
+                <footer className="mt-6 pt-4 border-t border-[rgba(4,7,17,0.8)]">
+                  <cite className="not-italic">
+                    <span className="font-semibold text-ink block">
+                      {caseItem.testimonial.author}
+                    </span>
+                    <span className="text-small text-[rgba(4,7,17,0.8)]">
+                      {caseItem.testimonial.role} · {caseItem.client}
+                    </span>
+                  </cite>
+                </footer>
+              </blockquote>
+            </FadeIn>
+          </div>
+        )}
+
         <div className="mt-16 lg:hidden">
           <div className="relative aspect-video rounded-md overflow-hidden bg-ebony">
             {showPlaceholder ? (

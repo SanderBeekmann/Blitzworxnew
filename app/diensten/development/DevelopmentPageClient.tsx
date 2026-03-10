@@ -7,6 +7,7 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 import { SectionTopBars } from '@/components/animations/SectionTopBars';
 import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
 import { Button } from '@/components/ui/Button';
+import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
 interface ScrollTriggerRef {
   kill: () => void;
@@ -448,7 +449,7 @@ export function DevelopmentPageClient() {
       {/* ── Capabilities ── */}
       <section
         ref={capabilitiesRef}
-        className="section relative overflow-hidden"
+        className="section relative overflow-hidden bg-ink"
         aria-labelledby="capabilities-title"
       >
         <div className="container-narrow">
@@ -622,6 +623,8 @@ export function DevelopmentPageClient() {
           </div>
         </div>
       </section>
+
+      <MaintenanceSection />
 
       {/* ── CTA ── */}
       <section

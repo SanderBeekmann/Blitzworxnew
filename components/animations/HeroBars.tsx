@@ -7,28 +7,28 @@ const RETREAT_OFFSET = 80;
 const BAR_GROUPS = [
   {
     position:
-      'fixed -left-8 md:-left-4 lg:-left-14 2xl:-left-8 z-10 flex gap-0 origin-bottom-right top-[calc(-22%-244px)] md:top-[calc(-18%-220px)] lg:top-[calc(-26%-310px)] 2xl:top-[calc(-30%-360px)]',
+      'absolute md:fixed -left-8 md:-left-4 lg:-left-14 2xl:-left-8 z-10 flex gap-0 origin-bottom-right top-[calc(-22%-244px)] md:top-[calc(-18%-220px)] lg:top-[calc(-26%-310px)] 2xl:top-[calc(-30%-360px)]',
     style: { transform: 'rotate(-28deg)' },
     clipPath: 'polygon(0 0, 100% 0, 100% 92%, 0 100%)',
     colors: ['var(--ebony)', 'var(--grey-olive)', 'var(--dry-sage)', 'var(--cornsilk)'],
   },
   {
     position:
-      'fixed -right-8 md:-right-4 lg:-right-14 2xl:-right-8 z-10 flex gap-0 origin-bottom-left top-[calc(-22%-244px)] md:top-[calc(-18%-220px)] lg:top-[calc(-26%-310px)] 2xl:top-[calc(-30%-360px)]',
+      'absolute md:fixed -right-8 md:-right-4 lg:-right-14 2xl:-right-8 z-10 flex gap-0 origin-bottom-left top-[calc(-22%-244px)] md:top-[calc(-18%-220px)] lg:top-[calc(-26%-310px)] 2xl:top-[calc(-30%-360px)]',
     style: { transform: 'rotate(26deg)' },
     clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 92%)',
     colors: ['var(--grey-olive)', 'var(--ebony)', 'var(--dry-sage)', 'var(--cornsilk)'],
   },
   {
     position:
-      'fixed -left-8 md:left-0 lg:-left-6 2xl:left-4 z-10 flex gap-0 origin-top-right bottom-[calc(-22%-244px)] md:bottom-[calc(-18%-220px)] lg:bottom-[calc(-26%-310px)] 2xl:bottom-[calc(-30%-360px)]',
+      'absolute md:fixed -left-8 md:left-0 lg:-left-6 2xl:left-4 z-10 flex gap-0 origin-top-right bottom-[calc(-22%-244px)] md:bottom-[calc(-18%-220px)] lg:bottom-[calc(-26%-310px)] 2xl:bottom-[calc(-30%-360px)]',
     style: { transform: 'rotate(24deg)' },
     clipPath: 'polygon(0 8%, 100% 0, 100% 100%, 0 100%)',
     colors: ['var(--dry-sage)', 'var(--ebony)', 'var(--grey-olive)', 'var(--cornsilk)'],
   },
   {
     position:
-      'fixed -right-8 md:right-0 lg:-right-6 2xl:right-4 z-10 flex gap-0 origin-top-left bottom-[calc(-22%-244px)] md:bottom-[calc(-18%-220px)] lg:bottom-[calc(-26%-310px)] 2xl:bottom-[calc(-30%-360px)]',
+      'absolute md:fixed -right-8 md:right-0 lg:-right-6 2xl:right-4 z-10 flex gap-0 origin-top-left bottom-[calc(-22%-244px)] md:bottom-[calc(-18%-220px)] lg:bottom-[calc(-26%-310px)] 2xl:bottom-[calc(-30%-360px)]',
     style: { transform: 'rotate(-26deg)' },
     clipPath: 'polygon(0 0, 100% 8%, 100% 100%, 0 100%)',
     colors: ['var(--grey-olive)', 'var(--dry-sage)', 'var(--ebony)', 'var(--cornsilk)'],
@@ -121,7 +121,7 @@ export function HeroBars() {
           {group.colors.map((color, i) => (
             <div
               key={i}
-              className="hero-bar w-14 md:w-24 h-[55vh] md:h-[75vh] opacity-0 motion-reduce:opacity-100"
+              className="hero-bar w-14 md:w-24 h-[55dvh] md:h-[75vh] opacity-0 motion-reduce:opacity-100"
               style={{
                 clipPath: group.clipPath,
                 backgroundColor: color,

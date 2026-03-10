@@ -13,6 +13,12 @@ export interface Case {
   /** Show placeholder with "Coming soon" instead of images */
   imagePlaceholder?: boolean;
   year: string;
+  /** Optional client testimonial */
+  testimonial?: {
+    quote: string;
+    author: string;
+    role: string;
+  };
 }
 
 export const cases: Case[] = [
@@ -48,5 +54,11 @@ Maandelijks help ik BlueShipment nu met het doorvoeren van nieuwe ideeën en ver
     ],
     websiteUrl: 'https://blueshipment.nl',
     year: '2026',
+    testimonial: {
+      quote:
+        'Sander van Blitzworx heeft voor ons fulfilment center een hele mooie website gebouwd (blueshipment.nl). We zijn erg tevreden met het eindresultaat. Naast het bouwen van de website dacht Sander ook actief mee over de opzet en uitstraling, wat voor ons echt meerwaarde had. De samenwerking verliep prettig en duidelijk. Al met al zeer tevreden en we zullen in de toekomst zeker weer bij Blitzworx aankloppen.',
+      author: 'Reitze Douma',
+      role: 'Co-founder',
+    },
   },
 ];

@@ -336,7 +336,9 @@ export function AboutPageClient() {
 
   return (
     <div id="about-page" className="relative">
-      <AboutScrollLine />
+      <div className="hidden md:block">
+        <AboutScrollLine />
+      </div>
 
       {/* ── HERO ── */}
       <section
@@ -528,7 +530,7 @@ export function AboutPageClient() {
           />
 
           {/* Composition container */}
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-[600px] md:min-h-[700px] lg:min-h-[800px]">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 md:min-h-[700px] lg:min-h-[800px]">
 
             {/* ─ LAYER 1 (back): Dashboard — centered, largest ─ */}
             <div ref={dashboardParallaxRef} className="relative z-10 mx-auto w-full max-w-4xl will-change-transform">
@@ -580,7 +582,7 @@ export function AboutPageClient() {
             </div>
 
             {/* ─ LAYER 2 (mid): Desktop mockup — overlaps bottom-left ─ */}
-            <div ref={desktopParallaxRef} className="relative z-20 -mt-24 md:-mt-40 lg:-mt-52 ml-0 md:-ml-8 lg:-ml-12 w-[85%] md:w-[55%] max-w-xl will-change-transform">
+            <div ref={desktopParallaxRef} className="relative z-20 mt-6 md:-mt-40 lg:-mt-52 ml-0 md:-ml-8 lg:-ml-12 w-full md:w-[55%] max-w-xl will-change-transform">
             <div
               ref={desktopMockupRef}
               className="motion-reduce:!transform-none motion-reduce:!opacity-100"
@@ -628,7 +630,7 @@ export function AboutPageClient() {
             </div>
 
             {/* ─ LAYER 3 (front): Phone mockup — overlaps right side, same browser frame style ─ */}
-            <div ref={phoneParallaxRef} className="absolute z-30 right-4 sm:right-8 md:right-12 lg:right-16 bottom-0 md:bottom-8 w-[140px] sm:w-[180px] md:w-[220px] lg:w-[250px] will-change-transform">
+            <div ref={phoneParallaxRef} className="relative md:absolute z-30 mt-6 md:mt-0 mx-auto md:mx-0 md:right-12 lg:right-16 md:bottom-8 w-[180px] sm:w-[200px] md:w-[220px] lg:w-[250px] will-change-transform">
             <div
               ref={phoneMockupRef}
               className="motion-reduce:!transform-none motion-reduce:!opacity-100"

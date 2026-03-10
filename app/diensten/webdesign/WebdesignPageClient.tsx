@@ -7,6 +7,7 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 import { SectionTopBars } from '@/components/animations/SectionTopBars';
 import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
 import { Button } from '@/components/ui/Button';
+import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
 interface ScrollTriggerRef {
   kill: () => void;
@@ -805,6 +806,8 @@ export function WebdesignPageClient() {
           </div>
         </div>
       </section>
+
+      <MaintenanceSection />
 
       {/* ── CTA ── */}
       <section

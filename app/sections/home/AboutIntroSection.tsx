@@ -37,7 +37,7 @@ export function AboutIntroSection() {
   const dotGridRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const nameTagRef = useRef<HTMLDivElement>(null);
-  const quoteRef = useRef<HTMLDivElement>(null);
+
   const archLinesRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -52,7 +52,7 @@ export function AboutIntroSection() {
     const dotGrid = dotGridRef.current;
     const glow = glowRef.current;
     const nameTag = nameTagRef.current;
-    const quote = quoteRef.current;
+
     const archLines = archLinesRef.current;
 
     if (!section || !photo || !photoInner) return;
@@ -223,26 +223,6 @@ export function AboutIntroSection() {
           );
         }
 
-        // ── Quote: fade in with letter-spacing tighten ──
-        if (quote) {
-          gsap.fromTo(
-            quote,
-            { opacity: 0, letterSpacing: '0.15em', y: 10 },
-            {
-              opacity: 1,
-              letterSpacing: '0em',
-              y: 0,
-              duration: 1,
-              delay: 1.6,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: photo,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }
-          );
-        }
 
         // ── Parallax: photo floats up, backdrop drifts slower (desktop only) ──
         if (window.matchMedia('(min-width: 768px)').matches) {
@@ -268,6 +248,7 @@ export function AboutIntroSection() {
               },
             });
           }
+
 
           if (dotGrid) {
             gsap.to(dotGrid, {
@@ -456,6 +437,13 @@ export function AboutIntroSection() {
                 aria-hidden
               />
 
+              {/* Location label above photo */}
+              <FadeIn delay={1.4}>
+                <span className="block text-right text-[10px] font-mono tracking-[0.15em] uppercase text-grey-olive/40 mb-2 px-2">
+                  Zwolle, NL
+                </span>
+              </FadeIn>
+
               {/* Backdrop rectangle as portal — image emerges from it */}
               <div className="relative aspect-[3/4]">
                 <div
@@ -492,28 +480,14 @@ export function AboutIntroSection() {
               </div>
 
               {/* Name tag beneath the figure */}
-              <div ref={nameTagRef} className="mt-4 flex items-end justify-between px-2">
-                <div>
-                  <span className="name-tag-item block text-[10px] font-mono tracking-[0.25em] uppercase text-dry-sage/60 mb-1 opacity-0">
-                    Oprichter &amp; Creative Developer
-                  </span>
-                  <span className="name-tag-item block text-h3 md:text-h3-lg font-bold text-cornsilk opacity-0">
-                    Sander
-                  </span>
-                </div>
-                <span className="name-tag-item text-[10px] font-mono tracking-[0.15em] uppercase text-grey-olive/40 opacity-0">
-                  Zwolle, NL
+              <div ref={nameTagRef} className="mt-4 px-2">
+                <span className="name-tag-item block text-[10px] font-mono tracking-[0.25em] uppercase text-dry-sage/60 mb-1 opacity-0">
+                  Oprichter &amp; Creative Developer
+                </span>
+                <span className="name-tag-item block text-h3 md:text-h3-lg font-bold text-cornsilk opacity-0">
+                  Sander
                 </span>
               </div>
-            </div>
-
-            {/* Quote centered below name tag */}
-            <div ref={quoteRef} className="mt-6 md:mt-8 text-center opacity-0">
-              <blockquote className="inline-block relative pl-5 border-l-2 border-dry-sage/30">
-                <p className="text-small text-dry-sage/80 italic leading-relaxed">
-                  &ldquo;Let&apos;s create stuff that worx!&rdquo;
-                </p>
-              </blockquote>
             </div>
           </div>
         </div>

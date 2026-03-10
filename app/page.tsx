@@ -7,6 +7,7 @@ import { SkillsSection } from './sections/home/SkillsSection';
 import { TestimonialSection } from './sections/home/TestimonialSection';
 import { WhyBlitzworxSection } from './sections/home/WhyBlitzworxSection';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
+import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
 export const metadata: Metadata = {
   title: 'Webdesign, Development & Branding voor Ondernemers',
@@ -35,6 +36,7 @@ export default function HomePage() {
         <div className="relative z-30">
           <RecentCasesSection />
           <HowItWorxSection />
+          <MaintenanceSection />
           <WhyBlitzworxSection />
           <SkillsSection />
           <TestimonialSection />

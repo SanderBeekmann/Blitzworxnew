@@ -55,7 +55,7 @@ export function HeroSection() {
     <>
       <div
         ref={heroRef}
-        className="fixed inset-x-0 top-0 h-screen z-0 flex flex-col justify-center origin-center"
+        className="relative md:fixed inset-x-0 top-0 h-[100dvh] md:h-screen z-0 flex flex-col justify-center origin-center"
         aria-hidden
       >
         <HeroBars />
@@ -91,7 +91,7 @@ export function HeroSection() {
           </div>
         </section>
       </div>
-      <div ref={spacerRef} className="h-screen" aria-hidden />
+      <div ref={spacerRef} className="hidden md:block h-screen" aria-hidden />
     </>
   );
 }

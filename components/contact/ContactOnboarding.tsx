@@ -53,6 +53,7 @@ function getCalendarDays(year: number, month: number) {
 export function ContactOnboarding() {
   const [step, setStep] = useState(1);
   const [projectType, setProjectType] = useState<string | null>(null);
+  const [otherText, setOtherText] = useState('');
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', message: '' });
   const [preferredDate, setPreferredDate] = useState<string | null>(null);
   const [preferredTime, setPreferredTime] = useState<string | null>(null);
@@ -106,6 +107,7 @@ export function ContactOnboarding() {
 
   function handleNext() {
     if (step === 1 && !projectType) return;
+    if (step === 1 && projectType === 'other' && otherText.trim().length < 2) return;
     if ((step === 2 || step === 3 || step === 4) && !validateStep()) return;
     setDirection('forward');
     setHasNavigated(true);
@@ -148,7 +150,7 @@ export function ContactOnboarding() {
           phone: formData.phone.trim(),
           company: formData.company.trim(),
           message: formData.message.trim(),
-          projectType,
+          projectType: projectType === 'other' ? `Anders: ${otherText.trim()}` : projectType,
           preferredDate,
           preferredTime,
         }),
@@ -159,6 +161,7 @@ export function ContactOnboarding() {
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });
       setProjectType(null);
+      setOtherText('');
       setPreferredDate(null);
       setPreferredTime(null);
       setStep(1);
@@ -254,6 +257,22 @@ export function ContactOnboarding() {
                 </button>
               ))}
             </div>
+            {projectType === 'other' && (
+              <div className="mt-4">
+                <label htmlFor="onboard-other" className="block text-small font-medium text-dry-sage mb-2">
+                  Namelijk:
+                </label>
+                <input
+                  id="onboard-other"
+                  type="text"
+                  value={otherText}
+                  onChange={(e) => setOtherText(e.target.value)}
+                  className="block w-full min-h-[44px] px-4 py-3 rounded-md border border-ebony bg-ink text-cornsilk placeholder:text-grey-olive focus:border-dry-sage focus:ring-2 focus:ring-dry-sage/30 focus:outline-none"
+                  placeholder="Waar kan ik je mee helpen?"
+                  autoFocus
+                />
+              </div>
+            )}
           </div>
         )}
 
@@ -507,7 +526,7 @@ export function ContactOnboarding() {
             <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Project:</span>{' '}
-                {PROJECT_TYPES.find((p) => p.id === projectType)?.label ?? '-'}
+                {projectType === 'other' ? `Anders: ${otherText.trim()}` : (PROJECT_TYPES.find((p) => p.id === projectType)?.label ?? '-')}
               </p>
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Naam:</span> {formData.name}
@@ -558,7 +577,7 @@ export function ContactOnboarding() {
             <button
               type="button"
               onClick={handleNext}
-              disabled={step === 1 && !projectType}
+              disabled={step === 1 && (!projectType || (projectType === 'other' && otherText.trim().length < 2))}
               className="inline-flex items-center justify-center min-h-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Volgende
