@@ -5,6 +5,7 @@ import { RecentCasesSection } from './sections/home/RecentCasesSection';
 import { HowItWorxSection } from './sections/home/HowItWorxSection';
 import { SkillsSection } from './sections/home/SkillsSection';
 import { TestimonialSection } from './sections/home/TestimonialSection';
+import { WhyBlitzworxSection } from './sections/home/WhyBlitzworxSection';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 
 export const metadata: Metadata = {
@@ -12,9 +13,6 @@ export const metadata: Metadata = {
     'Blitzworx - Webdesign That Worx! Creative agency voor ondernemers die online willen groeien. Webdesign, development en branding.',
   alternates: {
     canonical: '/',
-  },
-  openGraph: {
-    url: '/',
   },
 };
 
@@ -30,6 +28,7 @@ export default function HomePage() {
         <div className="relative z-30">
           <RecentCasesSection />
           <HowItWorxSection />
+          <WhyBlitzworxSection />
           <SkillsSection />
           <TestimonialSection />
         </div>

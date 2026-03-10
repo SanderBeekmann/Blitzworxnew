@@ -39,7 +39,7 @@
 @layer base {
   html {
     font-size: var(--font-base);
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     /* Hide scrollbar, keep scroll functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;

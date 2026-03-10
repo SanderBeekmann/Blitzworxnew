@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: 'Blitzworx',
     images: [
       {
-        url: '/assets/images/blueshipmentmockup.png',
+        url: '/assets/images/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Blitzworx - Webdesign That Worx!',
@@ -27,11 +27,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/assets/images/blueshipmentmockup.png'],
+    images: ['/assets/images/og-image.png'],
   },
   robots: {
     index: true,
     follow: true,
+  },
+  other: {
+    'geo.region': 'NL',
+    'geo.placename': 'Nederland',
+    'content-language': 'nl',
   },
 };
 
@@ -49,7 +54,17 @@ export default function RootLayout({
         name: 'Blitzworx',
         url: siteUrl,
         description: 'Creative agency voor webdesign, development en branding. Webdesign That Worx!',
-        logo: { '@type': 'ImageObject', url: `${siteUrl}/assets/images/blueshipmentmockup.png` },
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/assets/images/og-image.png` },
+        sameAs: [
+          'https://www.linkedin.com/company/blitzworx/',
+          'https://www.instagram.com/blitzworx.nl/',
+        ],
+        founder: {
+          '@type': 'Person',
+          name: 'Sander Beekman',
+          url: `${siteUrl}/about`,
+          sameAs: 'https://www.linkedin.com/in/sander-beekman-38b054251/',
+        },
         contactPoint: {
           '@type': 'ContactPoint',
           email: 'sander@blitzworx.nl',
@@ -90,6 +105,32 @@ export default function RootLayout({
         description: 'Merkidentiteit en huisstijl. Van logo tot complete visuele identiteit voor jouw onderneming.',
         provider: { '@id': `${siteUrl}/#organization` },
         areaServed: 'NL',
+      },
+      {
+        '@type': 'ProfessionalService',
+        '@id': `${siteUrl}/#localbusiness`,
+        name: 'Blitzworx',
+        url: siteUrl,
+        description: 'Creative agency voor webdesign, development en branding in Nederland.',
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/assets/images/og-image.png` },
+        image: `${siteUrl}/assets/images/og-image.png`,
+        telephone: '',
+        email: 'sander@blitzworx.nl',
+        priceRange: '$$',
+        areaServed: {
+          '@type': 'Country',
+          name: 'Nederland',
+          sameAs: 'https://en.wikipedia.org/wiki/Netherlands',
+        },
+        serviceArea: {
+          '@type': 'GeoShape',
+          addressCountry: 'NL',
+        },
+        availableLanguage: [
+          { '@type': 'Language', name: 'Dutch', alternateName: 'nl' },
+          { '@type': 'Language', name: 'English', alternateName: 'en' },
+        ],
+        parentOrganization: { '@id': `${siteUrl}/#organization` },
       },
     ],
   };

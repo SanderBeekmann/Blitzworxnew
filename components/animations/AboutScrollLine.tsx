@@ -100,6 +100,7 @@ export function AboutScrollLine() {
       }
     };
 
+    let gradientFrame = 0;
     const updateLine = () => {
       const heroTitle = document.getElementById('about-hero-title');
       if (!heroTitle) return;
@@ -122,7 +123,12 @@ export function AboutScrollLine() {
             : (viewportCenterY - lineStartY) / lineLength;
 
       path.style.strokeDashoffset = `${pathLength * (1 - progress)}`;
-      updateGradient();
+
+      // Throttle gradient updates — only every 4th frame
+      gradientFrame++;
+      if (gradientFrame % 4 === 0) {
+        updateGradient();
+      }
     };
 
     const updateContainer = () => {

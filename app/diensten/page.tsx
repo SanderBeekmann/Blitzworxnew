@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { siteUrl } from '@/lib/site';
 import { FadeIn } from '@/components/animations/FadeIn';
 
 export const metadata: Metadata = {
@@ -28,8 +29,21 @@ const SERVICES = [
 ] as const;
 
 export default function DienstenPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Diensten', item: `${siteUrl}/diensten` },
+    ],
+  };
+
   return (
     <main className="section min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="container-narrow">
         <FadeIn>
           <Link
@@ -47,7 +61,7 @@ export default function DienstenPage() {
           <FadeIn delay={0.1}>
             <p className="mt-6 text-body text-dry-sage max-w-prose">
               Blitzworx biedt het totaalpakket voor ondernemers die online willen groeien. Van
-              merkidentiteit tot werkende website: we begeleiden je van concept tot live.
+              merkidentiteit tot werkende website: ik begeleid je van concept tot live.
             </p>
           </FadeIn>
         </header>

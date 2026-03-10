@@ -35,14 +35,14 @@ export const cases: Case[] = [
       'Op maat gemaakte oplossing op basis van hun voorbeelden, plus maandelijks abonnement voor nieuwe ideeën.',
     fullStory: `BlueShipment is een fulfillment center dat een op maat gemaakte oplossing zocht. Het project startte met voorbeelden die zij zelf aanleverden. Op basis hiervan ben ik aan de slag gegaan om een oplossing te bouwen die precies aansluit bij hun werkwijze en wensen.
 
-De samenwerking verliep soepel: door hun concrete input kon ik snel schakelen en iteratief tot het gewenste resultaat komen. Na de oplevering hebben zij een abonnement afgenomen, waardoor we de samenwerking hebben voortgezet.
+De samenwerking verliep soepel: door hun concrete input kon ik snel schakelen en iteratief tot het gewenste resultaat komen. Na de oplevering hebben zij een abonnement afgenomen, waardoor ik de samenwerking heb voortgezet.
 
-Maandelijks help ik BlueShipment nu met het doorvoeren van nieuwe ideeën en verbeteringen. Of het nu gaat om kleine aanpassingen of grotere uitbreidingen, we blijven samen de oplossing verder ontwikkelen zodat deze meegroeit met hun bedrijf.`,
-    image: '/assets/images/blueshipmentmockup.png',
-    imageHover: '/assets/images/iphonemockupblueship.png',
+Maandelijks help ik BlueShipment nu met het doorvoeren van nieuwe ideeën en verbeteringen. Of het nu gaat om kleine aanpassingen of grotere uitbreidingen, ik blijf samen met hen de oplossing verder ontwikkelen zodat deze meegroeit met hun bedrijf.`,
+    image: '/assets/images/blueshipmentmockup.webp',
+    imageHover: '/assets/images/iphonemockupblueship.webp',
     images: [
-      '/assets/images/blueshipmentmockup.png',
-      '/assets/images/iphonemockupblueship.png',
+      '/assets/images/blueshipmentmockup.webp',
+      '/assets/images/iphonemockupblueship.webp',
       'https://images.unsplash.com/photo-1556742111-a301076d9d18?w=800&h=600&fit=crop',
       'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=600&fit=crop',
     ],

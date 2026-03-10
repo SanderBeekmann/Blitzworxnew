@@ -137,7 +137,7 @@ export function ContactOnboarding() {
       <div className="p-8 rounded-md border border-ebony bg-ink/50 text-center">
         <p className="text-h3 font-semibold text-cornsilk mb-2">Bedankt!</p>
         <p className="text-body text-dry-sage">
-          Je bericht is verzonden. We nemen zo snel mogelijk contact op.
+          Je bericht is verzonden. Ik neem zo snel mogelijk contact op.
         </p>
       </div>
     );
@@ -147,7 +147,7 @@ export function ContactOnboarding() {
 
   return (
     <div>
-      <h2 className="text-h3 font-semibold text-cornsilk">Waar kunnen we je mee helpen?</h2>
+      <h2 className="text-h3 font-semibold text-cornsilk">Waar kan ik je mee helpen?</h2>
 
       <div className="mt-6 h-0.5 rounded-full bg-ebony/50 overflow-hidden mb-8" aria-hidden>
         <div

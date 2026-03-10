@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { siteUrl } from '@/lib/site';
 import { cases } from '@/lib/cases';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
@@ -13,8 +14,21 @@ export const metadata: Metadata = {
 };
 
 export default function CasesPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Cases', item: `${siteUrl}/cases` },
+    ],
+  };
+
   return (
     <section className="section" aria-labelledby="cases-title">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="container-narrow">
         <header className="py-24 md:py-36">
           <TitleReveal

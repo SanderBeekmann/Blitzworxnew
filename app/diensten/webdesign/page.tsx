@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { siteUrl } from '@/lib/site';
 import { WebdesignPageClient } from './WebdesignPageClient';
 
 export const metadata: Metadata = {
@@ -9,5 +10,23 @@ export const metadata: Metadata = {
 };
 
 export default function WebdesignPage() {
-  return <WebdesignPageClient />;
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Diensten', item: `${siteUrl}/diensten` },
+      { '@type': 'ListItem', position: 3, name: 'Webdesign', item: `${siteUrl}/diensten/webdesign` },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <WebdesignPageClient />
+    </>
+  );
 }

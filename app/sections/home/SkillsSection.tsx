@@ -9,7 +9,7 @@ const skills = [
   {
     title: 'UI / UX',
     description:
-      'Gebruiksvriendelijkheid staat centraal. We ontwerpen voor dagelijkse gebruiksmomenten en logische interacties. Animaties ondersteunen de gebruikerservaring en we testen met prototypes voordat we bouwen.',
+      'Gebruiksvriendelijkheid staat centraal. Ik ontwerp voor dagelijkse gebruiksmomenten en logische interacties. Animaties ondersteunen de gebruikerservaring en ik test met prototypes voordat ik bouw.',
     href: '/diensten/webdesign',
   },
   {
@@ -21,7 +21,7 @@ const skills = [
   {
     title: 'Branding',
     description:
-      'Creativiteit en merkidentiteit. Samen vertalen we je identiteit naar communicatie en marktpositie. Van logo tot volledige huisstijl.',
+      'Creativiteit en merkidentiteit. Samen vertalen we jouw identiteit naar communicatie en marktpositie. Van logo tot volledige huisstijl.',
     href: '/diensten/branding',
   },
 ];

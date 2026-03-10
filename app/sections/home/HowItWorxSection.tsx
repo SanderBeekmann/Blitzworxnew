@@ -16,7 +16,7 @@ const steps = [
     number: '01',
     title: 'Intake',
     description:
-      'Kennismaking en het opstellen van een maatwerkplan. We bespreken je doelen, doelgroep en wensen.',
+      'Kennismaking en het opstellen van een maatwerkplan. Ik bespreek je doelen, doelgroep en wensen.',
   },
   {
     number: '02',
@@ -28,7 +28,7 @@ const steps = [
     number: '03',
     title: 'Feedback & Optimalisatie',
     description:
-      'Evaluatie na oplevering en doorvoeren van verbeteringen. We perfectioneren tot alles klopt.',
+      'Evaluatie na oplevering en doorvoeren van verbeteringen. Ik perfectioneer tot alles klopt.',
   },
   {
     number: '04',

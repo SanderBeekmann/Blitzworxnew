@@ -1,74 +1,64 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { SectionTopBars } from '@/components/animations/SectionTopBars';
 import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
 import { Button } from '@/components/ui/Button';
 
-const SLIDE_OFFSET = '30vw';
-
 interface ScrollTriggerRef {
+  kill: () => void;
+}
+
+interface GsapTimelineRef {
   kill: () => void;
 }
 
 const benefits = [
   {
-    number: '01',
     title: 'Eerste indruk die blijft',
     description:
       'Bezoekers vormen in 0,05 seconde een mening over je website. Professioneel design wekt direct vertrouwen en houdt bezoekers langer vast.',
   },
   {
-    number: '02',
     title: 'Meer conversies',
     description:
       'Doordacht ontwerp stuurt bezoekers naar de juiste actie. Elke pagina is gebouwd om resultaat te leveren.',
   },
   {
-    number: '03',
     title: 'Herkenbaar en consistent',
     description:
       'Jouw merkidentiteit komt terug in elk detail: van kleuren en typografie tot de kleinste interacties.',
   },
   {
-    number: '04',
     title: 'Mobiel-eerst ontwerp',
     description:
       'Meer dan 60% van het verkeer komt via mobiel. Elk ontwerp begint op het kleinste scherm en schaalt naadloos op.',
   },
 ];
 
-const processSteps = [
+const processPhases = [
   {
-    number: '01',
-    title: 'Kennismaking & Briefing',
+    label: 'Briefing',
     description:
-      'We starten met jouw verhaal. Wie ben je, wie is je doelgroep, en wat wil je bereiken? Op basis hiervan stellen we een creatieve briefing op.',
-    imagePlaceholder: 'Afbeelding: Briefing',
+      'Ik start met jouw verhaal. Wie ben je, wie is je doelgroep, en wat wil je bereiken? Op basis hiervan stel ik een creatieve briefing op.',
   },
   {
-    number: '02',
-    title: 'Wireframes & Structuur',
+    label: 'Wireframes',
     description:
-      'We ontwerpen de blauwdruk van je website. Logische navigatie, duidelijke hiërarchie en een structuur die werkt voor jouw bezoekers.',
-    imagePlaceholder: 'Afbeelding: Wireframe',
+      'Ik ontwerp de blauwdruk van je website. Logische navigatie, duidelijke hiërarchie en een structuur die werkt voor jouw bezoekers.',
   },
   {
-    number: '03',
-    title: 'Visueel Ontwerp',
+    label: 'Visueel ontwerp',
     description:
       'Je huisstijl wordt vertaald naar een prachtig design. Kleuren, typografie, beelden en animaties komen samen in een ontwerp dat past bij jouw merk.',
-    imagePlaceholder: 'Afbeelding: Design',
   },
   {
-    number: '04',
-    title: 'Feedback & Oplevering',
+    label: 'Oplevering',
     description:
-      'Je geeft feedback, wij perfectioneren. Het definitieve ontwerp wordt development-ready opgeleverd, klaar om gebouwd te worden.',
-    imagePlaceholder: 'Afbeelding: Oplevering',
+      'Je geeft feedback, ik perfectioneer. Het definitieve ontwerp wordt development-ready opgeleverd, klaar om gebouwd te worden.',
   },
 ];
 
@@ -81,7 +71,7 @@ const usps = [
   {
     title: 'Ontwerp + techniek onder één dak',
     description:
-      'We ontwerpen niet alleen, we bouwen ook. Dat betekent designs die technisch haalbaar zijn en naadloos worden omgezet naar code.',
+      'Ik ontwerp niet alleen, ik bouw ook. Dat betekent designs die technisch haalbaar zijn en naadloos worden omgezet naar code.',
   },
   {
     title: 'Persoonlijke samenwerking',
@@ -90,10 +80,10 @@ const usps = [
   },
 ];
 
-const portfolioItems = [
-  { title: 'BlueShipment', description: 'Website voor fulfilment center' },
-  { title: 'Project 2', description: 'Binnenkort beschikbaar' },
-  { title: 'Project 3', description: 'Binnenkort beschikbaar' },
+const devices = [
+  { key: 'phone' as const, label: 'Mobiel', width: 'w-[100px]', height: 'h-[180px]', radius: 'rounded-xl' },
+  { key: 'tablet' as const, label: 'Tablet', width: 'w-[160px]', height: 'h-[200px]', radius: 'rounded-lg' },
+  { key: 'desktop' as const, label: 'Desktop', width: 'w-[240px]', height: 'h-[160px]', radius: 'rounded-sm' },
 ];
 
 const techGroups = [
@@ -103,201 +93,196 @@ const techGroups = [
 ];
 
 export function WebdesignPageClient() {
-  const timelineSectionRef = useRef<HTMLElement>(null);
-  const timelineRef = useRef<SVGPathElement>(null);
-  const timelineContainerRef = useRef<HTMLDivElement>(null);
-  const lastStepRef = useRef<HTMLDivElement>(null);
-  const timelineCleanupRef = useRef<(() => void) | null>(null);
-  const uspImageRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const processRef = useRef<HTMLElement>(null);
+  const deviceRef = useRef<HTMLDivElement>(null);
+  const [activeDevice, setActiveDevice] = useState(0);
 
-  // Timeline line + dot animation (HowItWorxSection pattern)
-  useEffect(() => {
-    const section = timelineSectionRef.current;
-    const path = timelineRef.current;
-    if (!section || !path) return;
+  // ── 1. Hero: Mouse parallax on canvas layers ──
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.innerWidth < 768) return;
 
-    let isMounted = true;
-    const initAnimation = (retryCount = 0) => {
-      if (!isMounted) return;
-      const dots = section.querySelectorAll('.timeline-dot');
-      if (!dots.length && retryCount < 5) {
-        setTimeout(() => initAnimation(retryCount + 1), 100);
-        return;
-      }
-      if (!dots.length) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) {
-        path.style.strokeDashoffset = '0';
-        dots.forEach((dot) => ((dot as HTMLElement).style.opacity = '1'));
-        return;
-      }
+    const layers = canvas.querySelectorAll<HTMLElement>('[data-depth]');
 
-      const stepsWrapper = timelineContainerRef.current?.parentElement;
-      if (!stepsWrapper) return;
-      const stepsWrapperRect = stepsWrapper.getBoundingClientRect();
-      const lastDot = dots[dots.length - 1] as HTMLElement;
-      const lastDotRect = lastDot.getBoundingClientRect();
-      const lastDotCenterY = lastDotRect.top + lastDotRect.height / 2;
-      const lineStartY = stepsWrapperRect.top;
-      const lineEndY = lastDotCenterY;
-      const lineLength = lineEndY - lineStartY;
-
-      const dotProgresses: number[] = [];
-      dots.forEach((dot) => {
-        const rect = (dot as HTMLElement).getBoundingClientRect();
-        const dotCenterY = rect.top + rect.height / 2;
-        const progress = lineLength > 0 ? (dotCenterY - lineStartY) / lineLength : 0;
-        dotProgresses.push(Math.max(0, Math.min(1, progress)));
-      });
-
-      const pathLength = path.getTotalLength();
-      path.style.strokeDasharray = `${pathLength}`;
-      path.style.strokeDashoffset = `${pathLength}`;
-
-      const timelineContainer = timelineContainerRef.current;
-      if (!timelineContainer) return;
-
-      const viewportCenterY = () => window.innerHeight / 2;
-
-      const updateLine = () => {
-        if (!isMounted || !path) return;
-        const rect = timelineContainer.getBoundingClientRect();
-        const lineHeight = rect.bottom - rect.top;
-        const centerY = viewportCenterY();
-        const progress = lineHeight > 0
-          ? Math.max(0, Math.min(1, (centerY - rect.top) / lineHeight))
-          : 0;
-        path.style.strokeDashoffset = `${pathLength * (1 - progress)}`;
-
-        dots.forEach((dot, i) => {
-          const dotProgress = dotProgresses[i];
-          (dot as HTMLElement).style.opacity = progress >= dotProgress ? '1' : '0';
+    import('gsap').then(({ gsap }) => {
+      layers.forEach((layer) => {
+        const depth = parseFloat(layer.dataset.depth || '0');
+        gsap.to(layer, {
+          x: x * depth * 40,
+          y: y * depth * 40,
+          duration: 0.6,
+          ease: 'power2.out',
         });
-      };
-
-      updateLine();
-      window.addEventListener('scroll', updateLine, { passive: true });
-      window.addEventListener('resize', updateLine);
-
-      timelineCleanupRef.current = () => {
-        window.removeEventListener('scroll', updateLine);
-        window.removeEventListener('resize', updateLine);
-      };
-    };
-
-    const timeoutId = setTimeout(() => initAnimation(0), 150);
-
-    return () => {
-      isMounted = false;
-      clearTimeout(timeoutId);
-      timelineCleanupRef.current?.();
-    };
+      });
+    });
   }, []);
 
-  // Timeline container bottom alignment
+  // Mobile: ambient floating animation
   useEffect(() => {
-    const timelineContainer = timelineContainerRef.current;
-    const lastStep = lastStepRef.current;
-    if (!timelineContainer || !lastStep) return;
-
-    const updateTimelineEnd = () => {
-      const containerRect = timelineContainer.parentElement?.getBoundingClientRect();
-      const lastStepRect = lastStep.getBoundingClientRect();
-      if (!containerRect) return;
-      const lastStepCenter = lastStepRect.top + lastStepRect.height / 2;
-      const containerBottom = containerRect.bottom;
-      const offset = containerBottom - lastStepCenter;
-      timelineContainer.style.bottom = `${offset}px`;
-    };
-
-    updateTimelineEnd();
-    const observer = new ResizeObserver(updateTimelineEnd);
-    observer.observe(lastStep);
-    return () => observer.disconnect();
-  }, []);
-
-  // Step content slide-in animation
-  useEffect(() => {
-    const section = timelineSectionRef.current;
-    if (!section) return;
-
-    const stepContents = section.querySelectorAll<HTMLElement>('.step-content');
-    if (!stepContents.length) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      stepContents.forEach((el) => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-      return;
-    }
+    if (prefersReducedMotion) return;
+    if (window.innerWidth >= 768) return;
 
+    let timeline: GsapTimelineRef | null = null;
+
+    import('gsap').then(({ gsap }) => {
+      const layers = canvas.querySelectorAll<HTMLElement>('[data-depth]');
+      const tl = gsap.timeline({ repeat: -1, yoyo: true });
+      layers.forEach((layer, i) => {
+        const depth = parseFloat(layer.dataset.depth || '0');
+        tl.to(
+          layer,
+          {
+            y: depth * 6 * (i % 2 === 0 ? 1 : -1),
+            x: depth * 3 * (i % 2 === 0 ? -1 : 1),
+            duration: 2.5 + i * 0.3,
+            ease: 'sine.inOut',
+          },
+          0
+        );
+      });
+      timeline = tl;
+    });
+
+    return () => timeline?.kill();
+  }, []);
+
+  // ── 2. Process: Pinned scroll layer build-up ──
+  useEffect(() => {
+    const section = processRef.current;
+    if (!section) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+    if (window.innerWidth < 768) return;
+
+    let killed = false;
     const triggers: Array<ScrollTriggerRef> = [];
+    let timeline: GsapTimelineRef | null = null;
 
     Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
       ([{ gsap }, { ScrollTrigger }]) => {
+        if (killed) return;
         gsap.registerPlugin(ScrollTrigger);
 
-        stepContents.forEach((el, i) => {
-          const fromLeft = i % 2 === 0;
-          gsap.set(el, {
-            opacity: 0,
-            x: fromLeft ? `-${SLIDE_OFFSET}` : SLIDE_OFFSET,
-          });
+        const pinWrapper = section.querySelector<HTMLElement>('.process-pin-wrapper');
+        const phaseEls = section.querySelectorAll<HTMLElement>('.process-phase');
+        const descEls = section.querySelectorAll<HTMLElement>('.process-desc');
+        if (!pinWrapper || !phaseEls.length) return;
 
-          const tl = gsap.to(el, {
-            opacity: 1,
-            x: 0,
-            duration: 0.8,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          });
-
-          if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: pinWrapper,
+            start: 'center center',
+            end: () => `+=${window.innerHeight * 3}`,
+            pin: true,
+            pinSpacing: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
         });
 
-        ScrollTrigger.refresh();
+        // Phase 0 (Briefing) visible by default — fade it out when phase 1 enters
+        // Phase 1: Wireframes
+        tl.to(phaseEls[0], { opacity: 0, duration: 0.5 }, 0.3);
+        tl.to(descEls[0], { opacity: 0, y: -20, duration: 0.3 }, 0.3);
+        tl.to(phaseEls[1], { opacity: 1, duration: 0.5 }, 0.5);
+        tl.to(descEls[1], { opacity: 1, y: 0, duration: 0.5 }, 0.5);
+
+        // Phase 2: Visual design
+        tl.to(phaseEls[1], { opacity: 0, duration: 0.5 }, 1.3);
+        tl.to(descEls[1], { opacity: 0, y: -20, duration: 0.3 }, 1.3);
+        tl.to(phaseEls[2], { opacity: 1, duration: 0.5 }, 1.5);
+        tl.to(descEls[2], { opacity: 1, y: 0, duration: 0.5 }, 1.5);
+
+        // Phase 3: Oplevering
+        tl.to(phaseEls[2], { opacity: 0, duration: 0.5 }, 2.3);
+        tl.to(descEls[2], { opacity: 0, y: -20, duration: 0.3 }, 2.3);
+        tl.to(phaseEls[3], { opacity: 1, duration: 0.5 }, 2.5);
+        tl.to(descEls[3], { opacity: 1, y: 0, duration: 0.5 }, 2.5);
+
+        timeline = tl;
+        if (tl.scrollTrigger) triggers.push(tl.scrollTrigger);
+
+        // Refresh after a short delay to ensure layout is settled
+        requestAnimationFrame(() => {
+          ScrollTrigger.refresh();
+        });
       }
     );
 
-    return () => triggers.forEach((t) => t.kill());
+    return () => {
+      killed = true;
+      timeline?.kill();
+      triggers.forEach((t) => t.kill());
+    };
   }, []);
 
-  // USP image slide-in from right (AboutPageClient pattern)
+  // ── 3. USPs: Device morph cycling ──
   useEffect(() => {
-    const el = uspImageRef.current;
+    const el = deviceRef.current;
     if (!el) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) return;
 
-    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
-      ([{ gsap }, { ScrollTrigger }]) => {
-        gsap.registerPlugin(ScrollTrigger);
-        gsap.set(el, { x: '100%' });
-        gsap.to(el, {
-          x: 0,
-          duration: 0.9,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
-      }
-    );
+    const interval = setInterval(() => {
+      setActiveDevice((prev) => (prev + 1) % 3);
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  // Animate device frame on activeDevice change
+  useEffect(() => {
+    const el = deviceRef.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    import('gsap').then(({ gsap }) => {
+      const frame = el.querySelector('.device-frame');
+      const inner = el.querySelector('.device-inner');
+      if (!frame || !inner) return;
+
+      const device = devices[activeDevice];
+      // Get computed pixel values from Tailwind classes
+      const widths = [100, 160, 240];
+      const heights = [180, 200, 160];
+      const radii = [12, 8, 2];
+
+      gsap.to(frame, {
+        width: widths[activeDevice],
+        height: heights[activeDevice],
+        borderRadius: radii[activeDevice],
+        duration: 0.6,
+        ease: 'power2.inOut',
+      });
+
+      // Animate inner layout
+      const cols = activeDevice === 2 ? 3 : activeDevice === 1 ? 2 : 1;
+      gsap.to(inner, {
+        duration: 0.4,
+        ease: 'power2.inOut',
+      });
+    });
+  }, [activeDevice]);
 
   return (
     <main className="relative">
-      {/* ── Section 1: Hero ── */}
+      {/* ── Hero — Interactive Browser Canvas ── */}
       <section className="section relative min-h-screen flex flex-col justify-center">
         <div className="container-narrow">
           <FadeIn>
@@ -305,12 +290,17 @@ export function WebdesignPageClient() {
               href="/diensten"
               className="text-small text-grey-olive hover:text-dry-sage transition-colors"
             >
-              ← Terug naar diensten
+              &larr; Terug naar diensten
             </Link>
           </FadeIn>
 
           <div className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
             <div>
+              <FadeIn delay={0.1}>
+                <span className="inline-block text-caption font-mono text-grey-olive tracking-wider mb-6">
+                  Design &middot; Interactie &middot; Ervaring
+                </span>
+              </FadeIn>
               <TitleReveal
                 as="h1"
                 className="text-hero md:text-hero-lg font-bold text-cornsilk"
@@ -331,43 +321,141 @@ export function WebdesignPageClient() {
                     Start jouw project
                   </Button>
                   <Button href="/cases" variant="outline">
-                    Bekijk ons werk
+                    Bekijk mijn werk
                   </Button>
                 </div>
               </FadeIn>
             </div>
+
+            {/* Browser canvas with parallax layers */}
             <FadeIn delay={0.4}>
-              <div className="aspect-[16/10] bg-ebony flex items-center justify-center">
-                <span className="text-grey-olive text-small">Afbeelding</span>
+              <div
+                ref={canvasRef}
+                className="relative bg-ink border border-ebony overflow-hidden select-none"
+                onMouseMove={handleMouseMove}
+                aria-hidden
+              >
+                {/* Browser chrome bar */}
+                <div className="flex items-center gap-2 px-4 py-3 border-b border-ebony bg-ink">
+                  <span className="w-2.5 h-2.5 rounded-full bg-grey-olive/50" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-grey-olive/50" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-grey-olive/50" />
+                  <span className="ml-3 text-caption text-grey-olive font-mono">jouwmerk.nl</span>
+                </div>
+
+                {/* Canvas area with design elements */}
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  {/* Grid pattern background */}
+                  <div
+                    data-depth="0.5"
+                    className="absolute inset-0 opacity-[0.08]"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(var(--grey-olive) 1px, transparent 1px), linear-gradient(90deg, var(--grey-olive) 1px, transparent 1px)',
+                      backgroundSize: '24px 24px',
+                    }}
+                  />
+
+                  {/* Typography specimen */}
+                  <div
+                    data-depth="2"
+                    className="absolute top-[12%] left-[8%]"
+                  >
+                    <span className="block text-[2.5rem] md:text-[3.5rem] font-bold text-cornsilk/15 leading-none">
+                      Aa
+                    </span>
+                    <span className="block text-caption text-grey-olive/40 mt-1 font-mono">
+                      Sans · 700
+                    </span>
+                  </div>
+
+                  {/* Color strip */}
+                  <div
+                    data-depth="3"
+                    className="absolute top-[18%] right-[10%] flex gap-1.5"
+                  >
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-cornsilk/20" />
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-dry-sage/30" />
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-grey-olive/25" />
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-ebony/40" />
+                  </div>
+
+                  {/* Geometric shape — circle */}
+                  <div
+                    data-depth="4"
+                    className="absolute bottom-[20%] left-[15%] w-16 h-16 md:w-20 md:h-20 rounded-full border border-dry-sage/20"
+                  />
+
+                  {/* Rectangle block */}
+                  <div
+                    data-depth="1.5"
+                    className="absolute top-[45%] left-[35%] w-24 h-12 md:w-32 md:h-16 bg-cornsilk/5 border border-ebony"
+                  />
+
+                  {/* Small grid of dots */}
+                  <div
+                    data-depth="2.5"
+                    className="absolute bottom-[15%] right-[12%] grid grid-cols-4 gap-2"
+                  >
+                    {Array.from({ length: 16 }).map((_, i) => (
+                      <div key={i} className="w-1.5 h-1.5 rounded-full bg-grey-olive/20" />
+                    ))}
+                  </div>
+
+                  {/* Diagonal line */}
+                  <div
+                    data-depth="3.5"
+                    className="absolute top-[30%] left-[55%] w-24 h-px bg-dry-sage/15 rotate-45 origin-left"
+                  />
+                </div>
               </div>
             </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* ── Section 2: Voordelen ── */}
+      {/* ── Voordelen — Grid Overlay Hover Cards ── */}
       <section className="section relative overflow-hidden" aria-labelledby="benefits-title">
-        <SectionTopBars />
         <div className="container-narrow">
           <TitleReveal
             as="h2"
             id="benefits-title"
-            className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-16 text-center"
+            className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-4 text-center"
           >
             Waarom professioneel webdesign?
           </TitleReveal>
+          <FadeIn>
+            <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
+              Goed design is geen luxe — het is de basis van elk succesvol online platform.
+            </p>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {benefits.map((benefit, index) => (
-              <FadeIn key={benefit.number} delay={index * 0.1} className="h-full">
-                <article className="group h-full p-6 bg-ink border border-ebony flex flex-col transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)]">
-                  <div className="w-10 h-10 bg-ebony/50 flex items-center justify-center mb-4">
-                    <span className="text-cornsilk font-mono text-small">{benefit.number}</span>
+              <FadeIn key={benefit.title} delay={index * 0.1} className="h-full">
+                <article className="group relative h-full p-6 md:p-8 bg-ink border border-ebony overflow-hidden transition-all duration-500 hover:border-grey-olive hover:shadow-[0_0_24px_rgba(254,250,220,0.12)]">
+                  {/* Grid dot pattern overlay */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    aria-hidden
+                    style={{
+                      backgroundImage:
+                        'radial-gradient(circle, var(--grey-olive) 1px, transparent 1px)',
+                      backgroundSize: '16px 16px',
+                      opacity: undefined,
+                    }}
+                  />
+                  <div className="relative z-10">
+                    <span className="inline-block text-caption font-mono text-grey-olive tracking-wider mb-4">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="text-h3 font-semibold text-cornsilk group-hover:text-dry-sage transition-colors">
+                      {benefit.title}
+                    </h3>
+                    <p className="mt-3 text-body text-dry-sage leading-relaxed">
+                      {benefit.description}
+                    </p>
                   </div>
-                  <h3 className="text-h3 font-semibold text-cornsilk">{benefit.title}</h3>
-                  <p className="mt-3 text-body text-dry-sage leading-relaxed flex-1">
-                    {benefit.description}
-                  </p>
                 </article>
               </FadeIn>
             ))}
@@ -375,171 +463,311 @@ export function WebdesignPageClient() {
         </div>
       </section>
 
-      {/* ── Section 3: Proces / Tijdlijn ── */}
+      {/* ── Proces — Scroll-driven Layer Build-up ── */}
       <section
-        ref={timelineSectionRef}
-        className="section relative overflow-x-hidden"
+        ref={processRef}
+        className="section relative"
         aria-labelledby="process-title"
       >
-        <div className="container-narrow">
-          <TitleReveal
-            as="h2"
-            id="process-title"
-            className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-4 text-center"
-          >
-            Van idee tot ontwerp
-          </TitleReveal>
-          <FadeIn>
-            <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
-              Ons bewezen webdesign proces in vier stappen.
-            </p>
-          </FadeIn>
+        {/* Pinned scroll wrapper — title is INSIDE so pin doesn't cause layout jumps */}
+        <div className="process-pin-wrapper">
+          <div className="container-narrow">
+            <TitleReveal
+              as="h2"
+              id="process-title"
+              className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-4 text-center"
+            >
+              Van idee tot ontwerp
+            </TitleReveal>
+            <FadeIn>
+              <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
+                Scroll door mijn ontwerpproces en zie hoe een website tot leven komt.
+              </p>
+            </FadeIn>
 
-          <div className="relative">
-            <div className="relative overflow-x-hidden">
-              <div
-                ref={timelineContainerRef}
-                className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px md:-translate-x-1/2"
-              >
-                <svg className="w-full h-full" viewBox="0 0 1 100" preserveAspectRatio="none">
-                  <path
-                    ref={timelineRef}
-                    d="M 0.5 0 L 0.5 100"
-                    fill="none"
-                    stroke="var(--cornsilk)"
-                    strokeWidth="1"
-                    className="timeline-path"
-                  />
-                </svg>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+              {/* Monitor frame */}
+              <div className="relative">
+                <div className="process-monitor bg-ink border border-ebony overflow-hidden">
+                  {/* Monitor top bar */}
+                  <div className="flex items-center gap-2 px-4 py-2.5 border-b border-ebony">
+                    <span className="w-2 h-2 rounded-full bg-grey-olive/40" />
+                    <span className="w-2 h-2 rounded-full bg-grey-olive/40" />
+                    <span className="w-2 h-2 rounded-full bg-grey-olive/40" />
+                  </div>
 
-              <div className="flex flex-col gap-16 md:gap-24">
-                {processSteps.map((step, index) => (
-                  <div
-                    key={step.number}
-                    ref={index === processSteps.length - 1 ? lastStepRef : undefined}
-                    className={`relative flex pl-12 md:pl-0 ${
-                      index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'
-                    }`}
-                  >
-                    <div
-                      className="timeline-dot absolute left-4 md:left-1/2 top-8 w-3 h-3 -translate-x-1/2 rounded-full bg-cornsilk border-2 border-ink z-10 opacity-0"
-                      data-dot-index={index}
-                      aria-hidden
-                    />
-                    <div
-                      className={`step-content w-full max-w-[calc(100%-2rem)] md:max-w-[calc(50%-2rem)] opacity-0 ${
-                        index % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8 md:text-left'
-                      }`}
-                    >
-                      <div
-                        className={`flex flex-col gap-4 ${
-                          index % 2 === 0 ? 'md:items-end' : 'md:items-start'
-                        }`}
-                      >
-                        <div>
-                          <span className="text-small font-mono text-dry-sage" aria-hidden>
-                            {step.number}
-                          </span>
-                          <h3 className="mt-2 text-h3 font-semibold text-cornsilk">{step.title}</h3>
-                          <p className="mt-2 text-body text-dry-sage max-w-prose">
-                            {step.description}
-                          </p>
+                  {/* Monitor content area */}
+                  <div className="relative aspect-[16/10] overflow-hidden">
+                    {/* Phase 0: Briefing — text lines (grey) */}
+                    <div className="process-phase absolute inset-0 p-6 flex flex-col justify-center gap-3 opacity-100">
+                      <div className="w-3/4 h-3 bg-grey-olive/20" />
+                      <div className="w-1/2 h-3 bg-grey-olive/15" />
+                      <div className="w-2/3 h-3 bg-grey-olive/20" />
+                      <div className="w-1/3 h-3 bg-grey-olive/10" />
+                      <div className="mt-4 w-full h-2 bg-grey-olive/10" />
+                      <div className="w-5/6 h-2 bg-grey-olive/10" />
+                      <div className="w-4/6 h-2 bg-grey-olive/10" />
+                    </div>
+
+                    {/* Phase 1: Wireframes — geometric blocks with dashed borders */}
+                    <div className="process-phase absolute inset-0 p-6 opacity-0 md:opacity-0">
+                      <div className="grid grid-cols-3 gap-3 h-full">
+                        <div className="col-span-3 h-8 border border-dashed border-grey-olive/40" />
+                        <div className="col-span-2 flex-1 border border-dashed border-grey-olive/40 min-h-[60px]" />
+                        <div className="col-span-1 flex-1 border border-dashed border-grey-olive/40 min-h-[60px]" />
+                        <div className="col-span-1 h-10 border border-dashed border-grey-olive/40" />
+                        <div className="col-span-1 h-10 border border-dashed border-grey-olive/40" />
+                        <div className="col-span-1 h-10 border border-dashed border-grey-olive/40" />
+                        <div className="col-span-3 h-6 border border-dashed border-grey-olive/40" />
+                      </div>
+                    </div>
+
+                    {/* Phase 2: Visual design — blocks filled with color */}
+                    <div className="process-phase absolute inset-0 p-6 opacity-0 md:opacity-0">
+                      <div className="grid grid-cols-3 gap-3 h-full">
+                        <div className="col-span-3 h-8 bg-ebony border border-ebony flex items-center px-3">
+                          <div className="flex gap-2">
+                            <div className="w-8 h-2 bg-cornsilk/30" />
+                            <div className="w-6 h-2 bg-cornsilk/20" />
+                            <div className="w-7 h-2 bg-cornsilk/20" />
+                          </div>
                         </div>
-                        <div className="aspect-[4/3] w-full max-w-[280px] bg-ebony flex items-center justify-center">
-                          <span className="text-grey-olive text-small">{step.imagePlaceholder}</span>
+                        <div className="col-span-2 flex-1 bg-dry-sage/10 border border-dry-sage/20 min-h-[60px]" />
+                        <div className="col-span-1 flex-1 bg-cornsilk/5 border border-ebony min-h-[60px]" />
+                        <div className="col-span-1 h-10 bg-cornsilk/8 border border-ebony" />
+                        <div className="col-span-1 h-10 bg-dry-sage/8 border border-ebony" />
+                        <div className="col-span-1 h-10 bg-cornsilk/8 border border-ebony" />
+                        <div className="col-span-3 h-6 bg-ebony/60 border border-ebony" />
+                      </div>
+                    </div>
+
+                    {/* Phase 3: Oplevering — polished with shadows + gradients */}
+                    <div className="process-phase absolute inset-0 p-6 opacity-0 md:opacity-0">
+                      <div className="grid grid-cols-3 gap-3 h-full">
+                        <div className="col-span-3 h-8 bg-ebony border border-ebony shadow-sm flex items-center justify-between px-3">
+                          <div className="flex gap-2">
+                            <div className="w-8 h-2 bg-cornsilk/40 rounded-sm" />
+                            <div className="w-6 h-2 bg-cornsilk/25 rounded-sm" />
+                            <div className="w-7 h-2 bg-cornsilk/25 rounded-sm" />
+                          </div>
+                          <div className="w-12 h-4 bg-dry-sage/30 rounded-sm" />
                         </div>
+                        <div className="col-span-2 flex-1 bg-gradient-to-br from-dry-sage/15 to-cornsilk/5 border border-dry-sage/30 shadow-[0_2px_8px_rgba(0,0,0,0.3)] min-h-[60px]" />
+                        <div className="col-span-1 flex-1 bg-gradient-to-b from-cornsilk/10 to-transparent border border-ebony shadow-[0_2px_8px_rgba(0,0,0,0.2)] min-h-[60px]" />
+                        <div className="col-span-1 h-10 bg-cornsilk/10 border border-ebony shadow-sm" />
+                        <div className="col-span-1 h-10 bg-dry-sage/10 border border-ebony shadow-sm" />
+                        <div className="col-span-1 h-10 bg-cornsilk/10 border border-ebony shadow-sm" />
+                        <div className="col-span-3 h-6 bg-gradient-to-r from-ebony to-ebony/80 border border-ebony shadow-sm" />
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* Monitor stand */}
+                <div className="hidden md:flex flex-col items-center" aria-hidden>
+                  <div className="w-16 h-6 bg-ebony/60 border-x border-ebony" />
+                  <div className="w-24 h-2 bg-ebony/40 border border-ebony rounded-b-sm" />
+                </div>
+              </div>
+
+              {/* Phase descriptions */}
+              <div className="relative min-h-[120px]">
+                {/* Desktop: stacked, animated by GSAP */}
+                <div className="hidden md:block relative">
+                  {processPhases.map((phase, index) => (
+                    <div
+                      key={phase.label}
+                      className={`process-desc ${index === 0 ? 'relative' : 'absolute inset-0'}`}
+                      style={{ opacity: index === 0 ? 1 : 0, transform: index === 0 ? 'none' : 'translateY(20px)' }}
+                    >
+                      <span className="inline-block text-caption font-mono text-grey-olive tracking-wider mb-3">
+                        Stap {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <h3 className="text-h3 font-semibold text-cornsilk mb-3">
+                        {phase.label}
+                      </h3>
+                      <p className="text-body text-dry-sage leading-relaxed max-w-prose">
+                        {phase.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Mobile: stacked layout */}
+                <div className="md:hidden space-y-8">
+                  {processPhases.map((phase, index) => (
+                    <FadeIn key={phase.label} delay={index * 0.1}>
+                      <div className="border-l-2 border-ebony pl-6">
+                        <span className="inline-block text-caption font-mono text-grey-olive tracking-wider mb-2">
+                          Stap {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <h3 className="text-h3 font-semibold text-cornsilk mb-2">
+                          {phase.label}
+                        </h3>
+                        <p className="text-body text-dry-sage leading-relaxed">
+                          {phase.description}
+                        </p>
+                      </div>
+                    </FadeIn>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Section 4: Waarom Blitzworx (USPs) ── */}
-      <section className="section relative overflow-hidden" aria-labelledby="usp-title">
-        <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+      {/* ── USPs — Responsive Device Morph ── */}
+      <section className="section relative overflow-hidden md:min-h-screen md:flex md:items-center" aria-labelledby="usp-title">
+        <div className="container-narrow w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
+            {/* Left: Title + Device showcase */}
             <div>
               <TitleReveal
                 as="h2"
                 id="usp-title"
-                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-12"
+                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
               >
                 Waarom Blitzworx?
               </TitleReveal>
-              <div className="space-y-8">
-                {usps.map((usp, index) => (
-                  <FadeIn key={usp.title} delay={index * 0.15}>
-                    <div className="border-l-2 border-dry-sage pl-6">
-                      <h3 className="text-h3 font-semibold text-cornsilk">{usp.title}</h3>
-                      <p className="mt-2 text-body text-dry-sage leading-relaxed">
-                        {usp.description}
-                      </p>
+              <FadeIn delay={0.1}>
+                <p className="text-body text-dry-sage leading-relaxed mb-10">
+                  Ik ontwerp niet alleen, ik bouw ook. Dat betekent designs die technisch
+                  haalbaar zijn en er op elk scherm perfect uitzien.
+                </p>
+              </FadeIn>
+
+              {/* Device morph showcase */}
+              <FadeIn delay={0.3}>
+                <div className="flex flex-col items-center">
+                  <div
+                    ref={deviceRef}
+                    className="flex items-center justify-center mb-6"
+                    style={{ minHeight: 220 }}
+                    aria-hidden
+                  >
+                    <div
+                      className="device-frame bg-ink border border-ebony overflow-hidden transition-all duration-600"
+                      style={{
+                        width: devices[activeDevice === undefined ? 2 : activeDevice]?.width
+                          ? undefined
+                          : 240,
+                        height: devices[activeDevice === undefined ? 2 : activeDevice]?.height
+                          ? undefined
+                          : 160,
+                      }}
+                    >
+                      {/* Device top bar */}
+                      <div className="flex items-center gap-1 px-2 py-1.5 border-b border-ebony bg-ebony/30">
+                        {activeDevice === 0 ? (
+                          /* Phone: centered notch */
+                          <div className="mx-auto w-8 h-1 bg-grey-olive/20 rounded-full" />
+                        ) : (
+                          /* Tablet/Desktop: dots */
+                          <>
+                            <span className="w-1.5 h-1.5 rounded-full bg-grey-olive/30" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-grey-olive/30" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-grey-olive/30" />
+                          </>
+                        )}
+                      </div>
+
+                      {/* Device content */}
+                      <div className="device-inner p-2 flex-1">
+                        {activeDevice === 0 && (
+                          /* Phone layout: single column */
+                          <div className="space-y-1.5">
+                            <div className="w-full h-2 bg-grey-olive/15" />
+                            <div className="w-3/4 h-2 bg-grey-olive/10" />
+                            <div className="w-full h-8 bg-cornsilk/5 mt-2" />
+                            <div className="w-full h-6 bg-dry-sage/5" />
+                            <div className="w-full h-6 bg-dry-sage/5" />
+                          </div>
+                        )}
+                        {activeDevice === 1 && (
+                          /* Tablet layout: 2 columns */
+                          <div className="space-y-1.5">
+                            <div className="w-2/3 h-2 bg-grey-olive/15" />
+                            <div className="grid grid-cols-2 gap-1.5 mt-2">
+                              <div className="h-10 bg-cornsilk/5" />
+                              <div className="h-10 bg-cornsilk/5" />
+                              <div className="h-8 bg-dry-sage/5" />
+                              <div className="h-8 bg-dry-sage/5" />
+                            </div>
+                          </div>
+                        )}
+                        {activeDevice === 2 && (
+                          /* Desktop layout: 3 columns with sidebar */
+                          <div className="space-y-1.5">
+                            <div className="flex gap-1.5">
+                              <div className="w-8 h-2 bg-cornsilk/15" />
+                              <div className="w-6 h-2 bg-grey-olive/10" />
+                              <div className="w-6 h-2 bg-grey-olive/10" />
+                              <div className="flex-1" />
+                              <div className="w-10 h-2 bg-dry-sage/15" />
+                            </div>
+                            <div className="grid grid-cols-3 gap-1.5 mt-2">
+                              <div className="col-span-2 h-12 bg-cornsilk/5" />
+                              <div className="h-12 bg-dry-sage/5" />
+                              <div className="h-8 bg-cornsilk/5" />
+                              <div className="h-8 bg-cornsilk/5" />
+                              <div className="h-8 bg-dry-sage/5" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </FadeIn>
-                ))}
-              </div>
+                  </div>
+
+                  {/* Device indicators */}
+                  <div className="flex gap-6 relative">
+                    {devices.map((device, i) => (
+                      <button
+                        key={device.key}
+                        onClick={() => setActiveDevice(i)}
+                        className={`text-caption font-mono tracking-wider pb-2 transition-colors duration-300 ${
+                          activeDevice === i ? 'text-cornsilk' : 'text-grey-olive hover:text-dry-sage'
+                        }`}
+                        aria-label={`Toon ${device.label} weergave`}
+                      >
+                        {device.label}
+                      </button>
+                    ))}
+                    {/* Sliding underline */}
+                    <div
+                      className="absolute bottom-0 h-px bg-cornsilk transition-all duration-300"
+                      style={{
+                        width: '33.333%',
+                        left: `${activeDevice * 33.333}%`,
+                      }}
+                      aria-hidden
+                    />
+                  </div>
+                </div>
+              </FadeIn>
             </div>
-            <div
-              ref={uspImageRef}
-              className="aspect-[3/4] bg-ebony flex items-center justify-center overflow-hidden"
-            >
-              <span className="text-grey-olive text-small">Afbeelding</span>
+
+            {/* Right: USP cards with left border */}
+            <div className="space-y-8 md:mt-8">
+              {usps.map((usp, index) => (
+                <FadeIn key={usp.title} delay={index * 0.15}>
+                  <div className="border-l-2 border-dry-sage pl-6">
+                    <h3 className="text-h3 font-semibold text-cornsilk">{usp.title}</h3>
+                    <p className="mt-2 text-body text-dry-sage leading-relaxed">
+                      {usp.description}
+                    </p>
+                  </div>
+                </FadeIn>
+              ))}
             </div>
           </div>
         </div>
         <SectionBottomBars />
       </section>
 
-      {/* ── Section 5: Portfolio Preview ── */}
-      <section className="section relative overflow-hidden" aria-labelledby="portfolio-title">
-        <SectionTopBars />
-        <div className="container-narrow">
-          <TitleReveal
-            as="h2"
-            id="portfolio-title"
-            className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-4 text-center"
-          >
-            Ontwerp in actie
-          </TitleReveal>
-          <FadeIn>
-            <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
-              Een selectie van onze recente webdesign projecten.
-            </p>
-          </FadeIn>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {portfolioItems.map((item, index) => (
-              <FadeIn key={item.title} delay={index * 0.15} className="h-full">
-                <article className="group h-full bg-ink border border-ebony overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)]">
-                  <div className="relative aspect-[4/3] bg-ebony flex items-center justify-center">
-                    <span className="text-grey-olive text-small">Afbeelding</span>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-h3 font-semibold text-cornsilk">{item.title}</h3>
-                    <p className="mt-2 text-small text-grey-olive">{item.description}</p>
-                  </div>
-                </article>
-              </FadeIn>
-            ))}
-          </div>
-
-          <div className="mt-12 flex justify-center">
-            <FadeIn delay={0.4}>
-              <Button href="/cases" variant="outline">
-                Bekijk alle cases
-              </Button>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 6: Tools & Technologieen ── */}
+      {/* ── Tools & Technologieen ── */}
       <section className="section relative" aria-labelledby="tech-title">
+        <SectionTopBars />
         <div className="container-narrow">
           <TitleReveal
             as="h2"
@@ -550,7 +778,7 @@ export function WebdesignPageClient() {
           </TitleReveal>
           <FadeIn>
             <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-12">
-              We werken met de beste tools voor design en ontwikkeling.
+              Ik werk met de beste tools voor design en ontwikkeling.
             </p>
           </FadeIn>
 
@@ -578,7 +806,7 @@ export function WebdesignPageClient() {
         </div>
       </section>
 
-      {/* ── Section 7: CTA ── */}
+      {/* ── CTA ── */}
       <section
         className="section relative min-h-[60vh] flex flex-col justify-center items-center text-center border-t border-ebony"
         aria-labelledby="cta-title"
@@ -593,7 +821,7 @@ export function WebdesignPageClient() {
           </TitleReveal>
           <FadeIn delay={0.2}>
             <p className="text-body text-dry-sage max-w-prose mx-auto">
-              Laten we kennismaken en ontdekken hoe we jouw online doelen kunnen bereiken.
+              Laten we kennismaken en ontdekken hoe ik jouw online doelen kan bereiken.
               Geen verplichtingen, gewoon een goed gesprek.
             </p>
           </FadeIn>
