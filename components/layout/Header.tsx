@@ -11,8 +11,8 @@ const navLinks: { href: string; label: string }[] = [
 ];
 
 const SCROLL_THRESHOLD = 10;
-const MOBILE_DIRECTION_THRESHOLD = 15;
-const MOBILE_SHOW_DELAY_MS = 120;
+const MOBILE_DIRECTION_THRESHOLD = 60;
+const MOBILE_SHOW_DELAY_MS = 250;
 
 export function Header() {
   const pathname = usePathname();
@@ -23,6 +23,7 @@ export function Header() {
   const lastScrollY = useRef(0);
   const hasScrolledUpRef = useRef(false);
   const showDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cumulativeDelta = useRef(0);
 
   const isAboutPage = pathname === '/about';
 
@@ -61,18 +62,26 @@ export function Header() {
           }
           setVisible(true);
         } else if (isMobile) {
-          if (Math.abs(delta) >= MOBILE_DIRECTION_THRESHOLD) {
-            if (delta > 0) {
+          // Track cumulative scroll distance; reset when direction flips
+          if ((delta > 0 && cumulativeDelta.current < 0) || (delta < 0 && cumulativeDelta.current > 0)) {
+            cumulativeDelta.current = 0;
+          }
+          cumulativeDelta.current += delta;
+
+          if (Math.abs(cumulativeDelta.current) >= MOBILE_DIRECTION_THRESHOLD) {
+            if (cumulativeDelta.current > 0) {
               if (showDelayRef.current) {
                 clearTimeout(showDelayRef.current);
                 showDelayRef.current = null;
               }
               setVisible(false);
+              cumulativeDelta.current = 0;
             } else {
               if (!showDelayRef.current) {
                 showDelayRef.current = setTimeout(() => {
                   showDelayRef.current = null;
                   setVisible(true);
+                  cumulativeDelta.current = 0;
                 }, MOBILE_SHOW_DELAY_MS);
               }
             }
