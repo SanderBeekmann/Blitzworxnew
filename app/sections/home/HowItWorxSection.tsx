@@ -130,20 +130,9 @@ export function HowItWorxSection() {
 
     const timeoutId = setTimeout(() => initAnimation(0), 150);
 
-    const handleRefresh = () => {
-      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
-        ScrollTrigger.refresh();
-      });
-    };
-
-    window.addEventListener('resize', handleRefresh);
-    window.addEventListener('load', handleRefresh);
-
     return () => {
       isMounted = false;
       clearTimeout(timeoutId);
-      window.removeEventListener('resize', handleRefresh);
-      window.removeEventListener('load', handleRefresh);
       timelineCleanupRef.current?.();
     };
   }, []);

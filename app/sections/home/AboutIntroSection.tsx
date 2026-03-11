@@ -41,6 +41,8 @@ export function AboutIntroSection() {
   const archLinesRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  const triggersRef = useRef<{ kill: () => void }[]>([]);
+
   // ── Master animation timeline ──
   useEffect(() => {
     const section = sectionRef.current;
@@ -64,10 +66,14 @@ export function AboutIntroSection() {
       ([{ gsap }, { ScrollTrigger }]) => {
         gsap.registerPlugin(ScrollTrigger);
 
+        const collect = (tween: gsap.core.Tween) => {
+          if (tween.scrollTrigger) triggersRef.current.push(tween.scrollTrigger);
+        };
+
         // ── Architectural background lines: grow from center ──
         if (archLines) {
           const lines = archLines.querySelectorAll('.arch-line');
-          gsap.fromTo(
+          collect(gsap.fromTo(
             lines,
             { scaleY: 0 },
             {
@@ -81,12 +87,12 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
 
         // ── Ruler draw ──
         if (ruler) {
-          gsap.fromTo(
+          collect(gsap.fromTo(
             ruler,
             { scaleX: 0 },
             {
@@ -99,12 +105,12 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
 
         // ── Step 1: Backdrop rectangle appears first ──
         if (backdrop) {
-          gsap.fromTo(
+          collect(gsap.fromTo(
             backdrop,
             { opacity: 0, scale: 0.9 },
             {
@@ -118,7 +124,7 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
 
         // ── Step 2: Person rises out of the rectangle ──
@@ -133,7 +139,7 @@ export function AboutIntroSection() {
         });
 
         // Rise up inside the clipped rectangle
-        gsap.to(photoInner, {
+        collect(gsap.to(photoInner, {
           y: '0%',
           scale: 1,
           ...(isDesktop && { filter: 'grayscale(0%) brightness(1)' }),
@@ -145,12 +151,12 @@ export function AboutIntroSection() {
             start: 'top 80%',
             toggleActions: 'play none none none',
           },
-        });
+        }));
 
         // Smoothly expand the clip to reveal the full figure beyond the rectangle
         if (backdrop) {
           if (isDesktop) {
-            gsap.to(backdrop, {
+            collect(gsap.to(backdrop, {
               clipPath: 'inset(-40% -25% 0 -25%)',
               duration: 1.2,
               delay: 0.4,
@@ -160,7 +166,7 @@ export function AboutIntroSection() {
                 start: 'top 80%',
                 toggleActions: 'play none none none',
               },
-            });
+            }));
           } else {
             gsap.set(backdrop, { clipPath: 'inset(-40% -25% 0 -25%)' });
           }
@@ -168,7 +174,7 @@ export function AboutIntroSection() {
 
         // ── Dot grid: typewriter-style reveal ──
         if (dotGrid) {
-          gsap.fromTo(
+          collect(gsap.fromTo(
             dotGrid,
             { clipPath: 'inset(0 0 100% 0)', opacity: 0 },
             {
@@ -183,12 +189,12 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
 
         // ── Radial glow: pulse in ──
         if (glow) {
-          gsap.fromTo(
+          collect(gsap.fromTo(
             glow,
             { opacity: 0, scale: 0.6 },
             {
@@ -203,13 +209,13 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
 
         // ── Name tag: slide up with staggered children ──
         if (nameTag) {
           const children = nameTag.querySelectorAll('.name-tag-item');
-          gsap.fromTo(
+          collect(gsap.fromTo(
             children,
             { opacity: 0, y: 20 },
             {
@@ -225,13 +231,13 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
 
 
         // ── Parallax: photo floats up, backdrop drifts slower (desktop only) ──
         if (window.matchMedia('(min-width: 768px)').matches) {
-          gsap.to(photo, {
+          collect(gsap.to(photo, {
             y: -50,
             willChange: 'transform',
             scrollTrigger: {
@@ -240,10 +246,10 @@ export function AboutIntroSection() {
               end: 'bottom top',
               scrub: 1.2,
             },
-          });
+          }));
 
           if (backdrop) {
-            gsap.to(backdrop, {
+            collect(gsap.to(backdrop, {
               y: -25,
               scrollTrigger: {
                 trigger: section,
@@ -251,12 +257,11 @@ export function AboutIntroSection() {
                 end: 'bottom top',
                 scrub: 1.5,
               },
-            });
+            }));
           }
 
-
           if (dotGrid) {
-            gsap.to(dotGrid, {
+            collect(gsap.to(dotGrid, {
               y: -15,
               scrollTrigger: {
                 trigger: section,
@@ -264,14 +269,14 @@ export function AboutIntroSection() {
                 end: 'bottom top',
                 scrub: 2,
               },
-            });
+            }));
           }
         }
 
         // ── Disciplines: stagger reveal with border draw ──
         if (disciplines) {
           const items = disciplines.querySelectorAll('.discipline-item');
-          gsap.fromTo(
+          collect(gsap.fromTo(
             items,
             { opacity: 0, x: -30, clipPath: 'inset(0 100% 0 0)' },
             {
@@ -287,10 +292,15 @@ export function AboutIntroSection() {
                 toggleActions: 'play none none none',
               },
             }
-          );
+          ));
         }
       }
     );
+
+    return () => {
+      triggersRef.current.forEach((st) => st.kill());
+      triggersRef.current = [];
+    };
   }, []);
 
 

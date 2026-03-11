@@ -12,6 +12,8 @@ export function RecentCasesSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
+  const triggerRef = useRef<{ kill: () => void } | null>(null);
+
   useEffect(() => {
     const section = sectionRef.current;
     const cards = cardsRef.current?.querySelectorAll('.recent-case-card');
@@ -24,7 +26,7 @@ export function RecentCasesSection() {
       import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
         gsap.registerPlugin(ScrollTrigger);
 
-        gsap.fromTo(
+        const tween = gsap.fromTo(
           cards,
           { opacity: 0, y: 40 },
           {
@@ -40,8 +42,14 @@ export function RecentCasesSection() {
             },
           }
         );
+        triggerRef.current = tween.scrollTrigger ?? null;
       });
     });
+
+    return () => {
+      triggerRef.current?.kill();
+      triggerRef.current = null;
+    };
   }, []);
 
   return (

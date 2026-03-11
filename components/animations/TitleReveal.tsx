@@ -20,6 +20,7 @@ export function TitleReveal({
   triggerOnMount = false,
 }: TitleRevealProps) {
   const containerRef = useRef<HTMLSpanElement>(null);
+  const triggerRef = useRef<{ kill: () => void } | null>(null);
   const text = typeof children === 'string' ? children : String(children);
   const words = text.split(/\s+/);
 
@@ -53,7 +54,7 @@ export function TitleReveal({
       } else {
         import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
           gsap.registerPlugin(ScrollTrigger);
-          gsap.fromTo(
+          const tween = gsap.fromTo(
             wordEls,
             { opacity: 0, y: 24 },
             {
@@ -65,9 +66,15 @@ export function TitleReveal({
               },
             }
           );
+          triggerRef.current = tween.scrollTrigger ?? null;
         });
       }
     });
+
+    return () => {
+      triggerRef.current?.kill();
+      triggerRef.current = null;
+    };
   }, [triggerStart, triggerOnMount]);
 
   return (

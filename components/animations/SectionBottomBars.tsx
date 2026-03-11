@@ -23,6 +23,7 @@ const BOTTOM_BAR_GROUPS = [
 
 export function SectionBottomBars() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<{ kill: () => void } | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -67,9 +68,15 @@ export function SectionBottomBars() {
               stagger
             );
           });
+          triggerRef.current = tl.scrollTrigger ?? null;
         }
       });
     });
+
+    return () => {
+      triggerRef.current?.kill();
+      triggerRef.current = null;
+    };
   }, []);
 
   return (

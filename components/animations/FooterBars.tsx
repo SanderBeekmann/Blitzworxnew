@@ -25,6 +25,7 @@ const BAR_COUNT = 5;
 
 export function FooterBars() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<{ kill: () => void } | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -69,9 +70,15 @@ export function FooterBars() {
               stagger
             );
           });
+          triggerRef.current = tl.scrollTrigger ?? null;
         }
       });
     });
+
+    return () => {
+      triggerRef.current?.kill();
+      triggerRef.current = null;
+    };
   }, []);
 
   return (

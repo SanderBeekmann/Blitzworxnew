@@ -19,6 +19,7 @@ export function SubtitleReveal({
   id,
 }: SubtitleRevealProps) {
   const containerRef = useRef<HTMLParagraphElement | HTMLHeadingElement>(null);
+  const triggersRef = useRef<{ kill: () => void }[]>([]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -45,7 +46,7 @@ export function SubtitleReveal({
         const isWorx = i === WORX_INDEX;
         const delay = i * baseStagger + (isWorx ? worxExtraDelay : 0);
 
-        gsap.fromTo(
+        const tween = gsap.fromTo(
           el,
           {
             opacity: 0,
@@ -70,6 +71,7 @@ export function SubtitleReveal({
                 }),
           }
         );
+        if (tween.scrollTrigger) triggersRef.current.push(tween.scrollTrigger);
       });
     };
 
@@ -83,6 +85,11 @@ export function SubtitleReveal({
         });
       }
     });
+
+    return () => {
+      triggersRef.current.forEach((st) => st.kill());
+      triggersRef.current = [];
+    };
   }, [triggerOnMount]);
 
   return (
