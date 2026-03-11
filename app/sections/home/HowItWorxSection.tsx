@@ -94,6 +94,7 @@ export function HowItWorxSection() {
 
       const viewportCenterY = () => window.innerHeight / 2;
 
+      let rafId: number | null = null;
       const updateLine = () => {
         if (!isMounted || !path) return;
         const rect = timelineContainer.getBoundingClientRect();
@@ -108,15 +109,22 @@ export function HowItWorxSection() {
           const dotProgress = dotProgresses[i];
           (dot as HTMLElement).style.opacity = progress >= dotProgress ? '1' : '0';
         });
+        rafId = null;
+      };
+
+      const onScroll = () => {
+        if (rafId !== null) return;
+        rafId = requestAnimationFrame(updateLine);
       };
 
       updateLine();
-      window.addEventListener('scroll', updateLine, { passive: true });
-      window.addEventListener('resize', updateLine);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
 
       timelineCleanupRef.current = () => {
-        window.removeEventListener('scroll', updateLine);
-        window.removeEventListener('resize', updateLine);
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+        if (rafId !== null) cancelAnimationFrame(rafId);
       };
     };
 

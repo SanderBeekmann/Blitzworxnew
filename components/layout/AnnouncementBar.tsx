@@ -104,6 +104,7 @@ export function AnnouncementBar() {
 
     const mq = window.matchMedia('(max-width: 767px)');
 
+    let rafId: number | null = null;
     const handleScroll = () => {
       if (mq.matches) return;
       const currentScrollY = window.scrollY;
@@ -120,11 +121,20 @@ export function AnnouncementBar() {
       }
 
       lastScrollY.current = currentScrollY;
+      rafId = null;
+    };
+
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(handleScroll);
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   useEffect(() => {
