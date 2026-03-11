@@ -398,99 +398,102 @@ export function ContactOnboarding() {
               {dates.length === 0 ? (
                 <p className="text-small text-grey-olive">Laden...</p>
               ) : (
-                <div className="space-y-4">
-                  {/* Calendar header */}
-                  <div className="flex items-center justify-between">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const prev = month === 0 ? 11 : month - 1;
-                        const prevYear = month === 0 ? year - 1 : year;
-                        setCalendarMonth({ year: prevYear, month: prev });
-                      }}
-                      disabled={!canGoPrev}
-                      className="p-2 text-dry-sage hover:text-cornsilk disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-                      aria-label="Vorige maand"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </button>
-                    <span className="text-body font-semibold text-cornsilk">
-                      {DUTCH_MONTH_NAMES[month]} {year}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = month === 11 ? 0 : month + 1;
-                        const nextYear = month === 11 ? year + 1 : year;
-                        setCalendarMonth({ year: nextYear, month: next });
-                      }}
-                      disabled={!canGoNext}
-                      className="p-2 text-dry-sage hover:text-cornsilk disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
-                      aria-label="Volgende maand"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    </button>
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Calendar */}
+                  <div className="space-y-4 flex-1 min-w-0">
+                    {/* Calendar header */}
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const prev = month === 0 ? 11 : month - 1;
+                          const prevYear = month === 0 ? year - 1 : year;
+                          setCalendarMonth({ year: prevYear, month: prev });
+                        }}
+                        disabled={!canGoPrev}
+                        className="p-2 text-dry-sage hover:text-cornsilk disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                        aria-label="Vorige maand"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                      <span className="text-body font-semibold text-cornsilk">
+                        {DUTCH_MONTH_NAMES[month]} {year}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const next = month === 11 ? 0 : month + 1;
+                          const nextYear = month === 11 ? year + 1 : year;
+                          setCalendarMonth({ year: nextYear, month: next });
+                        }}
+                        disabled={!canGoNext}
+                        className="p-2 text-dry-sage hover:text-cornsilk disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+                        aria-label="Volgende maand"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </button>
+                    </div>
+
+                    {/* Day headers */}
+                    <div className="grid grid-cols-7 gap-1">
+                      {DUTCH_DAY_HEADERS.map((d) => (
+                        <div key={d} className="text-center text-caption font-mono text-grey-olive/50 py-1">
+                          {d}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Calendar grid */}
+                    <div className="grid grid-cols-7 gap-1">
+                      {calDays.map((day, i) => {
+                        if (day === null) return <div key={`empty-${i}`} />;
+
+                        const dateKey = formatDateKey(new Date(year, month, day));
+                        const isAvailable = availableDates.has(dateKey);
+                        const isPast = dateKey < todayKey;
+                        const isSelected = preferredDate === dateKey;
+
+                        return (
+                          <button
+                            key={dateKey}
+                            type="button"
+                            disabled={!isAvailable || isPast}
+                            onClick={() => {
+                              setPreferredDate(dateKey);
+                              setPreferredTime(null);
+                            }}
+                            className={`
+                              relative aspect-square flex items-center justify-center rounded-md text-small font-medium transition-all duration-200
+                              ${isSelected
+                                ? 'bg-cornsilk text-ink ring-2 ring-cornsilk/50'
+                                : isAvailable && !isPast
+                                  ? 'text-cornsilk hover:bg-dry-sage/15 hover:text-cornsilk'
+                                  : 'text-grey-olive/30 cursor-not-allowed'
+                              }
+                            `}
+                            style={!isAvailable || isPast ? {
+                              backgroundImage:
+                                'repeating-linear-gradient(135deg, transparent, transparent 3px, rgba(84,92,82,0.15) 3px, rgba(84,92,82,0.15) 4px)',
+                              backgroundColor: 'rgba(84,92,82,0.06)',
+                            } : undefined}
+                          >
+                            {day}
+                            {isAvailable && !isPast && !isSelected && (
+                              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-dry-sage/60" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  {/* Day headers */}
-                  <div className="grid grid-cols-7 gap-1">
-                    {DUTCH_DAY_HEADERS.map((d) => (
-                      <div key={d} className="text-center text-caption font-mono text-grey-olive/50 py-1">
-                        {d}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Calendar grid */}
-                  <div className="grid grid-cols-7 gap-1">
-                    {calDays.map((day, i) => {
-                      if (day === null) return <div key={`empty-${i}`} />;
-
-                      const dateKey = formatDateKey(new Date(year, month, day));
-                      const isAvailable = availableDates.has(dateKey);
-                      const isPast = dateKey < todayKey;
-                      const isSelected = preferredDate === dateKey;
-
-                      return (
-                        <button
-                          key={dateKey}
-                          type="button"
-                          disabled={!isAvailable || isPast}
-                          onClick={() => {
-                            setPreferredDate(dateKey);
-                            setPreferredTime(null);
-                          }}
-                          className={`
-                            relative aspect-square flex items-center justify-center rounded-md text-small font-medium transition-all duration-200
-                            ${isSelected
-                              ? 'bg-cornsilk text-ink ring-2 ring-cornsilk/50'
-                              : isAvailable && !isPast
-                                ? 'text-cornsilk hover:bg-dry-sage/15 hover:text-cornsilk'
-                                : 'text-grey-olive/30 cursor-not-allowed'
-                            }
-                          `}
-                          style={!isAvailable || isPast ? {
-                            backgroundImage:
-                              'repeating-linear-gradient(135deg, transparent, transparent 3px, rgba(84,92,82,0.15) 3px, rgba(84,92,82,0.15) 4px)',
-                            backgroundColor: 'rgba(84,92,82,0.06)',
-                          } : undefined}
-                        >
-                          {day}
-                          {isAvailable && !isPast && !isSelected && (
-                            <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-dry-sage/60" />
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Time slots for selected date */}
+                  {/* Time slots next to calendar */}
                   {preferredDate && (
-                    <div className="pt-4 border-t border-ebony/40">
+                    <div className="md:w-36 md:border-l md:border-ebony/40 md:pl-4 border-t md:border-t-0 border-ebony/40 pt-4 md:pt-0">
                       <p className="text-small font-medium text-dry-sage mb-3">
-                        Beschikbare tijden op {formatDisplayDate(preferredDate)}
+                        {formatDisplayDate(preferredDate)}
                       </p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap md:flex-col gap-2">
                         {slotsForSelected.length === 0 ? (
                           <p className="text-small text-grey-olive">Geen tijden beschikbaar</p>
                         ) : (
