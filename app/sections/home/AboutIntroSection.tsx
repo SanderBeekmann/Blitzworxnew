@@ -124,18 +124,19 @@ export function AboutIntroSection() {
         // ── Step 2: Person rises out of the rectangle ──
         // Image starts fully below the rectangle, slides up and grows
         // Rectangle's overflow-hidden clips at the bottom edge
+        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
         gsap.set(photoInner, {
           opacity: 1,
           y: '100%',
           scale: 0.8,
-          filter: 'grayscale(100%) brightness(0.6)',
+          ...(isDesktop && { filter: 'grayscale(100%) brightness(0.6)' }),
         });
 
         // Rise up inside the clipped rectangle
         gsap.to(photoInner, {
           y: '0%',
           scale: 1,
-          filter: 'grayscale(0%) brightness(1)',
+          ...(isDesktop && { filter: 'grayscale(0%) brightness(1)' }),
           duration: 2,
           delay: 0.7,
           ease: 'power3.out',
@@ -148,17 +149,21 @@ export function AboutIntroSection() {
 
         // Smoothly expand the clip to reveal the full figure beyond the rectangle
         if (backdrop) {
-          gsap.to(backdrop, {
-            clipPath: 'inset(-40% -25% 0 -25%)',
-            duration: 1.2,
-            delay: 0.4,
-            ease: 'power2.inOut',
-            scrollTrigger: {
-              trigger: photo,
-              start: 'top 80%',
-              toggleActions: 'play none none none',
-            },
-          });
+          if (isDesktop) {
+            gsap.to(backdrop, {
+              clipPath: 'inset(-40% -25% 0 -25%)',
+              duration: 1.2,
+              delay: 0.4,
+              ease: 'power2.inOut',
+              scrollTrigger: {
+                trigger: photo,
+                start: 'top 80%',
+                toggleActions: 'play none none none',
+              },
+            });
+          } else {
+            gsap.set(backdrop, { clipPath: 'inset(-40% -25% 0 -25%)' });
+          }
         }
 
         // ── Dot grid: typewriter-style reveal ──
@@ -292,7 +297,7 @@ export function AboutIntroSection() {
   return (
     <section
       ref={sectionRef}
-      className="section relative min-h-screen flex flex-col justify-center border-t border-ebony overflow-hidden"
+      className="section relative min-h-screen flex flex-col justify-center border-t border-ebony overflow-x-hidden"
       aria-labelledby="about-intro-title"
     >
       {/* Background architectural lines */}
