@@ -16,7 +16,7 @@ const ctaConfig: Record<Post['category'], { heading: string; text: string; href:
   },
   branding: {
     heading: 'Wil je een merk dat opvalt?',
-    text: 'Van logo tot complete huisstijl — ik help je een merk bouwen dat blijft hangen.',
+    text: 'Van logo tot complete huisstijl: ik help je een merk bouwen dat blijft hangen.',
     href: '/diensten/branding',
     label: 'Bekijk mijn branding diensten',
   },

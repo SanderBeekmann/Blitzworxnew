@@ -462,7 +462,7 @@ export function DevelopmentPageClient() {
           </TitleReveal>
           <FadeIn>
             <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
-              Van website tot volledig platform — ik bouw wat jouw bedrijf nodig heeft.
+              Van website tot volledig platform: ik bouw wat jouw bedrijf nodig heeft.
             </p>
           </FadeIn>
 
@@ -470,8 +470,16 @@ export function DevelopmentPageClient() {
             {capabilities.map((cap) => (
               <article
                 key={cap.label}
-                className="capability-card group h-full p-6 md:p-8 bg-ink border border-ebony flex flex-col transition-all duration-500 hover:border-grey-olive hover:shadow-[0_0_24px_rgba(254,250,220,0.12),0_0_48px_rgba(254,250,220,0.06)]"
+                className="capability-card group relative h-full p-6 md:p-8 bg-ink border border-ebony flex flex-col overflow-hidden transition-all duration-500 hover:border-grey-olive hover:shadow-[0_0_24px_rgba(254,250,220,0.12),0_0_48px_rgba(254,250,220,0.06)]"
               >
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+                  }}
+                  aria-hidden
+                />
                 <span className="text-caption font-mono text-grey-olive tracking-wider uppercase mb-3">
                   {cap.label}
                 </span>
@@ -605,7 +613,15 @@ export function DevelopmentPageClient() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {techStack.map((group, groupIndex) => (
               <FadeIn key={group.category} delay={groupIndex * 0.1}>
-                <div className="p-6 bg-ink border border-ebony h-full">
+                <div className="relative p-6 bg-ink border border-ebony h-full overflow-hidden">
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+                    }}
+                    aria-hidden
+                  />
                   <h3 className="text-small font-semibold text-grey-olive uppercase tracking-widest mb-4">
                     {group.category}
                   </h3>
@@ -641,7 +657,7 @@ export function DevelopmentPageClient() {
           </TitleReveal>
           <FadeIn delay={0.2}>
             <p className="text-body text-dry-sage max-w-prose mx-auto">
-              Van eerste idee tot werkend product — laten we samen ontdekken wat
+              Van eerste idee tot werkend product. Laten we samen ontdekken wat
               er mogelijk is. Geen verplichtingen, gewoon een goed gesprek over jouw project.
             </p>
           </FadeIn>

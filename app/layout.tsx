@@ -93,7 +93,7 @@ export default function RootLayout({
       {
         '@type': 'Service',
         serviceType: 'Web Development',
-        name: 'Webdevelopment',
+        name: 'Development',
         description: 'Op maat gemaakte websites en webapplicaties. Van eenvoudige sites tot complexe dashboards en backends.',
         provider: { '@id': `${siteUrl}/#organization` },
         areaServed: 'NL',

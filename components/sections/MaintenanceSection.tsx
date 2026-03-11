@@ -127,7 +127,7 @@ export function MaintenanceSection() {
           <FadeIn delay={0.15}>
             <p className="text-body text-dry-sage leading-relaxed max-w-2xl">
               Een website is nooit helemaal &lsquo;af&rsquo;. Met een onderhoudsabonnement blijft je
-              site veilig, snel en up-to-date — zonder dat je er zelf naar om hoeft te kijken.
+              site veilig, snel en up-to-date, zonder dat je er zelf naar om hoeft te kijken.
             </p>
           </FadeIn>
         </div>

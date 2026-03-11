@@ -20,7 +20,7 @@ const brandingLayers = [
   {
     label: 'Logo & woordmerk',
     description:
-      'Een herkenbaar symbool dat past bij jouw merk en doelgroep. Uniek, tijdloos en veelzijdig inzetbaar — van visitekaartje tot billboard.',
+      'Een herkenbaar symbool dat past bij jouw merk en doelgroep. Uniek, tijdloos en veelzijdig inzetbaar, van visitekaartje tot billboard.',
   },
   {
     label: 'Kleurenpalet',
@@ -652,7 +652,7 @@ export function BrandingPageClient() {
               <p className="mt-6 md:mt-8 text-body md:text-[1.125rem] text-dry-sage max-w-[48ch] leading-relaxed">
                 Een sterk merk begint met een duidelijke identiteit. Blitzworx ontwikkelt
                 logo&apos;s, huisstijlen en visuele richtlijnen die jouw onderneming herkenbaar
-                maken — offline en online.
+                maken, offline en online.
               </p>
             </FadeIn>
             <FadeIn delay={0.5}>
@@ -850,7 +850,15 @@ export function BrandingPageClient() {
         <div className="md:hidden container-narrow pb-16 space-y-6">
           {brandingLayers.map((layer, index) => (
             <FadeIn key={layer.label} delay={index * 0.1}>
-              <div className="p-6 bg-ink border border-ebony">
+              <div className="relative p-6 bg-ink border border-ebony overflow-hidden">
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+                  }}
+                  aria-hidden
+                />
                 <span className="text-caption font-mono text-grey-olive tracking-wider">
                   {String(index + 1).padStart(2, '0')}
                 </span>

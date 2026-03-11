@@ -235,44 +235,6 @@ export function AboutIntroSection() {
         }
 
 
-        // ── Parallax: photo floats up, backdrop drifts slower (desktop only) ──
-        if (window.matchMedia('(min-width: 768px)').matches) {
-          collect(gsap.to(photo, {
-            y: -50,
-            willChange: 'transform',
-            scrollTrigger: {
-              trigger: section,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1.2,
-            },
-          }));
-
-          if (backdrop) {
-            collect(gsap.to(backdrop, {
-              y: -25,
-              scrollTrigger: {
-                trigger: section,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 1.5,
-              },
-            }));
-          }
-
-          if (dotGrid) {
-            collect(gsap.to(dotGrid, {
-              y: -15,
-              scrollTrigger: {
-                trigger: section,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 2,
-              },
-            }));
-          }
-        }
-
         // ── Disciplines: stagger reveal with border draw ──
         if (disciplines) {
           const items = disciplines.querySelectorAll('.discipline-item');
@@ -308,6 +270,7 @@ export function AboutIntroSection() {
     <section
       ref={sectionRef}
       className="section relative min-h-screen flex flex-col justify-center border-t border-ebony overflow-x-hidden"
+      style={{ overflowAnchor: 'none' }}
       aria-labelledby="about-intro-title"
     >
       {/* Background architectural lines */}

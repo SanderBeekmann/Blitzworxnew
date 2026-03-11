@@ -6,7 +6,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 export const metadata: Metadata = {
   title: 'Diensten — Webdesign, Development & Branding',
   description:
-    'Webdesign, webdevelopment en branding voor ondernemers. Blitzworx helpt je online groeien met maatwerk dat werkt.',
+    'Webdesign, development en branding voor ondernemers. Blitzworx helpt je online groeien met maatwerk dat werkt.',
   openGraph: {
     title: 'Diensten — Blitzworx',
     description:
@@ -24,7 +24,7 @@ const SERVICES = [
   },
   {
     href: '/diensten/development',
-    title: 'Webdevelopment',
+    title: 'Development',
     description: 'Op maat gemaakte websites, dashboards en backends die meegroeien.',
   },
   {
@@ -77,8 +77,16 @@ export default function DienstenPage() {
             <FadeIn key={service.href} delay={0.1 + i * 0.05} className="h-full">
               <Link
                 href={service.href}
-                className="flex flex-col h-full p-6 md:p-8 rounded-md bg-ink border border-ebony hover:border-grey-olive transition-shadow transition-colors duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)] group"
+                className="relative flex flex-col h-full p-6 md:p-8 rounded-md bg-ink border border-ebony overflow-hidden hover:border-grey-olive transition-shadow transition-colors duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)] group"
               >
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+                  }}
+                  aria-hidden
+                />
                 <h2 className="text-h3 font-semibold text-cornsilk group-hover:text-dry-sage transition-colors">
                   {service.title}
                 </h2>

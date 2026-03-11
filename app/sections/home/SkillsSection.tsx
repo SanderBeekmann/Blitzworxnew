@@ -41,7 +41,15 @@ export function SkillsSection() {
           {skills.map((skill, index) => (
             <FadeIn key={skill.title} delay={index * 0.1} className="h-full">
               <Link href={skill.href} className="block h-full">
-                <article className="group h-full p-6 rounded-md bg-ink border border-ebony flex flex-col transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)]">
+                <article className="group relative h-full p-6 rounded-md bg-ink border border-ebony flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)]">
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background:
+                        'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+                    }}
+                    aria-hidden
+                  />
                   <h3 className="text-h3 font-semibold text-cornsilk">{skill.title}</h3>
                   <p className="mt-4 text-body text-dry-sage max-w-prose leading-relaxed flex-1">
                     {skill.description}

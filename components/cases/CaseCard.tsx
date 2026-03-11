@@ -12,8 +12,16 @@ export function CaseCard({ caseItem }: CaseCardProps) {
   return (
     <Link
       href={`/cases/${caseItem.slug}`}
-      className="group flex flex-col h-full overflow-hidden rounded-md bg-ink border border-transparent hover:border-grey-olive transition-all duration-500 ease-in-out delay-200 hover:delay-0"
+      className="group relative flex flex-col h-full overflow-hidden rounded-md border border-transparent hover:border-grey-olive transition-all duration-500 ease-in-out delay-200 hover:delay-0"
     >
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+        }}
+        aria-hidden
+      />
       <div className="relative aspect-[4/3] overflow-hidden shrink-0 bg-ebony">
         {caseItem.imagePlaceholder ? (
           <div className="absolute inset-0 flex items-center justify-center bg-ink">

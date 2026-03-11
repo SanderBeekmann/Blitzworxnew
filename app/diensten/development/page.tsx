@@ -3,11 +3,11 @@ import { siteUrl } from '@/lib/site';
 import { DevelopmentPageClient } from './DevelopmentPageClient';
 
 export const metadata: Metadata = {
-  title: 'Webdevelopment — Maatwerk Websites & Webapplicaties',
+  title: 'Development — Maatwerk Websites & Webapplicaties',
   description:
     'Op maat gemaakte websites en webapplicaties. Van eenvoudige sites tot complexe dashboards en backends. Blitzworx bouwt oplossingen die meegroeien met je bedrijf.',
   openGraph: {
-    title: 'Webdevelopment — Blitzworx',
+    title: 'Development — Blitzworx',
     description:
       'Maatwerk websites en webapplicaties die meegroeien met je bedrijf.',
     url: '/diensten/development',

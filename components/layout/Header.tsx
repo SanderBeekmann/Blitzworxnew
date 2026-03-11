@@ -3,12 +3,34 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
+
 const navLinks: { href: string; label: string }[] = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/diensten', label: 'Diensten' },
   { href: '/cases', label: 'Cases' },
 ];
+
+const DIENSTEN = [
+  {
+    href: '/diensten/webdesign',
+    label: 'Webdesign',
+    description: 'Visueel ontwerp dat jouw merk versterkt en bezoekers overtuigt.',
+    mono: '01',
+  },
+  {
+    href: '/diensten/development',
+    label: 'Development',
+    description: 'Op maat gemaakte websites en backends die meegroeien.',
+    mono: '02',
+  },
+  {
+    href: '/diensten/branding',
+    label: 'Branding',
+    description: 'Merkidentiteit en huisstijl die je onderneming herkenbaar maken.',
+    mono: '03',
+  },
+] as const;
 
 const SCROLL_THRESHOLD = 10;
 const MOBILE_DIRECTION_THRESHOLD = 60;
@@ -252,6 +274,22 @@ export function Header() {
                     >
                       {link.label}
                     </Link>
+                    {link.href === '/diensten' && (
+                      <div className="pl-4 mt-1 flex flex-col gap-2">
+                        {DIENSTEN.map((d) => (
+                          <Link
+                            key={d.href}
+                            href={d.href}
+                            onClick={handleMenuLinkClick}
+                            className={`text-base transition-colors ${
+                              pathname === d.href ? 'text-dry-sage' : 'text-grey-olive hover:text-cornsilk'
+                            }`}
+                          >
+                            {d.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </li>
                 ))}
                 <li className="pt-4 w-full text-left">
@@ -280,20 +318,120 @@ export function Header() {
         </Link>
 
         <ul className="hidden md:flex items-center justify-center gap-8 justify-self-center">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className={`text-body font-medium transition-colors ${
-                  pathname === link.href
-                    ? 'text-dry-sage'
-                    : 'text-grey-olive hover:text-cornsilk'
-                }`}
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
+          {navLinks.map((link) => {
+            if (link.href === '/diensten') {
+              const isActive = pathname?.startsWith('/diensten');
+              return (
+                <li
+                  key={link.href}
+                  className="relative group"
+                  onMouseLeave={() => {}}
+                >
+                  <Link
+                    href={link.href}
+                    className={`text-body font-medium transition-colors flex items-center gap-1 ${
+                      isActive ? 'text-dry-sage' : 'text-grey-olive hover:text-cornsilk group-hover:text-cornsilk'
+                    }`}
+                  >
+                    {link.label}
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      className="mt-px transition-transform duration-300 group-hover:rotate-180"
+                    >
+                      <path d="M2 4L5 7L8 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </Link>
+
+                  {/* Invisible bridge between link and dropdown */}
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full w-[340px] h-6" />
+
+                  {/* Dropdown panel */}
+                  <div
+                    className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+12px)] w-[340px] pt-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-[opacity,transform] duration-300 ease-out"
+                  >
+                    {/* Subtle upward arrow */}
+                    <div className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-[#0d1117] border-t border-l border-ebony/60" />
+
+                    <div
+                      className="relative overflow-hidden rounded-lg border border-ebony/60 bg-[#0d1117]/90 backdrop-blur-2xl shadow-[0_8px_40px_rgba(0,0,0,0.5),0_0_0_1px_rgba(84,92,82,0.1)]"
+                    >
+                      {/* Ambient glow */}
+                      <div
+                        className="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full pointer-events-none"
+                        style={{ background: 'radial-gradient(ellipse, rgba(202,202,170,0.06) 0%, transparent 70%)' }}
+                        aria-hidden
+                      />
+
+                      <div className="relative p-2">
+                        {DIENSTEN.map((dienst) => {
+                          const isItemActive = pathname === dienst.href;
+                          return (
+                            <Link
+                              key={dienst.href}
+                              href={dienst.href}
+                              className={`group/item flex items-start gap-4 px-4 py-3.5 rounded-md transition-all duration-200 ${
+                                isItemActive
+                                  ? 'bg-ebony/20'
+                                  : 'hover:bg-ebony/15'
+                              }`}
+                            >
+                              <span className="text-[11px] font-mono text-grey-olive/40 mt-0.5 shrink-0 tabular-nums tracking-wider">
+                                {dienst.mono}
+                              </span>
+                              <div className="min-w-0">
+                                <span className={`block text-[15px] font-semibold transition-colors duration-200 ${
+                                  isItemActive
+                                    ? 'text-dry-sage'
+                                    : 'text-cornsilk group-hover/item:text-dry-sage'
+                                }`}>
+                                  {dienst.label}
+                                </span>
+                                <span className="block text-[13px] text-grey-olive leading-relaxed mt-0.5">
+                                  {dienst.description}
+                                </span>
+                              </div>
+                              <span className="text-grey-olive/0 group-hover/item:text-grey-olive/60 transition-all duration-200 ml-auto mt-0.5 shrink-0 translate-x-[-4px] group-hover/item:translate-x-0">
+                                →
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+
+                      {/* Bottom bar: link to overview */}
+                      <div className="border-t border-ebony/40 px-4 py-3">
+                        <Link
+                          href="/diensten"
+                          className="flex items-center justify-between text-[12px] font-mono tracking-wider uppercase text-grey-olive/50 hover:text-dry-sage transition-colors"
+                        >
+                          <span>Alle diensten</span>
+                          <span className="transition-transform duration-200 hover:translate-x-0.5">→</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              );
+            }
+
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className={`text-body font-medium transition-colors ${
+                    pathname === link.href
+                      ? 'text-dry-sage'
+                      : 'text-grey-olive hover:text-cornsilk'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="flex items-center justify-end gap-4 justify-self-end">

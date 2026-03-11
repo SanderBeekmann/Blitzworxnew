@@ -427,7 +427,7 @@ export function WebdesignPageClient() {
           </TitleReveal>
           <FadeIn>
             <p className="text-body text-dry-sage text-center max-w-prose mx-auto mb-16">
-              Goed design is geen luxe — het is de basis van elk succesvol online platform.
+              Goed design is geen luxe, het is de basis van elk succesvol online platform.
             </p>
           </FadeIn>
 
@@ -435,16 +435,18 @@ export function WebdesignPageClient() {
             {benefits.map((benefit, index) => (
               <FadeIn key={benefit.title} delay={index * 0.1} className="h-full">
                 <article className="group relative h-full p-6 md:p-8 bg-ink border border-ebony overflow-hidden transition-all duration-500 hover:border-grey-olive hover:shadow-[0_0_24px_rgba(254,250,220,0.12)]">
-                  {/* Grid dot pattern overlay */}
                   <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    aria-hidden
+                    className="absolute inset-0 pointer-events-none"
                     style={{
-                      backgroundImage:
-                        'radial-gradient(circle, var(--grey-olive) 1px, transparent 1px)',
-                      backgroundSize: '16px 16px',
-                      opacity: undefined,
+                      background:
+                        'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
                     }}
+                    aria-hidden
+                  />
+                  {/* Hover fill overlay */}
+                  <div
+                    className="absolute inset-0 bg-ink opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    aria-hidden
                   />
                   <div className="relative z-10">
                     <span className="inline-block text-caption font-mono text-grey-olive tracking-wider mb-4">

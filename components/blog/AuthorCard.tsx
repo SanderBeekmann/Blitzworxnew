@@ -2,11 +2,19 @@ import Link from 'next/link';
 
 export function AuthorCard() {
   return (
-    <section className="mt-12 flex items-start gap-5 p-6 border border-ebony rounded-sm bg-ink/50">
-      <div className="shrink-0 w-14 h-14 rounded-full bg-ebony flex items-center justify-center text-cornsilk font-bold text-h3">
+    <section className="relative mt-12 flex items-start gap-5 p-6 border border-ebony rounded-sm overflow-hidden">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+        }}
+        aria-hidden
+      />
+      <div className="relative shrink-0 w-14 h-14 rounded-full bg-ebony flex items-center justify-center text-cornsilk font-bold text-h3">
         SB
       </div>
-      <div>
+      <div className="relative">
         <p className="font-bold text-cornsilk text-body">Sander Beekman</p>
         <p className="text-small text-grey-olive">Oprichter Blitzworx</p>
         <p className="mt-2 text-body text-dry-sage">

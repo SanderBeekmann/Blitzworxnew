@@ -80,10 +80,11 @@ export function AboutPageClient() {
 
         // Subtle parallax on the image wrapper
         if (parallaxWrap) {
+          const section = parallaxWrap.closest('section');
           gsap.to(parallaxWrap, {
             y: -60,
             scrollTrigger: {
-              trigger: parallaxWrap,
+              trigger: section || parallaxWrap,
               start: 'top bottom',
               end: 'bottom top',
               scrub: 1,
@@ -449,8 +450,8 @@ export function AboutPageClient() {
             {/* Right: three pillars */}
             <div ref={visionItemsRef} className="space-y-6 md:mt-2">
               {[
-                { label: 'Kwaliteit', desc: 'Elk detail telt — van typografie tot performance.' },
-                { label: 'Creativiteit', desc: 'Onderscheidend ontwerp dat opvalt en beklijft.' },
+                { label: 'Kwaliteit', desc: 'Elk detail telt, van typografie tot performance.' },
+                { label: 'Creativiteit', desc: 'Onderscheidend ontwerp dat opvalt en blijft hangen.' },
                 { label: 'Resultaat', desc: 'Websites die converteren en meetbaar groeien.' },
               ].map((item) => (
                 <div
@@ -719,7 +720,7 @@ export function AboutPageClient() {
             <div className="md:pt-20 lg:pt-28 order-2 md:order-1">
               <FadeIn delay={0.2}>
                 <span className="text-caption font-mono tracking-[0.25em] uppercase text-grey-olive block mb-3">
-                  Oprichter &amp; Creative Director
+                  Oprichter &amp; Creative Developer
                 </span>
                 <div className="flex items-center gap-4 mb-8">
                   <h3 className="text-h3 md:text-h3-lg font-bold text-cornsilk">Sander</h3>
