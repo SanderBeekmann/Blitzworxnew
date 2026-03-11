@@ -41,9 +41,9 @@ export function AboutIntroSection() {
   const archLinesRef = useRef<HTMLDivElement>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const triggersRef = useRef<{ kill: () => void }[]>([]);
+  const cleanupRef = useRef<(() => void)[]>([]);
 
-  // ── Master animation timeline ──
+  // ── All animations via IntersectionObserver — zero ScrollTrigger ──
   useEffect(() => {
     const section = sectionRef.current;
     const photo = photoRef.current;
@@ -54,7 +54,6 @@ export function AboutIntroSection() {
     const dotGrid = dotGridRef.current;
     const glow = glowRef.current;
     const nameTag = nameTagRef.current;
-
     const archLines = archLinesRef.current;
 
     if (!section || !photo || !photoInner) return;
@@ -62,206 +61,129 @@ export function AboutIntroSection() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
 
-    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
-      ([{ gsap }, { ScrollTrigger }]) => {
-        gsap.registerPlugin(ScrollTrigger);
+    import('gsap').then(({ gsap }) => {
+      const observers: IntersectionObserver[] = [];
 
-        const collect = (tween: gsap.core.Tween) => {
-          if (tween.scrollTrigger) triggersRef.current.push(tween.scrollTrigger);
-        };
-
-        // ── Architectural background lines: grow from center ──
-        if (archLines) {
-          const lines = archLines.querySelectorAll('.arch-line');
-          collect(gsap.fromTo(
-            lines,
-            { scaleY: 0 },
-            {
-              scaleY: 1,
-              duration: 1.8,
-              stagger: 0.2,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-              },
+      // Helper: observe element, play callback once when visible
+      const onVisible = (
+        el: Element,
+        callback: () => void,
+        threshold = 0.2,
+      ) => {
+        const io = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              callback();
+              io.disconnect();
             }
-          ));
-        }
+          },
+          { threshold },
+        );
+        io.observe(el);
+        observers.push(io);
+      };
 
-        // ── Ruler draw ──
-        if (ruler) {
-          collect(gsap.fromTo(
-            ruler,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              duration: 1.2,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: ruler,
-                start: 'top 88%',
-                toggleActions: 'play none none none',
-              },
-            }
-          ));
-        }
+      // ── Architectural background lines ──
+      if (archLines) {
+        const lines = archLines.querySelectorAll('.arch-line');
+        onVisible(section, () => {
+          gsap.fromTo(lines, { scaleY: 0 }, { scaleY: 1, duration: 1.8, stagger: 0.2, ease: 'power2.out' });
+        }, 0.15);
+      }
 
-        // ── Step 1: Backdrop rectangle appears first ──
+      // ── Ruler draw ──
+      if (ruler) {
+        onVisible(ruler, () => {
+          gsap.fromTo(ruler, { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power2.out' });
+        }, 0.1);
+      }
+
+      // ── Photo animations ──
+      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+
+      gsap.set(photoInner, {
+        opacity: 1,
+        y: '100%',
+        scale: 0.8,
+        ...(isDesktop && { filter: 'grayscale(100%) brightness(0.6)' }),
+      });
+
+      onVisible(photo, () => {
+        // Backdrop rectangle appears
         if (backdrop) {
-          collect(gsap.fromTo(
-            backdrop,
+          gsap.fromTo(backdrop,
             { opacity: 0, scale: 0.9 },
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: photo,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }
-          ));
+            { opacity: 1, scale: 1, duration: 1, ease: 'power3.out' },
+          );
         }
 
-        // ── Step 2: Person rises out of the rectangle ──
-        // Image starts fully below the rectangle, slides up and grows
-        // Rectangle's overflow-hidden clips at the bottom edge
-        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
-        gsap.set(photoInner, {
-          opacity: 1,
-          y: '100%',
-          scale: 0.8,
-          ...(isDesktop && { filter: 'grayscale(100%) brightness(0.6)' }),
-        });
-
-        // Rise up inside the clipped rectangle
-        collect(gsap.to(photoInner, {
+        // Person rises out of the rectangle
+        gsap.to(photoInner, {
           y: '0%',
           scale: 1,
           ...(isDesktop && { filter: 'grayscale(0%) brightness(1)' }),
           duration: 2,
           delay: 0.7,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: photo,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }));
+        });
 
-        // Smoothly expand the clip to reveal the full figure beyond the rectangle
+        // Expand clip to reveal full figure
         if (backdrop) {
           if (isDesktop) {
-            collect(gsap.to(backdrop, {
+            gsap.to(backdrop, {
               clipPath: 'inset(-40% -25% 0 -25%)',
               duration: 1.2,
               delay: 0.4,
               ease: 'power2.inOut',
-              scrollTrigger: {
-                trigger: photo,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }));
+            });
           } else {
             gsap.set(backdrop, { clipPath: 'inset(-40% -25% 0 -25%)' });
           }
         }
 
-        // ── Dot grid: typewriter-style reveal ──
+        // Dot grid reveal
         if (dotGrid) {
-          collect(gsap.fromTo(
-            dotGrid,
+          gsap.fromTo(dotGrid,
             { clipPath: 'inset(0 0 100% 0)', opacity: 0 },
-            {
-              clipPath: 'inset(0 0 0% 0)',
-              opacity: 0.15,
-              duration: 1.2,
-              delay: 0.6,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: photo,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }
-          ));
+            { clipPath: 'inset(0 0 0% 0)', opacity: 0.15, duration: 1.2, delay: 0.6, ease: 'power2.out' },
+          );
         }
 
-        // ── Radial glow: pulse in ──
+        // Radial glow
         if (glow) {
-          collect(gsap.fromTo(
-            glow,
+          gsap.fromTo(glow,
             { opacity: 0, scale: 0.6 },
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 2,
-              delay: 0.4,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: photo,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }
-          ));
+            { opacity: 1, scale: 1, duration: 2, delay: 0.4, ease: 'power2.out' },
+          );
         }
 
-        // ── Name tag: slide up with staggered children ──
+        // Name tag
         if (nameTag) {
           const children = nameTag.querySelectorAll('.name-tag-item');
-          collect(gsap.fromTo(
-            children,
+          gsap.fromTo(children,
             { opacity: 0, y: 20 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              stagger: 0.15,
-              delay: 1.2,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: photo,
-                start: 'top 80%',
-                toggleActions: 'play none none none',
-              },
-            }
-          ));
+            { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 1.2, ease: 'power3.out' },
+          );
         }
+      }, 0.2);
 
-
-        // ── Disciplines: stagger reveal with border draw ──
-        if (disciplines) {
-          const items = disciplines.querySelectorAll('.discipline-item');
-          collect(gsap.fromTo(
-            items,
+      // ── Disciplines: stagger reveal ──
+      if (disciplines) {
+        const items = disciplines.querySelectorAll('.discipline-item');
+        onVisible(disciplines, () => {
+          gsap.fromTo(items,
             { opacity: 0, x: -30, clipPath: 'inset(0 100% 0 0)' },
-            {
-              opacity: 1,
-              x: 0,
-              clipPath: 'inset(0 0% 0 0)',
-              duration: 0.8,
-              stagger: 0.15,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: disciplines,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-              },
-            }
-          ));
-        }
+            { opacity: 1, x: 0, clipPath: 'inset(0 0% 0 0)', duration: 0.8, stagger: 0.15, ease: 'power3.out' },
+          );
+        }, 0.15);
       }
-    );
+
+      cleanupRef.current = [() => observers.forEach((io) => io.disconnect())];
+    });
 
     return () => {
-      triggersRef.current.forEach((st) => st.kill());
-      triggersRef.current = [];
+      cleanupRef.current.forEach((fn) => fn());
+      cleanupRef.current = [];
     };
   }, []);
 
@@ -387,7 +309,7 @@ export function AboutIntroSection() {
           </div>
 
           {/* RIGHT COLUMN: Creator portrait */}
-          <div className="relative order-1 md:order-2 md:mt-8 lg:mt-0">
+          <div className="relative order-1 md:order-2 md:mt-8 lg:mt-0" style={{ contain: 'layout style', overflowAnchor: 'none' }}>
             <div
               ref={photoRef}
               className="relative w-full max-w-[500px] mx-auto md:mx-0 md:ml-auto"

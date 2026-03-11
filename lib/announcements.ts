@@ -5,6 +5,7 @@ export interface ProjectInProgress {
 
 export const projectsInProgress: ProjectInProgress[] = [
   { type: 'Website', company: 'FleetCare Connect' },
-  { type: 'Fulfillment center', company: 'BlueShipment' },
+  { type: 'Website', company: 'producerles.nl' },
   { type: 'Webshop', company: 'Gastvrijmoed' },
+  { type: 'Website', company: 'R.G.W. Dienstverlening' },
 ];
