@@ -42,6 +42,13 @@ const capabilities = [
       'Na oplevering blijf ik meegroeien met je onderneming. Updates, optimalisaties en nieuwe features wanneer je ze nodig hebt.',
     tags: ['Monitoring', 'CI/CD', 'Netlify'],
   },
+  {
+    label: 'Toegankelijkheid',
+    title: 'EAA/WCAG-compliant',
+    description:
+      'Elke website voldoet aan de European Accessibility Act (WCAG 2.1 AA). Toegankelijk voor iedereen, juridisch in orde.',
+    tags: ['WCAG 2.1 AA', 'EAA', 'Accessibility'],
+  },
 ];
 
 const processSteps = [

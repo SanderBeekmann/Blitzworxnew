@@ -7,7 +7,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 
 export const metadata: Metadata = {
-  title: 'Cases — Webdesign & Development Portfolio',
+  title: 'Cases - Development & Webdesign Portfolio',
   description:
     'Bekijk onze recente projecten. Van webdesign tot development en branding: cases die laten zien wat Blitzworx kan.',
   openGraph: {
@@ -46,7 +46,7 @@ export default function CasesPage() {
           </TitleReveal>
         </header>
         <ul className="space-y-16">
-          {cases.map((caseItem, index) => (
+          {cases.filter(c => !c.imagePlaceholder).map((caseItem, index) => (
             <li key={caseItem.slug}>
               <FadeIn delay={index * 0.1}>
                 <article className="group/case grid md:grid-cols-2 gap-8 lg:gap-12 items-center">

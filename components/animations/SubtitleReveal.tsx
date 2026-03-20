@@ -9,8 +9,8 @@ interface SubtitleRevealProps {
   id?: string;
 }
 
-const WORDS = ['Web', 'design', 'That', 'Worx!'];
-const WORX_INDEX = 3;
+const WORDS = ['Development', 'That', 'Worx!'];
+const WORX_INDEX = 2;
 
 export function SubtitleReveal({
   className = '',
@@ -39,7 +39,7 @@ export function SubtitleReveal({
 
     const runAnimations = (gsap: typeof import('gsap').gsap) => {
       const baseStagger = 0.4;
-      const worxExtraDelay = 0.55;
+      const worxExtraDelay = 1.05;
       const mountDelay = 0.6;
 
       wordEls.forEach((el, i) => {
@@ -97,7 +97,7 @@ export function SubtitleReveal({
       {WORDS.map((word, i) => (
         <span key={i} className="subtitle-word inline-block opacity-0 motion-reduce:opacity-100">
           {word}
-          {i < WORDS.length - 1 && i !== 0 ? '\u00A0' : ''}
+          {i < WORDS.length - 1 ? '\u00A0' : ''}
         </span>
       ))}
     </Tag>

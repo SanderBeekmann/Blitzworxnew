@@ -16,11 +16,8 @@ export function AboutPageClient() {
   const creatorImageRef = useRef<HTMLDivElement>(null);
   const creatorParallaxRef = useRef<HTMLDivElement>(null);
   const solutionsSectionRef = useRef<HTMLDivElement>(null);
-  const dashboardRef = useRef<HTMLDivElement>(null);
   const dashboardParallaxRef = useRef<HTMLDivElement>(null);
-  const desktopMockupRef = useRef<HTMLDivElement>(null);
   const desktopParallaxRef = useRef<HTMLDivElement>(null);
-  const phoneMockupRef = useRef<HTMLDivElement>(null);
   const phoneParallaxRef = useRef<HTMLDivElement>(null);
   const visionNumberRef = useRef<HTMLSpanElement>(null);
   const solutionsNumberRef = useRef<HTMLSpanElement>(null);
@@ -98,13 +95,10 @@ export function AboutPageClient() {
   // ── Selling Solutions parallax composition ──
   useEffect(() => {
     const section = solutionsSectionRef.current;
-    const dashboard = dashboardRef.current;
-    const desktop = desktopMockupRef.current;
-    const phone = phoneMockupRef.current;
     const dashPx = dashboardParallaxRef.current;
     const deskPx = desktopParallaxRef.current;
     const phonePx = phoneParallaxRef.current;
-    if (!section || !dashboard || !desktop || !phone || !dashPx || !deskPx || !phonePx) return;
+    if (!section || !dashPx || !deskPx || !phonePx) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
@@ -113,75 +107,7 @@ export function AboutPageClient() {
       ([{ gsap }, { ScrollTrigger }]) => {
         gsap.registerPlugin(ScrollTrigger);
 
-        // ── Entrance animations (on inner elements) ──
-
-        // Dashboard: 3D tilt entrance
-        gsap.set(dashboard, {
-          rotateX: 30,
-          rotateY: -6,
-          scale: 0.88,
-          opacity: 0,
-          transformPerspective: 1400,
-          transformOrigin: 'center 70%',
-        });
-        gsap.to(dashboard, {
-          rotateX: 0,
-          rotateY: 0,
-          scale: 1,
-          opacity: 1,
-          duration: 1.4,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: dashPx,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
-
-        // Desktop mockup: slide in from left
-        gsap.set(desktop, {
-          x: -80,
-          opacity: 0,
-          rotateY: 6,
-          transformPerspective: 1000,
-          transformOrigin: 'right center',
-        });
-        gsap.to(desktop, {
-          x: 0,
-          opacity: 1,
-          rotateY: 0,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: deskPx,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        });
-
-        // Phone mockup: slide in from right
-        gsap.set(phone, {
-          x: 60,
-          opacity: 0,
-          rotateY: -4,
-          transformPerspective: 1000,
-          transformOrigin: 'left center',
-        });
-        gsap.to(phone, {
-          x: 0,
-          opacity: 1,
-          rotateY: 0,
-          duration: 1.2,
-          delay: 0.15,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: phonePx,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        });
-
-        // ── Parallax (on outer wrapper elements — no property conflicts) ──
+        // ── Parallax ──
         gsap.to(dashPx, {
           y: -80,
           scrollTrigger: {
@@ -353,7 +279,7 @@ export function AboutPageClient() {
 
           <FadeIn delay={0.1}>
             <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive mb-6">
-              Blitzworx &mdash; Creative Agency
+              Blitzworx - AI-Driven Development
             </span>
           </FadeIn>
 
@@ -535,42 +461,16 @@ export function AboutPageClient() {
 
             {/* ─ LAYER 1 (back): Dashboard — centered, largest ─ */}
             <div ref={dashboardParallaxRef} className="relative z-10 mx-auto w-full max-w-4xl will-change-transform">
-            <div
-              ref={dashboardRef}
-              className="motion-reduce:!transform-none motion-reduce:!opacity-100"
-            >
-              <div className="group rounded-lg border border-ebony/40 overflow-hidden bg-[#0d0f14] shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
-                {/* Browser chrome */}
-                <div className="bg-[#1a1d23] px-4 py-3 flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#28c840]" />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className="bg-[#0d0f14] rounded-md px-4 py-1 text-[11px] text-grey-olive/60 font-mono tracking-wide max-w-xs w-full text-center">
-                      app.blitzworx.nl/dashboard
-                    </div>
-                  </div>
-                  <div className="w-[52px]" />
-                </div>
-                {/* Screen */}
-                <div className="relative">
-                  <Image
-                    src="/assets/images/agencyos-dashboard.webp"
-                    alt="AgencyOS dashboard — maatwerk CRM en projectbeheer"
-                    width={1200}
-                    height={675}
-                    className="w-full h-auto block"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 900px"
-                    priority
-                  />
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{ boxShadow: 'inset 0 0 80px rgba(4,7,17,0.4)' }}
-                    aria-hidden
-                  />
-                </div>
+              <div className="relative rounded-lg overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
+                <Image
+                  src="/assets/images/agencyos-dashboard.webp"
+                  alt="AgencyOS dashboard - maatwerk CRM en projectbeheer"
+                  width={1200}
+                  height={675}
+                  className="w-full h-auto block"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 900px"
+                  priority
+                />
               </div>
               {/* Label */}
               <div className="mt-4 flex items-center gap-3 justify-end">
@@ -580,92 +480,39 @@ export function AboutPageClient() {
                 <div className="w-8 h-px bg-dry-sage/20" aria-hidden />
               </div>
             </div>
-            </div>
 
             {/* ─ LAYER 2 (mid): Desktop mockup — overlaps bottom-left ─ */}
             <div ref={desktopParallaxRef} className="relative z-20 mt-6 md:-mt-40 lg:-mt-52 ml-0 md:-ml-8 lg:-ml-12 w-full md:w-[55%] max-w-xl will-change-transform">
-            <div
-              ref={desktopMockupRef}
-              className="motion-reduce:!transform-none motion-reduce:!opacity-100"
-            >
-              <div className="group rounded-lg border border-ebony/30 overflow-hidden bg-[#0d0f14] shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
-                {/* Browser chrome */}
-                <div className="bg-[#1a1d23] px-3 py-2.5 flex items-center gap-2">
-                  <div className="flex gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#ff5f57]/80" />
-                    <span className="w-2 h-2 rounded-full bg-[#febc2e]/80" />
-                    <span className="w-2 h-2 rounded-full bg-[#28c840]/80" />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className="bg-[#0d0f14] rounded px-3 py-0.5 text-[10px] text-grey-olive/50 font-mono tracking-wide max-w-[180px] w-full text-center">
-                      blueshipment.nl
-                    </div>
-                  </div>
-                  <div className="w-[36px]" />
-                </div>
-                {/* Screen */}
-                <div className="relative">
-                  <Image
-                    src="/assets/images/blueshipmentmockup.webp"
-                    alt="Blue Shipment — maatwerk website voor logistiek"
-                    width={900}
-                    height={560}
-                    className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                    sizes="(max-width: 768px) 85vw, 45vw"
-                  />
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{ boxShadow: 'inset 0 0 50px rgba(4,7,17,0.3)' }}
-                    aria-hidden
-                  />
-                </div>
+              <div className="relative rounded-lg overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+                <Image
+                  src="/assets/images/blueshipmentmockup.webp"
+                  alt="Blue Shipment - maatwerk website voor logistiek"
+                  width={900}
+                  height={560}
+                  className="w-full h-auto block"
+                  sizes="(max-width: 768px) 85vw, 45vw"
+                />
               </div>
               {/* Label */}
               <div className="mt-3 flex items-center gap-3">
                 <div className="w-6 h-px bg-dry-sage/20" aria-hidden />
                 <span className="text-[11px] font-mono tracking-[0.15em] uppercase text-grey-olive/50">
-                  Webdesign
+                  UI/UX Design
                 </span>
               </div>
-            </div>
             </div>
 
             {/* ─ LAYER 3 (front): Phone mockup — overlaps right side, same browser frame style ─ */}
             <div ref={phoneParallaxRef} className="relative md:absolute z-30 mt-6 md:mt-0 mx-auto md:mx-0 md:right-12 lg:right-16 md:bottom-8 w-[180px] sm:w-[200px] md:w-[220px] lg:w-[250px] will-change-transform">
-            <div
-              ref={phoneMockupRef}
-              className="motion-reduce:!transform-none motion-reduce:!opacity-100"
-            >
-              <div className="group rounded-lg border border-ebony/30 overflow-hidden bg-[#0d0f14] shadow-[0_12px_50px_rgba(0,0,0,0.5)]">
-                {/* Browser chrome */}
-                <div className="bg-[#1a1d23] px-2.5 py-2 flex items-center gap-1.5">
-                  <div className="flex gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ff5f57]/80" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#febc2e]/80" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#28c840]/80" />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className="bg-[#0d0f14] rounded px-2 py-0.5 text-[8px] text-grey-olive/50 font-mono tracking-wide w-full text-center truncate">
-                      blueshipment.nl
-                    </div>
-                  </div>
-                </div>
-                {/* Screen */}
-                <div className="relative">
-                  <Image
-                    src="/assets/images/iphonemockupblueship.webp"
-                    alt="Blue Shipment — mobiele weergave"
-                    width={560}
-                    height={1120}
-                    className="w-full h-auto block transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                    sizes="(max-width: 768px) 140px, (max-width: 1024px) 220px, 250px"
-                  />
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{ boxShadow: 'inset 0 0 40px rgba(4,7,17,0.3)' }}
-                    aria-hidden
-                  />
-                </div>
+              <div className="relative rounded-lg overflow-hidden shadow-[0_12px_50px_rgba(0,0,0,0.5)]">
+                <Image
+                  src="/assets/images/iphonemockupblueship.webp"
+                  alt="Blue Shipment - mobiele weergave"
+                  width={560}
+                  height={1120}
+                  className="w-full h-auto block"
+                  sizes="(max-width: 768px) 140px, (max-width: 1024px) 220px, 250px"
+                />
               </div>
               {/* Label */}
               <div className="mt-3 flex items-center gap-2 justify-center">
@@ -674,7 +521,6 @@ export function AboutPageClient() {
                   Responsive
                 </span>
               </div>
-            </div>
             </div>
 
           </div>
@@ -749,7 +595,7 @@ export function AboutPageClient() {
                 className="hidden lg:block absolute -left-12 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] font-mono tracking-[0.3em] uppercase text-grey-olive/30 whitespace-nowrap select-none"
                 aria-hidden
               >
-                Blitzworx — Est. 2024
+                Blitzworx - Est. 2025
               </span>
 
               <div

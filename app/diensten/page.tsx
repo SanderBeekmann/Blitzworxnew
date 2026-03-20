@@ -4,7 +4,7 @@ import { siteUrl } from '@/lib/site';
 import { FadeIn } from '@/components/animations/FadeIn';
 
 export const metadata: Metadata = {
-  title: 'Diensten — Webdesign, Development & Branding',
+  title: 'Diensten - Development, Webdesign & Branding',
   description:
     'Webdesign, development en branding voor ondernemers. Blitzworx helpt je online groeien met maatwerk dat werkt.',
   openGraph: {
@@ -31,6 +31,11 @@ const SERVICES = [
     href: '/diensten/branding',
     title: 'Branding',
     description: 'Merkidentiteit en huisstijl die je onderneming herkenbaar maken.',
+  },
+  {
+    href: '/diensten/ai-automatiseringen',
+    title: 'AI Automatiseringen',
+    description: 'Slimme workflows, chatbots en integraties die tijd besparen.',
   },
 ] as const;
 
@@ -72,7 +77,7 @@ export default function DienstenPage() {
           </FadeIn>
         </header>
 
-        <div className="mt-16 md:mt-24 grid md:grid-cols-3 gap-8 md:gap-12 md:items-stretch">
+        <div className="mt-16 md:mt-24 grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 md:items-stretch">
           {SERVICES.map((service, i) => (
             <FadeIn key={service.href} delay={0.1 + i * 0.05} className="h-full">
               <Link

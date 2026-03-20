@@ -30,6 +30,12 @@ const DIENSTEN = [
     description: 'Merkidentiteit en huisstijl die je onderneming herkenbaar maken.',
     mono: '03',
   },
+  {
+    href: '/diensten/ai-automatiseringen',
+    label: 'AI Automatiseringen',
+    description: 'Slimme workflows, chatbots en integraties die tijd besparen.',
+    mono: '04',
+  },
 ] as const;
 
 const SCROLL_THRESHOLD = 10;

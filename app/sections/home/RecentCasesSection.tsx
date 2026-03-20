@@ -6,7 +6,7 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 import { SectionTopBars } from '@/components/animations/SectionTopBars';
 import { useEffect, useRef } from 'react';
 
-const recentCases = cases.slice(0, 2);
+const recentCases = cases.filter(c => !c.imagePlaceholder).slice(0, 2);
 
 export function RecentCasesSection() {
   const sectionRef = useRef<HTMLElement>(null);

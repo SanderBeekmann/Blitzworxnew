@@ -10,13 +10,13 @@ import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
 export const metadata: Metadata = {
-  title: 'Webdesign, Development & Branding voor Ondernemers',
+  title: 'Development, UI/UX Design & Branding voor Ondernemers',
   description:
-    'Blitzworx is een creative agency voor ondernemers die online willen groeien. Professioneel webdesign, development en branding vanuit Zwolle.',
+    'Blitzworx is een AI-development partner voor ondernemers die online willen groeien. Webdesign, development en branding vanuit Zwolle.',
   openGraph: {
-    title: 'Blitzworx | Webdesign That Worx!',
+    title: 'Blitzworx | Development That Worx!',
     description:
-      'Creative agency voor ondernemers die online willen groeien. Webdesign, development en branding.',
+      'AI-development voor ondernemers die online willen groeien. Webdesign, development en branding.',
     url: '/',
   },
   alternates: {

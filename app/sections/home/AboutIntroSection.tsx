@@ -239,13 +239,13 @@ export function AboutIntroSection() {
             <FadeIn delay={0.15}>
               <div className="space-y-5 text-body text-dry-sage leading-relaxed max-w-prose">
                 <p>
-                  Ik ben Sander, oprichter van Blitzworx. Als creative developer combineer ik
-                  visueel ontwerp met technische expertise om websites te bouwen die er niet alleen
-                  goed uitzien, maar ook écht resultaat opleveren.
+                  Ik ben Sander, oprichter van Blitzworx. Als developer combineer ik
+                  AI-gedreven tools met technische expertise om websites en applicaties te bouwen
+                  die er niet alleen goed uitzien, maar ook écht resultaat opleveren.
                 </p>
                 <p className="text-grey-olive">
                   Eén vast aanspreekpunt, directe communicatie en volledige betrokkenheid bij elk
-                  detail. Zo ontstaat er een website die past bij jouw merk én doet wat-ie moet doen.
+                  detail. Zo ontstaat er een oplossing die past bij jouw merk én doet wat-ie moet doen.
                 </p>
               </div>
             </FadeIn>

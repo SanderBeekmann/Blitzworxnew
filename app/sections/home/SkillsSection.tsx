@@ -24,6 +24,12 @@ const skills = [
       'Creativiteit en merkidentiteit. Samen vertalen we jouw identiteit naar communicatie en marktpositie. Van logo tot volledige huisstijl.',
     href: '/diensten/branding',
   },
+  {
+    title: 'AI Automatiseringen',
+    description:
+      'Bespaar tijd met slimme workflows, chatbots en integraties. AI neemt repetitieve taken over zodat jij je kunt focussen op groei.',
+    href: '/diensten/ai-automatiseringen',
+  },
 ];
 
 export function SkillsSection() {
