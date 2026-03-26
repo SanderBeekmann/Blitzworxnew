@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FooterBars } from '@/components/animations/FooterBars';
+
 import { FooterLogo } from '@/components/animations/FooterLogo';
 
 const footerLinks = [
@@ -87,7 +87,6 @@ export function Footer() {
           </p>
         </div>
       </div>
-      <FooterBars />
     </footer>
   );
 }

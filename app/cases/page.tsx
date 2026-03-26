@@ -5,6 +5,7 @@ import { siteUrl } from '@/lib/site';
 import { cases } from '@/lib/cases';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
+import { GradientBlob } from '@/components/ui/GradientBlob';
 
 export const metadata: Metadata = {
   title: 'Cases - Development & Webdesign Portfolio',
@@ -30,7 +31,8 @@ export default function CasesPage() {
   };
 
   return (
-    <section className="section" aria-labelledby="cases-title">
+    <section className="relative section" aria-labelledby="cases-title">
+      <GradientBlob className="top-[8vh] right-[-7%] w-[320px] h-[280px] opacity-30" duration={20} delay={2} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -46,14 +48,17 @@ export default function CasesPage() {
           </TitleReveal>
         </header>
         <ul className="space-y-16">
-          {cases.filter(c => !c.imagePlaceholder).map((caseItem, index) => (
+          {cases.map((caseItem, index) => (
             <li key={caseItem.slug}>
               <FadeIn delay={index * 0.1}>
                 <article className="group/case grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
                   <div className="relative aspect-video rounded-md overflow-hidden bg-ebony">
                     {caseItem.imagePlaceholder ? (
-                      <div className="absolute inset-0 flex items-center justify-center bg-ink">
-                        <span className="text-body font-medium text-grey-olive">Coming soon</span>
+                      <div
+                        className="absolute inset-0 flex items-center justify-center"
+                        style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(84,92,82,0.25) 0%, rgba(4,7,17,0.95) 70%)' }}
+                      >
+                        <span className="text-h3 font-semibold text-ebony/30">{caseItem.client}</span>
                       </div>
                     ) : (
                       <>

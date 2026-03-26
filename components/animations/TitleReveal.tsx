@@ -67,6 +67,7 @@ export function TitleReveal({
             }
           );
           triggerRef.current = tween.scrollTrigger ?? null;
+          requestAnimationFrame(() => ScrollTrigger.refresh());
         });
       }
     });

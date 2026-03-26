@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { gilroy } from '@/app/fonts';
 import './globals.css';

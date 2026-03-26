@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
-import { SectionTopBars } from '@/components/animations/SectionTopBars';
-import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
+
 import { Button } from '@/components/ui/Button';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
@@ -597,12 +596,10 @@ export function DevelopmentPageClient() {
             </div>
           </div>
         </div>
-        <SectionBottomBars />
       </section>
 
       {/* ── Tech Stack ── */}
       <section className="section relative overflow-hidden" aria-labelledby="tech-title">
-        <SectionTopBars />
         <div className="container-narrow">
           <TitleReveal
             as="h2"

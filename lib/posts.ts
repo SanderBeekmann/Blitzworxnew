@@ -423,199 +423,158 @@ Klaar om te beginnen? [Neem contact op met Blitzworx](/contact) voor een vrijbli
   },
   {
     slug: 'wat-kost-een-website-op-maat',
-    title: 'Wat kost een website op maat in 2025?',
+    title: 'Wat kost een website op maat in 2026?',
     description:
-      'Wat kost een website op maat? Ontdek prijzen, kostenfactoren en bespaartips. Van €1.500 voor een eenvoudige site tot €50.000+ voor webapplicaties.',
-    date: '10 februari 2025',
-    dateISO: '2025-02-10',
-    dateModifiedISO: '2025-03-09',
+      'Wat kost een website laten maken in 2026? Eerlijk prijsoverzicht: freelancer EUR 1.200-3.500, bureau EUR 4.000-15.000, BlitzWorx vanaf EUR 750. Inclusief tips.',
+    date: '26 maart 2026',
+    dateISO: '2026-03-26',
+    dateModifiedISO: '2026-03-26',
     category: 'webdesign',
-    tags: ['website kosten', 'website op maat', 'prijzen', 'budget', 'webdesign'],
-    readingTime: 11,
+    tags: ['website kosten', 'website op maat', 'prijzen', 'wat kost een website', 'webdesign'],
+    readingTime: 8,
     faqs: [
       {
-        question: 'Wat kost een eenvoudige website?',
-        answer: 'Een eenvoudige website met 5–10 pagina\'s kost gemiddeld €1.500–€3.000. Dit is inclusief design, development en basisoptimalisatie. Hosting en onderhoud komen daar bovenop (€50–€150/maand).',
+        question: 'Wat kost een eenvoudige website in 2026?',
+        answer: 'Een eenvoudige website kost bij een freelancer EUR 1.200-3.500. Bij BlitzWorx start je vanaf EUR 750 dankzij een AI-gedreven werkwijze die het proces versnelt zonder kwaliteit in te leveren.',
       },
       {
-        question: 'Waarom zijn de prijsverschillen tussen bureaus zo groot?',
-        answer: 'Prijsverschillen ontstaan door verschillen in ervaring, technische aanpak, mate van maatwerk, en wat er wel/niet is inbegrepen. Een goedkoop bureau werkt vaak met templates en minder persoonlijke aandacht, terwijl een duurder bureau volledig op maat bouwt met meer strategie en ondersteuning.',
-      },
-      {
-        question: 'Kan ik besparen door zelf content aan te leveren?',
-        answer: 'Ja, het zelf aanleveren van teksten en afbeeldingen kan €500–€2.000 besparen. Zorg wel dat je content van goede kwaliteit is: helder geschreven, SEO-geoptimaliseerd en voorzien van professionele foto\'s.',
+        question: 'Waarom is BlitzWorx goedkoper dan een bureau?',
+        answer: 'Bij BlitzWorx praat je direct met de bouwer - geen accountmanagers of tussenpersonen. Daarnaast wordt AI ingezet om sneller te bouwen. Die tijdwinst wordt vertaald naar een lagere prijs.',
       },
       {
         question: 'Wat zijn de doorlopende kosten na oplevering?',
-        answer: 'Reken op €50–€200/maand voor hosting en onderhoud. Daarnaast €10–€50/jaar voor je domeinnaam en eventueel kosten voor content updates, SEO-monitoring of doorontwikkeling.',
+        answer: 'Reken op EUR 5-50/maand voor hosting, EUR 10-25/jaar voor je domeinnaam, en optioneel EUR 40-200/maand voor onderhoud. Bij BlitzWorx kost het onderhoudspakket EUR 40/maand inclusief 2 uur aanpassingen.',
       },
     ],
     content: `
-## Wat kost een website op maat? Het complete kostenplaatje voor 2025
+## Wat kost een website op maat in 2026?
 
-Een website op maat laten maken kost gemiddeld tussen de **€1.500 en €15.000**, afhankelijk van de complexiteit, het aantal pagina's en de gewenste functionaliteit. Eenvoudige websites starten rond €1.500, terwijl complexe webapplicaties €50.000 of meer kunnen kosten. In dit artikel geef ik je een helder overzicht van alle kostenfactoren, realistische prijsindicaties en praktische tips om binnen budget te blijven.
+Je wilt een website laten maken. Maar wat kost dat eigenlijk? Goede vraag, en het eerlijke antwoord is: dat hangt ervan af. Niet het antwoord waar je op hoopte, maar wel de waarheid.
 
-De grote prijsbandbreedte maakt het lastig om vooraf een exact bedrag te noemen. Maar door te begrijpen welke factoren de prijs bepalen, kun je beter vergelijken en een weloverwogen keuze maken.
+In dit artikel geef ik je een helder overzicht van wat je in 2026 kunt verwachten. Geen vage "vanaf"-prijzen, geen marketingpraatjes. Gewoon eerlijke cijfers, zodat je weet waar je aan toe bent.
 
-## De 7 factoren die de prijs van een website bepalen
+## De korte versie
 
-### 1. Omvang en aantal pagina's
+Even de cijfers op een rij:
 
-Het aantal pagina's is een van de meest directe kostenfactoren:
-- **5–10 pagina's**: standaard bedrijfswebsite
-- **10–25 pagina's**: uitgebreidere site met blog, cases en meerdere dienstpagina's
-- **25+ pagina's**: grote website met veel content, categorieën en landingspagina's
+- **Zelf doen** (Wix, Squarespace): EUR 0 - EUR 500 + je eigen tijd
+- **Freelancer**: EUR 1.200 - EUR 3.500
+- **Webdesignbureau**: EUR 4.000 - EUR 15.000+
+- **BlitzWorx**: EUR 750 - EUR 2.000
 
-Elke pagina vereist design, development, content en testing. Meer pagina's = meer werk = hogere kosten.
+Dat is een flink verschil. Waar dat aan ligt? Lees verder.
 
-### 2. Mate van maatwerk
+## Optie 1: zelf doen met een website builder
 
-Het grootste prijsverschil zit in de mate van maatwerk:
+Wix, Squarespace, Webflow - je kent ze wel. Je kiest een template, sleept wat blokken rond en je hebt een website. Klinkt goed, toch?
 
-| Aanpak | Prijsindicatie | Wat je krijgt |
-|--------|---------------|---------------|
-| Template/thema | €500–€2.000 | Voorgemaakt design, beperkt aanpasbaar |
-| Template + maatwerk | €2.000–€5.000 | Bestaand framework, eigen design |
-| Volledig maatwerk | €5.000–€15.000+ | Uniek design, custom code, optimale prestaties |
+In theorie wel. In de praktijk loop je al snel tegen beperkingen aan. De template past net niet bij je bedrijf. De laadtijd is traag. Je site ziet er hetzelfde uit als die van honderd andere bedrijven. En SEO? Succes met pagina 3 van Google.
 
-Bij [Blitzworx](/diensten/development) bouw ik volledig op maat met Next.js en React. Dit resulteert in websites die significant sneller laden en beter scoren in Google dan template-oplossingen.
+**Kosten:** EUR 0 - EUR 500 voor een abonnement en eventueel een premium template.
+**Verborgen kosten:** je eigen tijd. Reken op 20-40 uur als je het goed wilt doen. En dan heb je nog steeds een template.
 
-Lees meer over de afwegingen in mijn artikel [Website op maat vs. template](/blog/website-op-maat-vs-template).
+**Geschikt voor:** ondernemers die net starten en echt geen budget hebben. Als tijdelijke oplossing kan het werken.
 
-### 3. Functionaliteit
+## Optie 2: een freelancer inhuren
 
-Extra functies verhogen de prijs aanzienlijk:
+Een freelancer is persoonlijker dan een bureau en vaak betaalbaarder. Je hebt direct contact met degene die je website bouwt. Dat scheelt in communicatie en doorlooptijd.
 
-| Functionaliteit | Indicatie meerkosten |
-|----------------|---------------------|
-| Contactformulier | €200–€500 |
-| Blog | €500–€1.500 |
-| Zoekfunctie | €300–€1.000 |
-| Meertaligheid | €1.000–€3.000 |
-| E-commerce/webshop | €3.000–€10.000+ |
-| Klantportaal/dashboard | €5.000–€20.000+ |
-| CRM-integratie | €1.000–€5.000 |
-| Boekingssysteem | €2.000–€8.000 |
+De prijzen lopen in 2026 uiteen van EUR 1.200 tot EUR 3.500 voor een professionele website van 5-8 pagina's. Dat is inclusief design, ontwikkeling en een basale SEO-setup.
 
-### 4. Design-niveau
+Let op: de kwaliteit verschilt enorm. Sommige freelancers bouwen met verouderde technieken of leveren een WordPress-site op met tien plugins die je na een jaar zelf mag onderhouden. Vraag altijd naar hun portfolio en welke technologie ze gebruiken.
 
-De visuele complexiteit beïnvloedt de prijs:
-- **Basis design**: clean en functioneel, beperkte animaties → €1.000–€2.500
-- **Premium design**: unieke uitstraling, micro-animaties, op maat iconen → €2.500–€5.000
-- **High-end design**: motion design, 3D-elementen, interactieve storytelling → €5.000–€15.000+
+**Kosten:** EUR 1.200 - EUR 3.500
+**Doorlooptijd:** 2 - 6 weken
+**Geschikt voor:** ondernemers die een professionele site willen zonder de prijs van een bureau.
 
-Investeren in premium design loont: **94% van de eerste indrukken** wordt bepaald door design (Research Gate). Bekijk mijn [webdesign diensten](/diensten/webdesign) voor voorbeelden.
+## Optie 3: een webdesignbureau
 
-### 5. Content en copywriting
+Bij een bureau betaal je voor het volledige pakket: strategie, design, development, copywriting en projectmanagement. Je hebt een vast aanspreekpunt (meestal een accountmanager) en het proces is gestructureerd.
 
-Content is een vaak onderschatte kostenpost:
-- **Zelf aanleveren**: €0 (maar kost je eigen tijd)
-- **Copywriting door bureau**: €100–€250 per pagina
-- **Professionele fotografie**: €300–€1.000 per shoot
-- **Videoproductie**: €1.000–€5.000+
+De keerzijde: je betaalt ook voor die overhead. Een projectmanager, een designer, een developer - al die uren tikken door. Voor een MKB-website kom je in 2026 al snel uit op EUR 4.000 tot EUR 15.000, afhankelijk van de complexiteit.
 
-**Tip**: investeer in goede content. Volgens Content Marketing Institute genereert content marketing **3x meer leads** dan traditionele marketing, tegen **62% minder kosten**.
+**Kosten:** EUR 4.000 - EUR 15.000+
+**Doorlooptijd:** 4 - 12 weken
+**Geschikt voor:** bedrijven met een groter budget die een strategisch traject willen met meerdere specialisten.
 
-### 6. SEO en vindbaarheid
+## Optie 4: BlitzWorx - bureau-kwaliteit, eerlijke prijs
 
-SEO is geen luxe maar noodzaak:
-- **Basis SEO** (meta tags, sitemap, snelheid): vaak inbegrepen
-- **Uitgebreide SEO** (keyword research, content strategie, link building): €500–€2.000 eenmalig
-- **Doorlopende SEO**: €300–€1.500/maand
+Bij BlitzWorx bouw ik volledig op maat gemaakte websites voor EUR 750 tot EUR 2.000. Geen templates, geen WordPress, geen tien plugins die je site vertragen.
 
-Zonder SEO is je website als een winkel in een achterafstraatje — mooi, maar niemand vindt het. Lees mijn tips voor [online zichtbaarheid vergroten](/blog/online-zichtbaarheid-vergroten).
+Hoe dat kan voor die prijs? Twee redenen.
 
-### 7. Onderhoud en hosting
+**1. Directe lijnen**
+Je praat met mij - de bouwer. Geen accountmanagers, geen tussenpersonen. Dat scheelt uren aan meetings en afstemming die jij anders betaalt.
 
-Na oplevering zijn er doorlopende kosten:
-- **Hosting**: €5–€50/maand (afhankelijk van type en verkeer)
-- **Domein**: €10–€50/jaar
-- **SSL-certificaat**: vaak gratis bij hosting
-- **Onderhoud en updates**: €50–€200/maand
-- **Monitoring en backups**: €25–€100/maand
+**2. AI-gedreven werkwijze**
+Ik gebruik AI-tools om sneller te bouwen zonder kwaliteit in te leveren. Waar een traditioneel bureau dagen kwijt is aan bepaalde taken, doe ik dat in uren. Die tijdwinst vertaal ik naar een lagere prijs voor jou.
 
-## Realistische prijsindicaties per type website
+Het resultaat: een snelle, professionele website gebouwd met moderne technologie (Next.js, Tailwind CSS) die goed scoort in Google. Opgeleverd in 2-3 weken.
 
-### Eenvoudige bedrijfswebsite
-**€1.500 – €3.000**
-- 5–10 pagina's
-- Responsive design
-- Contactformulier
-- Basis SEO
-- CMS of statische site
+**Kosten:** EUR 750 - EUR 2.000
+**Doorlooptijd:** 2 - 3 weken
+**Geschikt voor:** ZZP'ers, kleine ondernemers en startups die een professionele website willen voor een eerlijke prijs.
 
-### Middelgrote bedrijfswebsite
-**€3.000 – €8.000**
-- 10–25 pagina's
-- Op maat ontworpen design
-- Blog
-- Meerdere formulieren
-- Integraties (analytics, CRM)
-- Uitgebreide SEO
+## Hoe AI de kosten van webdevelopment drukt
 
-### Professionele website met maatwerk
-**€8.000 – €15.000**
-- 15–40+ pagina's
-- Volledig custom design
-- Geavanceerde functionaliteit
-- Performance-geoptimaliseerd
-- Content strategie
-- Doorlopend onderhoud
+AI verandert de manier waarop websites gebouwd worden. Dat is geen hype - het is een praktische realiteit die direct invloed heeft op wat jij betaalt.
 
-### Webshop
-**€5.000 – €25.000+**
-- Productcatalogus
-- Betaalintegratie (iDEAL, creditcard)
-- Voorraad- en orderbeheer
-- Klantaccounts
-- Uitgebreide filters en zoekfunctie
+Concreet zet ik AI in voor:
 
-### Webapplicatie
-**€10.000 – €50.000+**
-- Custom functionaliteit
-- Gebruikersauthenticatie
-- Database en API
-- Complexe business logic
-- Schaalbare architectuur
+- **Code schrijven**: AI genereert basiscode die ik verfijn en optimaliseer. Wat vroeger een dag kostte, is nu in een paar uur klaar.
+- **Content en copy**: eerste versies van teksten, meta-descriptions en alt-tags worden sneller opgeleverd.
+- **Probleemoplossing**: complexe technische vraagstukken los ik sneller op doordat AI meedenkt als sparringpartner.
+- **Testen en kwaliteitscontrole**: AI helpt bij het opsporen van fouten en het verbeteren van toegankelijkheid.
 
-## 8 tips om kosten te beheersen
+Dat betekent niet dat AI het werk overneemt. Elke regel code wordt door mij gecontroleerd en aangepast. AI is een gereedschap, geen vervanging. Het versnelt het proces zodat ik meer kan bouwen in minder tijd - en die besparing geef ik door.
 
-1. **Start met een MVP**: bouw eerst de kern, breid later uit. Dit bespaart niet alleen geld, maar leert je ook wat gebruikers écht nodig hebben.
+Voor jou als ondernemer betekent dit: je krijgt in 2026 meer website voor minder geld dan twee jaar geleden. Tenminste, als je kiest voor iemand die AI daadwerkelijk inzet.
 
-2. **Lever zelf content aan**: goede teksten en afbeeldingen zelf aanleveren kan €500–€2.000 besparen.
+## Waar hangt de prijs van af?
 
-3. **Wees specifiek in je briefing**: hoe concreter je wensen, hoe preciezer de offerte. Vaagheid leidt tot meerwerk.
+Ongeacht wie je kiest, deze factoren bepalen de uiteindelijke prijs:
 
-4. **Prioriteer functionaliteit**: niet alles hoeft er in de eerste versie in te zitten. Maak een must-have en nice-to-have lijst.
+- **Aantal pagina's**: een one-pager is goedkoper dan een site met 15 pagina's
+- **Functionaliteit**: contactformulier is simpel, een boekingssysteem of webshop kost meer
+- **Design**: een bestaand ontwerp aanpassen is goedkoper dan volledig custom design
+- **Content**: lever je teksten en foto's aan, of moet dat ook gemaakt worden?
+- **SEO**: basis SEO-setup of een uitgebreide strategie met zoekwoordonderzoek?
+- **Koppelingen**: moet de site gekoppeld worden aan externe systemen (CRM, boekhoudsoftware)?
 
-5. **Kies het juiste bureau**: te goedkoop betekent vaak opnieuw beginnen. Investeer in kwaliteit. Lees mijn [gids voor het kiezen van een bureau](/blog/hoe-kies-je-een-webdesign-bureau).
+## Doorlopende kosten: waar je op moet letten
 
-6. **Vraag naar alles-in-één pakketten**: sommige bureaus bieden design, development en content als pakket met korting.
+Een website bouwen is stap een. Daarna heb je te maken met:
 
-7. **Plan onderhoud in**: reserveer budget voor doorlopend onderhoud. Een verwaarloosde website kost uiteindelijk meer.
+- **Hosting**: EUR 5 - EUR 50 per maand, afhankelijk van de aanbieder
+- **Domeinnaam**: EUR 10 - EUR 25 per jaar
+- **SSL-certificaat**: vaak gratis inbegrepen bij hosting
+- **Onderhoud en updates**: EUR 40 - EUR 200 per maand, afhankelijk van de aanbieder
+- **Content updates**: zelf doen of uitbesteden
 
-8. **Vergelijk minimaal 3 offertes**: maar vergelijk op waarde, niet alleen op prijs.
+Bij BlitzWorx bied ik een onderhoudspakket aan voor EUR 40 per maand. Daarin zitten 2 uur aan kleine aanpassingen, updates en support. Heb je meer nodig? Dan betaal je EUR 50 per uur. Geen verrassingen.
 
-## De ROI van een goede website
+## De echte vraag: wat levert een website je op?
 
-Een website is geen kostenpost, maar een investering. Reken even mee:
+Een website is geen kostenpost. Het is een investering. De vraag is niet "wat kost het?", maar "wat levert het op?"
 
-- Een goed geoptimaliseerde website genereert **10+ leads per maand**
-- Met een gemiddelde conversiewaarde van **€500** per lead
-- Is dat **€5.000/maand** aan potentiële omzet
-- Een website van **€8.000** verdient zichzelf dan **binnen 2 maanden** terug
+Een professionele website die goed vindbaar is in Google, vertrouwen wekt bij bezoekers en duidelijk maakt wat je doet - die levert klanten op. Elke maand opnieuw. Reken dat eens uit over twee, drie jaar.
 
-Dit zijn uiteraard indicaties, maar ze illustreren waarom het loont om te investeren in kwaliteit. De goedkoopste website is niet altijd de beste deal.
+Een verouderde website of een template die er generiek uitziet kost je juist geld. Potentiele klanten die je niet vinden of die afhaken omdat je site er niet professioneel uitziet - dat zijn gemiste inkomsten.
 
-## Conclusie: investeer slim in je website
+## Samenvatting
 
-De kosten van een website op maat variëren van €1.500 tot meer dan €50.000. De juiste investering hangt af van je doelen, doelgroep en groeambitie. Mijn advies:
+| Optie | Kosten | Doorlooptijd | Geschikt voor |
+|-------|--------|--------------|---------------|
+| Zelf doen (Wix/Squarespace) | EUR 0 - EUR 500 + eigen tijd | Variabel | Starters zonder budget |
+| Freelancer | EUR 1.200 - EUR 3.500 | 2 - 6 weken | Ondernemers die persoonlijk contact willen |
+| Bureau | EUR 4.000 - EUR 15.000+ | 4 - 12 weken | Bedrijven met groter budget |
+| BlitzWorx | EUR 750 - EUR 2.000 | 2 - 3 weken | ZZP'ers en kleine ondernemers |
 
-- **Starter of ZZP'er**: begin met een solide basis (€1.500–€3.000) en breid uit naarmate je groeit
-- **MKB**: investeer in een professionele website (€5.000–€15.000) die direct bijdraagt aan je omzet
-- **Groeiend bedrijf**: kies voor maatwerk met schaalbaarheid (€10.000+) om je groeiambities te ondersteunen
+## Volgende stap
 
-Bij [Blitzworx](/diensten) denk ik graag mee over de beste aanpak voor jouw budget en doelen. [Plan een vrijblijvend gesprek](/contact) en ontvang een transparante offerte.
+Wil je weten wat een website voor jouw bedrijf zou kosten? Ik denk graag vrijblijvend mee. Geen verkooppraatje, gewoon een eerlijk gesprek over wat je nodig hebt en wat dat kost.
+
+[Plan een vrijblijvend gesprek](https://blitzworx.nl/contact)
     `.trim(),
   },
   {

@@ -1,5 +1,6 @@
 'use client';
 
+import { GradientBlob } from '@/components/ui/GradientBlob';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
@@ -263,6 +264,8 @@ export function AboutPageClient() {
 
   return (
     <div id="about-page" className="relative">
+      <GradientBlob className="top-[60vh] right-[-5%] w-[350px] h-[280px] opacity-30" duration={24} delay={2} />
+      <GradientBlob className="top-[220vh] left-[-8%] w-[400px] h-[350px] opacity-35" duration={19} delay={6} />
       <div className="hidden md:block">
         <AboutScrollLine />
       </div>

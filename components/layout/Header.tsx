@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -318,9 +319,16 @@ export function Header() {
       >
         <Link
           href="/"
-          className="text-xl font-semibold text-cornsilk tracking-tight hover:text-dry-sage transition-colors justify-self-start"
+          className="justify-self-start hover:opacity-80 transition-opacity"
         >
-          BLITZWORX
+          <Image
+            src="/assets/images/blitzworx-logo.png"
+            alt="Blitzworx"
+            width={140}
+            height={32}
+            className="h-5 sm:h-5 md:h-5 lg:h-6 xl:h-8 2xl:h-9 w-auto"
+            priority
+          />
         </Link>
 
         <ul className="hidden md:flex items-center justify-center gap-8 justify-self-center">

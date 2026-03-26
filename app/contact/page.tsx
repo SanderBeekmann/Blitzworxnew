@@ -3,6 +3,7 @@ import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { ContactOnboarding } from '@/components/contact/ContactOnboarding';
 import { PhoneLink } from '@/components/contact/PhoneLink';
+import { GradientBlob } from '@/components/ui/GradientBlob';
 
 export const metadata: Metadata = {
   title: 'Contact — Plan een Vrijblijvend Gesprek',
@@ -55,7 +56,8 @@ const faqPageJsonLd = {
 
 export default function ContactPage() {
   return (
-    <>
+    <div className="relative">
+      <GradientBlob className="top-[10vh] left-[-10%] w-[300px] h-[350px] opacity-35" duration={23} delay={5} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd) }}
@@ -124,6 +126,6 @@ export default function ContactPage() {
           </section>
         </div>
       </section>
-    </>
+    </div>
   );
 }

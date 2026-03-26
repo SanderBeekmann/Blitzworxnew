@@ -6,8 +6,9 @@ import { HowItWorxSection } from './sections/home/HowItWorxSection';
 import { SkillsSection } from './sections/home/SkillsSection';
 import { TestimonialSection } from './sections/home/TestimonialSection';
 import { WhyBlitzworxSection } from './sections/home/WhyBlitzworxSection';
-import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
+import { AnimatedGradient } from '@/components/layout/AnimatedGradient';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
+import { GradientBlob } from '@/components/ui/GradientBlob';
 
 export const metadata: Metadata = {
   title: 'Development, UI/UX Design & Branding voor Ondernemers',
@@ -26,13 +27,15 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <>
-      <HeroSection />
-      <div className="relative z-10">
+    <div className="relative">
+      <GradientBlob className="top-[85vh] right-[-8%] w-[400px] h-[300px] opacity-35" duration={22} />
+      <GradientBlob className="top-[280vh] left-[-12%] w-[350px] h-[400px] opacity-30" duration={18} delay={4} />
+      <GradientBlob className="top-[420vh] right-[3%] w-[300px] h-[250px] opacity-35" duration={25} delay={8} />
+      <AnimatedGradient className="relative">
+        <HeroSection />
         <AboutIntroSection />
-        <div className="relative z-50 w-full">
-          <AnnouncementBar />
-        </div>
+      </AnimatedGradient>
+      <div className="relative z-10">
         <div className="relative z-30">
           <RecentCasesSection />
           <HowItWorxSection />
@@ -42,6 +45,6 @@ export default function HomePage() {
           <TestimonialSection />
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
-import { SectionTopBars } from '@/components/animations/SectionTopBars';
-import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
+
 import { Button } from '@/components/ui/Button';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
@@ -72,7 +71,7 @@ const usps = [
   {
     title: 'Ontwerp + techniek onder één dak',
     description:
-      'Ik ontwerp niet alleen, ik bouw ook. Dat betekent designs die technisch haalbaar zijn en naadloos worden omgezet naar code.',
+      'Ik kan niet alleen de website ontwikkelen, maar ook alle achterliggende processen. Van geautomatiseerde e-mails in huisstijl tot complete systemen die je bedrijfsvoering optimaliseren.',
   },
   {
     title: 'Persoonlijke samenwerking',
@@ -635,8 +634,9 @@ export function WebdesignPageClient() {
               </TitleReveal>
               <FadeIn delay={0.1}>
                 <p className="text-body text-dry-sage leading-relaxed mb-10">
-                  Ik ontwerp niet alleen, ik bouw ook. Dat betekent designs die technisch
-                  haalbaar zijn en er op elk scherm perfect uitzien.
+                  Ik kan niet alleen de website ontwikkelen, maar ook alle achterliggende
+                  processen. Van geautomatiseerde e-mails in huisstijl tot complete systemen
+                  die je bedrijfsvoering optimaliseren.
                 </p>
               </FadeIn>
 
@@ -765,12 +765,10 @@ export function WebdesignPageClient() {
             </div>
           </div>
         </div>
-        <div className="hidden md:block"><SectionBottomBars /></div>
       </section>
 
       {/* ── Tools & Technologieen ── */}
       <section className="section relative" aria-labelledby="tech-title">
-        <div className="hidden md:block"><SectionTopBars /></div>
         <div className="container-narrow">
           <TitleReveal
             as="h2"

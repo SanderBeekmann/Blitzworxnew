@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
-import { SectionTopBars } from '@/components/animations/SectionTopBars';
-import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
+
 import { Button } from '@/components/ui/Button';
 
 interface ScrollTriggerRef {
@@ -1207,7 +1206,6 @@ export function BrandingPageClient() {
             </div>
           </div>
         </div>
-        <SectionBottomBars />
       </section>
 
       {/* ── CTA ── */}

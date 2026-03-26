@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { siteUrl } from '@/lib/site';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { GradientBlob } from '@/components/ui/GradientBlob';
 
 export const metadata: Metadata = {
   title: 'Diensten - Development, Webdesign & Branding',
@@ -50,7 +51,8 @@ export default function DienstenPage() {
   };
 
   return (
-    <main className="section min-h-screen">
+    <main className="relative section min-h-screen">
+      <GradientBlob className="top-[15vh] right-[-6%] w-[350px] h-[300px] opacity-30" duration={21} delay={3} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

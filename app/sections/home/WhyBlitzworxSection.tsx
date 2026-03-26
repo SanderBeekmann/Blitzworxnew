@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { MagicText } from '@/components/ui/MagicText';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 
 const usps = [
@@ -13,7 +14,7 @@ const usps = [
   {
     title: 'Ontwerp + techniek onder één dak',
     description:
-      'Ik ontwerp niet alleen, ik bouw ook. Dat betekent designs die technisch haalbaar zijn en naadloos worden omgezet naar code.',
+      'Ik kan niet alleen de website ontwikkelen, maar ook alle achterliggende processen. Van geautomatiseerde e-mails in huisstijl tot complete systemen die je bedrijfsvoering optimaliseren.',
   },
   {
     title: 'Persoonlijke samenwerking',
@@ -83,12 +84,12 @@ export function WhyBlitzworxSection() {
             >
               Waarom Blitzworx?
             </TitleReveal>
-            <FadeIn delay={0.1}>
-              <p className="text-body text-dry-sage leading-relaxed mb-10">
-                Ik ontwerp niet alleen, ik bouw ook. Dat betekent designs die technisch
-                haalbaar zijn en er op elk scherm perfect uitzien.
-              </p>
-            </FadeIn>
+            <div className="mb-10">
+              <MagicText
+                text="Ik kan niet alleen de website ontwikkelen, maar ook alle achterliggende processen. Van geautomatiseerde e-mails in huisstijl tot complete systemen die je bedrijfsvoering optimaliseren."
+                className="text-body text-dry-sage leading-relaxed"
+              />
+            </div>
 
             {/* Device morph showcase */}
             <FadeIn delay={0.3}>

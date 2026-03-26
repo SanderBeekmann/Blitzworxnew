@@ -2,57 +2,44 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
 import type { Case } from '@/lib/cases';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
+
+function BentoGrid({ images, title }: { images: string[]; title: string }) {
+  const visibleImages = images.slice(0, 4);
+
+  return (
+    <div className="columns-2 gap-3 space-y-3">
+      {visibleImages.map((src, i) => (
+        <div
+          key={src}
+          className="break-inside-avoid rounded-md overflow-hidden bg-ink-black"
+        >
+          <Image
+            src={src}
+            alt={`${title} — screenshot ${i + 1}`}
+            width={1440}
+            height={900}
+            className="w-full h-auto block"
+            sizes="(max-width: 1024px) 50vw, 25vw"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 interface CaseDetailContentProps {
   caseItem: Case;
 }
 
 export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [imageIndex, setImageIndex] = useState(0);
-  const images = caseItem.imagePlaceholder ? [] : (caseItem.images ?? [caseItem.image, caseItem.imageHover].filter(Boolean));
+  const images = caseItem.imagePlaceholder
+    ? []
+    : (caseItem.images ?? [caseItem.image, caseItem.imageHover].filter((v): v is string => Boolean(v)));
   const showPlaceholder = caseItem.imagePlaceholder || images.length === 0;
   const paragraphs = (caseItem.fullStory ?? caseItem.description).split(/\n\n+/);
-
-  useEffect(() => {
-    if (images.length <= 1) return;
-
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
-    const updateImageIndex = () => {
-      const content = contentRef.current;
-      if (!content) return;
-
-      const rect = content.getBoundingClientRect();
-      const contentTop = rect.top + window.scrollY;
-      const contentHeight = content.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrollY = window.scrollY;
-
-      const scrollableHeight = Math.max(0, contentHeight - viewportHeight);
-      const scrolled = scrollY - contentTop;
-      const progress = scrollableHeight > 0 ? Math.min(1, Math.max(0, scrolled / scrollableHeight)) : 0;
-
-      const index = Math.min(
-        Math.floor(progress * images.length),
-        images.length - 1
-      );
-      setImageIndex(index);
-    };
-
-    updateImageIndex();
-    window.addEventListener('scroll', updateImageIndex, { passive: true });
-    window.addEventListener('resize', updateImageIndex);
-    return () => {
-      window.removeEventListener('scroll', updateImageIndex);
-      window.removeEventListener('resize', updateImageIndex);
-    };
-  }, [images.length]);
 
   return (
     <article className="section">
@@ -81,73 +68,64 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
           </div>
         </header>
 
-        <div className="mt-16 grid lg:grid-cols-[1fr,minmax(320px,420px)] lg:gap-16 xl:gap-24 items-start">
-          <div ref={contentRef} className="min-h-[60vh]">
-            <FadeIn delay={0.2}>
-              <div className="max-w-prose">
-                {paragraphs.map((paragraph, i) => (
-                  <p
-                    key={i}
-                    className={`text-body text-dry-sage leading-relaxed ${i > 0 ? 'mt-6' : ''}`}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          <FadeIn delay={0.2}>
+            <div className="max-w-prose">
+              {paragraphs.map((paragraph, i) => (
+                <p
+                  key={i}
+                  className={`text-body text-dry-sage leading-relaxed ${i > 0 ? 'mt-6' : ''}`}
+                >
+                  {paragraph}
+                </p>
+              ))}
+              <div className="mt-10 flex flex-wrap gap-4">
                 {caseItem.websiteUrl && (
-                  <div className="mt-8">
-                    <a
-                      href={caseItem.websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk hover:shadow-[0_0_32px_rgba(254,250,220,0.18)] transition-colors transition-shadow duration-300"
-                      aria-label="Bezoek de website (opent in nieuw tabblad)"
-                    >
-                      Bezoek de website
-                    </a>
-                  </div>
+                  <a
+                    href={caseItem.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk hover:shadow-[0_0_32px_rgba(254,250,220,0.18)] transition-colors transition-shadow duration-300"
+                    aria-label="Bezoek de website (opent in nieuw tabblad)"
+                  >
+                    Bezoek de website
+                  </a>
                 )}
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-6 py-3 font-medium rounded-md btn-secondary-cta"
+                >
+                  Neem contact op
+                </Link>
               </div>
-            </FadeIn>
-          </div>
-
-          <div className="hidden lg:block sticky top-24">
-            <div className="relative aspect-[4/3] rounded-md overflow-hidden bg-ebony">
-              {showPlaceholder ? (
-                <div className="absolute inset-0 flex items-center justify-center bg-ink">
-                  <span className="text-body font-medium text-grey-olive">Coming soon</span>
-                </div>
-              ) : (
-                <>
-                  {images.map((src, i) => (
-                    <div
-                      key={src ?? i}
-                      className={`absolute inset-0 transition-opacity duration-500 ${
-                        i === imageIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                      }`}
-                    >
-                      {src && (
-                        <Image
-                          src={src}
-                          alt={`${caseItem.title} - afbeelding ${i + 1}`}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 420px"
-                          className="object-cover"
-                          priority={i === 0}
-                        />
-                      )}
-                    </div>
-                  ))}
-                  <div
-                    className="absolute inset-0 pointer-events-none z-20"
-                    style={{
-                      background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
-                    }}
-                    aria-hidden
-                  />
-                </>
-              )}
             </div>
-          </div>
+          </FadeIn>
+
+          {/* Bento grid */}
+          <FadeIn delay={0.3}>
+            {showPlaceholder ? (
+              <div className="grid grid-cols-5 gap-3" style={{ gridTemplateRows: '160px 160px 160px' }}>
+                <div
+                  className="col-span-3 row-span-2 rounded-md"
+                  style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(84,92,82,0.3) 0%, rgba(4,7,17,0.95) 70%)' }}
+                />
+                <div
+                  className="col-span-2 row-span-1 rounded-md"
+                  style={{ background: 'radial-gradient(ellipse at 70% 30%, rgba(84,92,82,0.2) 0%, rgba(4,7,17,0.95) 70%)' }}
+                />
+                <div
+                  className="col-span-2 row-span-2 rounded-md"
+                  style={{ background: 'radial-gradient(ellipse at 50% 80%, rgba(202,202,170,0.08) 0%, rgba(4,7,17,0.95) 70%)' }}
+                />
+                <div
+                  className="col-span-3 row-span-1 rounded-md"
+                  style={{ background: 'radial-gradient(ellipse at 80% 40%, rgba(84,92,82,0.25) 0%, rgba(4,7,17,0.95) 70%)' }}
+                />
+              </div>
+            ) : (
+              <BentoGrid images={images} title={caseItem.title} />
+            )}
+          </FadeIn>
         </div>
 
         {/* Testimonial */}
@@ -185,36 +163,6 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
             </FadeIn>
           </div>
         )}
-
-        <div className="mt-16 lg:hidden">
-          <div className="relative aspect-video rounded-md overflow-hidden bg-ebony">
-            {showPlaceholder ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-ink">
-                <span className="text-body font-medium text-grey-olive">Coming soon</span>
-              </div>
-            ) : (
-              <>
-                {images[imageIndex] && (
-                  <Image
-                    src={images[imageIndex]}
-                    alt={caseItem.title}
-                    fill
-                    sizes="100vw"
-                    className="object-cover"
-                    priority
-                  />
-                )}
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'radial-gradient(ellipse at center, transparent 0%, rgba(4,7,17,0.4) 50%, rgba(4,7,17,0.85) 100%)',
-                  }}
-                  aria-hidden
-                />
-              </>
-            )}
-          </div>
-        </div>
       </div>
     </article>
   );

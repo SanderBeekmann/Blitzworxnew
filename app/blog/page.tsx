@@ -5,6 +5,7 @@ import { posts, categoryLabels } from '@/lib/posts';
 import type { Post } from '@/lib/posts';
 import { siteUrl } from '@/lib/site';
 import { CategoryFilter } from '@/components/blog/CategoryFilter';
+import { GradientBlob } from '@/components/ui/GradientBlob';
 
 export const metadata: Metadata = {
   title: 'Blog | Tips over webdesign, development en branding',
@@ -41,7 +42,8 @@ export default function BlogPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <main className="section min-h-screen">
+      <main className="relative section min-h-screen">
+        <GradientBlob className="top-[12vh] left-[-9%] w-[380px] h-[300px] opacity-30" duration={26} delay={4} />
         <div className="container-narrow">
           <FadeIn>
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-small text-grey-olive">

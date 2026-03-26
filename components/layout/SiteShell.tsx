@@ -14,6 +14,11 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  // Preload GSAP + ScrollTrigger so animations trigger on first paint
+  useEffect(() => {
+    import('@/lib/gsap').then(({ loadGsap }) => loadGsap());
+  }, []);
+
   if (isAdmin) {
     return <main className="flex-1">{children}</main>;
   }

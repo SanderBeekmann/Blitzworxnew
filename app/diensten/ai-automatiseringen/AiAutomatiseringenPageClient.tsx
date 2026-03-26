@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
-import { SectionBottomBars } from '@/components/animations/SectionBottomBars';
+
 import { Button } from '@/components/ui/Button';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 
@@ -92,23 +92,6 @@ const processSteps = [
   },
 ];
 
-const useCases = [
-  {
-    title: 'Automatische lead-opvolging',
-    description:
-      'Nieuwe leads krijgen direct een gepersonaliseerd bericht, worden gescoord en toegewezen aan de juiste medewerker.',
-  },
-  {
-    title: 'Slimme klantenservice',
-    description:
-      'Een AI-assistent beantwoordt veelgestelde vragen, escaleert complexe cases en leert van elke interactie.',
-  },
-  {
-    title: 'Rapportage op autopilot',
-    description:
-      'Dagelijkse, wekelijkse of maandelijkse rapportages automatisch gegenereerd uit je bestaande data en tools.',
-  },
-];
 
 // ── Node flow diagram: animated SVG showing data flowing between nodes ──
 function NodeFlowDiagram() {
@@ -500,42 +483,6 @@ export function AiAutomatiseringenPageClient() {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* ── Use cases ── */}
-      <section className="section relative overflow-hidden" aria-labelledby="ai-usecases-title">
-        <div className="container-narrow">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
-            <div>
-              <TitleReveal
-                as="h2"
-                id="ai-usecases-title"
-                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
-              >
-                Voorbeelden
-              </TitleReveal>
-              <FadeIn delay={0.1}>
-                <p className="text-body text-dry-sage leading-relaxed max-w-prose">
-                  AI-automatiseringen zijn breed inzetbaar. Hier een paar voorbeelden van
-                  wat ik voor ondernemers kan bouwen.
-                </p>
-              </FadeIn>
-            </div>
-            <div className="space-y-8">
-              {useCases.map((useCase, index) => (
-                <FadeIn key={useCase.title} delay={index * 0.15}>
-                  <div className="border-l border-ebony/60 pl-6 hover:border-dry-sage/40 transition-colors">
-                    <h3 className="text-h3 font-semibold text-cornsilk">{useCase.title}</h3>
-                    <p className="mt-2 text-body text-dry-sage leading-relaxed">
-                      {useCase.description}
-                    </p>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </div>
-        <SectionBottomBars />
       </section>
 
       {/* ── How I work: agents, pipeline, vault ── */}

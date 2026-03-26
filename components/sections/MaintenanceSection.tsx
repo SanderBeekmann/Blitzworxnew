@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { MagicText } from '@/components/ui/MagicText';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { Button } from '@/components/ui/Button';
 
@@ -30,18 +31,17 @@ const plans = [
     price: '50',
     unit: '/uur',
     description:
-      'Grotere aanpassingen of nieuwe functionaliteiten buiten het abonnement. Flexibel inzetbaar wanneer je wilt groeien.',
+      'Zonder abonnement werk ik op uurbasis. Ideaal voor losse aanpassingen of nieuwe functionaliteiten. Flexibel inzetbaar wanneer je het nodig hebt.',
     features: ['Nieuwe features', 'Design aanpassingen', 'Functie-uitbreidingen', 'Geen vaste verplichting'],
+    note: 'Grote nieuwe projecten vallen buiten deze bedragen.',
   },
 ];
 
 export function MaintenanceSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const ruleRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const rule = ruleRef.current;
     const cards = cardsRef.current;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -50,24 +50,6 @@ export function MaintenanceSection() {
     Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
       ([{ gsap }, { ScrollTrigger }]) => {
         gsap.registerPlugin(ScrollTrigger);
-
-        // Rule draw
-        if (rule) {
-          gsap.fromTo(
-            rule,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              duration: 1.2,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: rule,
-                start: 'top 88%',
-                toggleActions: 'play none none none',
-              },
-            }
-          );
-        }
 
         // Card stagger
         if (cards) {
@@ -96,27 +78,17 @@ export function MaintenanceSection() {
   return (
     <section
       ref={sectionRef}
-      className="section relative border-t border-ebony overflow-hidden"
+      className="section relative overflow-hidden"
       aria-labelledby="maintenance-title"
     >
       <div className="container-narrow relative z-10">
-        {/* Section label + rule */}
-        <FadeIn>
-          <div className="flex items-center gap-4 mb-16 md:mb-24">
-            <span className="text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50">
-              Na oplevering
-            </span>
-            <div
-              ref={ruleRef}
-              className="flex-1 h-px bg-ebony origin-left motion-reduce:!transform-none"
-              style={{ transform: 'scaleX(0)' }}
-              aria-hidden
-            />
-          </div>
-        </FadeIn>
-
         {/* Title + intro */}
         <div className="max-w-3xl mb-16 md:mb-20">
+          <FadeIn>
+            <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
+              Na oplevering
+            </span>
+          </FadeIn>
           <TitleReveal
             as="h2"
             id="maintenance-title"
@@ -124,12 +96,10 @@ export function MaintenanceSection() {
           >
             Jouw website blijft in topvorm
           </TitleReveal>
-          <FadeIn delay={0.15}>
-            <p className="text-body text-dry-sage leading-relaxed max-w-2xl">
-              Een website is nooit helemaal &lsquo;af&rsquo;. Met een onderhoudsabonnement blijft je
-              site veilig, snel en up-to-date, zonder dat je er zelf naar om hoeft te kijken.
-            </p>
-          </FadeIn>
+          <MagicText
+            text={"Je site staat live, maar dan begint het pas. Updates, beveiligingspatches, snelheidsoptimalisatie: het hoort erbij.\n\nMet een onderhoudsabonnement neem ik dat uit handen. Zo wordt je site als maar beter en blijft het presteren zonder dat jij er tijd aan kwijt bent.\nKom je met nieuwe inzichten of ideeën? Neem even contact op met BlitzWorx, dan wordt het geregeld zonder extra prijsafspraken of offertes."}
+            className="text-body text-dry-sage leading-relaxed max-w-2xl"
+          />
         </div>
 
         {/* Cards */}
@@ -140,7 +110,7 @@ export function MaintenanceSection() {
               className="maintenance-card group relative opacity-0 motion-reduce:opacity-100"
             >
               {/* Card */}
-              <div className="relative h-full border border-ebony/60 p-6 md:p-8 transition-colors duration-500 hover:border-dry-sage/30">
+              <div className="relative h-full border border-ebony/60 p-6 md:p-8 transition-colors duration-500 hover:border-dry-sage/30 flex flex-col">
                 {/* Mono number */}
                 <span
                   className="block text-[4rem] md:text-[5rem] font-bold leading-none select-none mb-6"
@@ -168,19 +138,26 @@ export function MaintenanceSection() {
                 <div className="w-full h-px bg-ebony/40 mb-5" aria-hidden />
 
                 {/* Description */}
-                <p className="text-small text-dry-sage/70 leading-relaxed mb-6">
+                <p className="text-small text-dry-sage/70 leading-relaxed flex-1">
                   {plan.description}
                 </p>
 
                 {/* Features */}
-                <ul className="space-y-2.5">
+                <ul className="space-y-2.5 mt-6">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-3">
-                      <span className="mt-1.5 w-1 h-1 rounded-full bg-dry-sage/40 shrink-0" />
+                      <span className="text-dry-sage/40 shrink-0 leading-none">•</span>
                       <span className="text-small text-dry-sage/60">{feature}</span>
                     </li>
                   ))}
                 </ul>
+
+                {/* Note */}
+                {'note' in plan && plan.note && (
+                  <p className="mt-5 text-caption text-grey-olive/40 italic">
+                    {plan.note}
+                  </p>
+                )}
 
                 {/* Corner accent — top right */}
                 <div
