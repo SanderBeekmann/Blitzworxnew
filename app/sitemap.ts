@@ -2,9 +2,11 @@ import { MetadataRoute } from 'next';
 import { cases } from '@/lib/cases';
 import { posts } from '@/lib/posts';
 import { siteUrl } from '@/lib/site';
+import { supabase } from '@/lib/supabase';
+import { getAllLandingPages } from '@/lib/landing-pages';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // Fixed date for static pages — update manually on significant content changes
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Fixed date for static pages - update manually on significant content changes
   const staticLastModified = new Date('2026-03-09');
 
   const staticPages = [
@@ -18,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/diensten/branding`, lastModified: staticLastModified, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${siteUrl}/diensten/ai-automatiseringen`, lastModified: staticLastModified, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${siteUrl}/blog`, lastModified: staticLastModified, changeFrequency: 'weekly' as const, priority: 0.7 },
+    { url: `${siteUrl}/podcasts`, lastModified: staticLastModified, changeFrequency: 'weekly' as const, priority: 0.7 },
   ];
 
   const blogPages = posts.map((p) => ({
@@ -34,5 +37,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...casePages, ...blogPages];
+  // Podcast pages from Supabase
+  let podcastPages: MetadataRoute.Sitemap = [];
+  if (supabase) {
+    const { data: podcasts } = await supabase
+      .from('podcasts')
+      .select('slug, published_at, updated_at')
+      .eq('status', 'published');
+
+    podcastPages = (podcasts || []).map((p) => ({
+      url: `${siteUrl}/podcasts/${p.slug}`,
+      lastModified: new Date(p.updated_at || p.published_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }));
+  }
+
+  // Landing pages from Supabase
+  const landingPages = await getAllLandingPages();
+  const landingPageEntries = landingPages.map((p) => ({
+    url: `${siteUrl}/${p.slug}`,
+    lastModified: new Date(p.updated_at || p.created_at),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...casePages, ...blogPages, ...podcastPages, ...landingPageEntries];
 }
