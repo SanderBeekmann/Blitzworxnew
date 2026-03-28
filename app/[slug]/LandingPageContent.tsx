@@ -104,46 +104,131 @@ function ProblemSection({ section }: { section: ContentSection }) {
   const paragraphs = extractParagraphs(section.body);
   const listItems = extractListItems(section.body);
 
-  return (
-    <section className="section border-t border-ebony/60">
-      <div className="container-narrow">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
-          <div>
-            <FadeIn>
-              <h2 className="text-h2 md:text-h2-lg font-bold text-cornsilk">{section.title}</h2>
-            </FadeIn>
-            <FadeIn delay={0.15}>
-              <div className="mt-6 space-y-4">
-                {paragraphs.filter((p) => !p.startsWith('-')).slice(0, 2).map((p, i) => (
-                  <Paragraph key={i} text={p} />
-                ))}
-              </div>
-            </FadeIn>
-          </div>
+  // Split paragraphs: intro (before pain points), closing (after)
+  const introParagraphs = paragraphs.filter((p) => !p.startsWith('-')).slice(0, 2);
+  const closingParagraphs = paragraphs.length > 2
+    ? paragraphs.filter((p) => !p.startsWith('-')).slice(2)
+    : [];
 
-          {listItems.length > 0 && (
-            <div className="space-y-4 md:mt-2">
-              {listItems.map((item, i) => (
-                <FadeIn key={i} delay={i * 0.1}>
-                  <div className="border-l-2 border-grey-olive/40 pl-5 py-2">
-                    <p
-                      className="text-body text-dry-sage leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(item) }}
+  return (
+    <section className="section border-t border-ebony/60 relative overflow-hidden">
+      {/* Diagonal accent line */}
+      <div
+        className="absolute top-0 right-0 w-px h-[200%] opacity-[0.06] pointer-events-none"
+        style={{
+          background: 'linear-gradient(to bottom, transparent, var(--grey-olive), transparent)',
+          transform: 'rotate(25deg)',
+          transformOrigin: 'top right',
+        }}
+        aria-hidden
+      />
+
+      <div className="container-narrow relative">
+        {/* Section header - full width, editorial style */}
+        <FadeIn>
+          <div className="flex items-baseline gap-4 mb-4">
+            <span className="text-caption font-mono text-grey-olive/40 tracking-widest uppercase">Probleem</span>
+            <div className="flex-1 h-px bg-ebony/40" />
+          </div>
+          <h2 className="text-h2 md:text-h2-lg font-bold text-cornsilk max-w-2xl">
+            {section.title}
+          </h2>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <div className="mt-6 max-w-xl space-y-4">
+            {introParagraphs.map((p, i) => (
+              <Paragraph key={i} text={p} />
+            ))}
+          </div>
+        </FadeIn>
+
+        {/* Pain point cards - stacked with increasing visual weight */}
+        {listItems.length > 0 && (
+          <div className="mt-14 space-y-4">
+            {listItems.map((item, i) => {
+              // Extract bold title and remaining text
+              const match = item.match(/^\*\*(.+?)\*\*\s*([\s\S]*)/);
+              const painTitle = match ? match[1] : '';
+              const painBody = match ? match[2] : item;
+              // Increasing opacity for visual escalation
+              const borderOpacity = [0.15, 0.25, 0.4][i] ?? 0.3;
+
+              return (
+                <FadeIn key={i} delay={0.2 + i * 0.12}>
+                  <div
+                    className="relative grid grid-cols-[auto_1fr] gap-6 p-6 md:p-8 group transition-all duration-500 hover:translate-x-1"
+                    style={{
+                      background: `linear-gradient(90deg, rgba(139,129,116,${borderOpacity * 0.15}) 0%, transparent 60%)`,
+                    }}
+                  >
+                    {/* Number marker */}
+                    <div className="flex flex-col items-center gap-2 pt-0.5">
+                      <span
+                        className="flex items-center justify-center w-8 h-8 text-caption font-mono font-bold border transition-colors duration-500 group-hover:border-dry-sage/60 group-hover:text-cornsilk"
+                        style={{
+                          borderColor: `rgba(139,129,116,${borderOpacity})`,
+                          color: `rgba(202,202,170,${0.4 + i * 0.2})`,
+                        }}
+                      >
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      {i < listItems.length - 1 && (
+                        <div
+                          className="w-px flex-1 min-h-[16px]"
+                          style={{ background: `rgba(139,129,116,${borderOpacity * 0.5})` }}
+                          aria-hidden
+                        />
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div>
+                      {painTitle && (
+                        <h3 className="text-body font-semibold text-cornsilk/90 group-hover:text-cornsilk transition-colors">
+                          {painTitle}
+                        </h3>
+                      )}
+                      <p className="mt-1.5 text-small text-dry-sage/70 leading-relaxed">
+                        {painBody}
+                      </p>
+                    </div>
+
+                    {/* Left accent bar */}
+                    <div
+                      className="absolute left-0 top-0 bottom-0 w-px transition-opacity duration-500 group-hover:opacity-100"
+                      style={{
+                        opacity: borderOpacity,
+                        background: `linear-gradient(to bottom, transparent, var(--grey-olive), transparent)`,
+                      }}
+                      aria-hidden
                     />
                   </div>
                 </FadeIn>
-              ))}
-            </div>
-          )}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Closing paragraph after list */}
-        {paragraphs.length > 2 && (
-          <FadeIn delay={0.3}>
-            <div className="mt-10 max-w-2xl">
-              {paragraphs.slice(-2).map((p, i) => (
-                <Paragraph key={i} text={p} />
-              ))}
+        {/* Closing - agitation + resolution tease */}
+        {closingParagraphs.length > 0 && (
+          <FadeIn delay={0.5}>
+            <div className="mt-14 relative pl-6 md:pl-10 border-l border-dry-sage/20">
+              <div className="space-y-3">
+                {closingParagraphs.map((p, i) => {
+                  // Last paragraph = resolution tease, style differently
+                  const isResolution = i === closingParagraphs.length - 1;
+                  return isResolution ? (
+                    <p
+                      key={i}
+                      className="text-body text-cornsilk font-semibold"
+                      dangerouslySetInnerHTML={{ __html: renderInlineMarkdown(p) }}
+                    />
+                  ) : (
+                    <Paragraph key={i} text={p} />
+                  );
+                })}
+              </div>
             </div>
           </FadeIn>
         )}
