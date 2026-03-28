@@ -3,8 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { siteUrl } from '@/lib/site';
 import { getAllLandingPages, getLandingPageBySlug } from '@/lib/landing-pages';
-import { FadeIn } from '@/components/animations/FadeIn';
-import { MarkdownContent } from '@/components/blog/MarkdownContent';
+import { LandingPageContent } from './LandingPageContent';
 
 export const revalidate = 3600;
 
@@ -62,6 +61,9 @@ export default async function LandingPageRoute({ params }: PageProps) {
     notFound();
   }
 
+  const sections = parseMarkdownSections(page.body);
+  const faqItems = extractFaqs(page.body);
+
   const jsonLdLocalBusiness = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -99,8 +101,6 @@ export default async function LandingPageRoute({ params }: PageProps) {
     ],
   };
 
-  // Extract FAQ sections from markdown (## Veelgestelde vragen ... ### Question\n\nAnswer)
-  const faqItems = extractFaqs(page.body);
   const jsonLdFaq =
     faqItems.length > 0
       ? {
@@ -131,60 +131,89 @@ export default async function LandingPageRoute({ params }: PageProps) {
         />
       )}
 
-      <main className="section min-h-screen">
-        <div className="container-narrow">
-          {/* Breadcrumb */}
-          <FadeIn>
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-small text-grey-olive">
-              <Link href="/" className="hover:text-dry-sage transition-colors">
-                Home
-              </Link>
-              <span>/</span>
-              <Link href="/diensten" className="hover:text-dry-sage transition-colors">
-                Diensten
-              </Link>
-              <span>/</span>
-              <span className="text-dry-sage">{page.title}</span>
-            </nav>
-          </FadeIn>
-
-          <article className="mt-12 md:mt-16 max-w-prose">
-            <MarkdownContent content={page.body} />
-
-            {/* CTA */}
-            <section className="mt-16 p-8 md:p-12 border border-ebony rounded-sm bg-ink/50">
-              <h2 className="text-h2 font-bold text-cornsilk">
-                Klaar om te beginnen?
-              </h2>
-              <p className="mt-4 text-body text-dry-sage max-w-prose">
-                Plan een vrijblijvend gesprek en ontdek wat BlitzWorx voor jouw bedrijf kan betekenen.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center px-6 py-3 bg-cornsilk text-ink font-bold text-body rounded-sm hover:bg-dry-sage transition-colors"
-                >
-                  Plan een gesprek
-                </Link>
-                <Link
-                  href="/diensten"
-                  className="inline-flex items-center px-6 py-3 border border-cornsilk text-cornsilk font-bold text-body rounded-sm hover:bg-cornsilk hover:text-ink transition-colors"
-                >
-                  Bekijk alle diensten
-                </Link>
-              </div>
-            </section>
-          </article>
-        </div>
-      </main>
+      <LandingPageContent
+        title={page.title}
+        sections={sections}
+        faqItems={faqItems}
+      />
     </>
   );
 }
 
-/**
- * Extracts FAQ items from markdown content.
- * Looks for h3 headings (###) after a "Veelgestelde vragen" h2 section.
- */
+// --- Content parsing ---
+
+export interface ContentSection {
+  type: 'hero' | 'problem' | 'solution' | 'services' | 'testimonial' | 'faq' | 'cta' | 'generic';
+  title: string;
+  body: string;
+  items?: Array<{ title: string; body: string }>;
+}
+
+function parseMarkdownSections(markdown: string): ContentSection[] {
+  const sections: ContentSection[] = [];
+
+  // Split on h2 headings
+  const parts = markdown.split(/^## /m);
+
+  // First part is the intro/hero (h1 + opening paragraphs)
+  const intro = parts[0].trim();
+  if (intro) {
+    const lines = intro.split('\n');
+    const h1Match = lines[0].match(/^# (.+)/);
+    const title = h1Match ? h1Match[1] : '';
+    const body = (h1Match ? lines.slice(1) : lines).join('\n').trim();
+    sections.push({ type: 'hero', title, body });
+  }
+
+  // Process each h2 section
+  for (let i = 1; i < parts.length; i++) {
+    const lines = parts[i].split('\n');
+    const title = lines[0].trim();
+    const body = lines.slice(1).join('\n').trim();
+    const titleLower = title.toLowerCase();
+
+    // Classify section by content
+    if (titleLower.includes('waarom') && titleLower.includes('vastlopen') || titleLower.includes('probleem')) {
+      sections.push({ type: 'problem', title, body });
+    } else if (titleLower.includes('blitzworx') || titleLower.includes('oplossing') || titleLower.includes('resultaat')) {
+      sections.push({ type: 'solution', title, body });
+    } else if (titleLower.includes('diensten') || titleLower.includes('services')) {
+      const items = parseSubsections(body);
+      sections.push({ type: 'services', title, body, items });
+    } else if (titleLower.includes('klanten zeggen') || titleLower.includes('testimonial') || titleLower.includes('reviews')) {
+      sections.push({ type: 'testimonial', title, body });
+    } else if (titleLower.includes('veelgestelde vragen') || titleLower.includes('faq')) {
+      const items = parseSubsections(body);
+      sections.push({ type: 'faq', title, body, items });
+    } else if (titleLower.includes('klaar') || titleLower.includes('beginnen') || titleLower.includes('contact') || titleLower.includes('gesprek')) {
+      sections.push({ type: 'cta', title, body });
+    } else {
+      // Check if it has h3 subsections
+      const items = parseSubsections(body);
+      if (items.length > 0) {
+        sections.push({ type: 'generic', title, body, items });
+      } else {
+        sections.push({ type: 'generic', title, body });
+      }
+    }
+  }
+
+  return sections;
+}
+
+function parseSubsections(body: string): Array<{ title: string; body: string }> {
+  const parts = body.split(/^### /m);
+  if (parts.length <= 1) return [];
+
+  return parts.slice(1).map((part) => {
+    const lines = part.split('\n');
+    return {
+      title: lines[0].trim(),
+      body: lines.slice(1).join('\n').trim(),
+    };
+  });
+}
+
 function extractFaqs(markdown: string): Array<{ question: string; answer: string }> {
   const faqSectionMatch = markdown.match(/## Veelgestelde vragen[\s\S]*/i);
   if (!faqSectionMatch) return [];
