@@ -2,22 +2,12 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
-/* Inline keyframes for step illustrations */
-const stepAnimationStyles = `
-  @keyframes hiw-typing-dot { 0%,80% { opacity:0.2 } 40% { opacity:1 } }
-  @keyframes hiw-draw { from { stroke-dashoffset: 1 } to { stroke-dashoffset: 0 } }
-  @keyframes hiw-pulse-line { 0%,100% { opacity:0.15 } 50% { opacity:0.6 } }
-  @keyframes hiw-flash { 0%,100% { opacity:0 } 2% { opacity:1 } 6% { opacity:0.8 } 15% { opacity:0 } }
-  @keyframes hiw-exhaust { 0% { opacity:0.5; transform:scaleY(1) } 50% { opacity:0.2; transform:scaleY(1.3) } 100% { opacity:0.5; transform:scaleY(1) } }
-  @keyframes hiw-cursor-blink { 0%,100% { opacity:1 } 50% { opacity:0 } }
-  @keyframes hiw-float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-4px) } }
-`;
 
 /* Step illustration SVGs - animated lineart matching site palette */
 const stepIllustrations: ReactNode[] = [
   // 01 - Kennismaking & Analyse: refined speech bubbles with typing dots + magnifying glass
   <svg key="ill-01" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <style>{stepAnimationStyles}</style>
+
     {/* Left bubble - larger, primary */}
     <rect x="20" y="45" width="90" height="60" rx="8" stroke="var(--cornsilk)" strokeWidth="1.5" />
     <path d="M50 105l-8 16 20-16" stroke="var(--cornsilk)" strokeWidth="1.5" strokeLinejoin="round" />
@@ -41,7 +31,7 @@ const stepIllustrations: ReactNode[] = [
 
   // 02 - Prototype & Richting: wireframe + camera with flash
   <svg key="ill-02" viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <style>{stepAnimationStyles}</style>
+
     {/* Wireframe screen */}
     <rect x="10" y="30" width="110" height="125" rx="4" stroke="var(--cornsilk)" strokeWidth="1.5" />
     {/* Nav bar */}
@@ -97,9 +87,6 @@ const stepIllustrations: ReactNode[] = [
 
   // 03 - Bouw & Voortgang: browser window building itself block by block
   <svg key="ill-03" viewBox="0 0 200 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <style>{stepAnimationStyles}{`
-      @keyframes hiw-block-in { 0% { opacity:0; transform:translateY(6px) } 100% { opacity:1; transform:translateY(0) } }
-    `}</style>
     {/* Browser chrome */}
     <rect x="10" y="10" width="180" height="150" rx="6" stroke="var(--cornsilk)" strokeWidth="1.5" />
     <line x1="10" y1="32" x2="190" y2="32" stroke="var(--ebony)" strokeWidth="1" opacity="0.5" />
@@ -128,7 +115,7 @@ const stepIllustrations: ReactNode[] = [
 
   // 04 - Oplevering & Livegang: rocket with animated exhaust + pulsing checkmark
   <svg key="ill-04" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <style>{stepAnimationStyles}</style>
+
     {/* Rocket body */}
     <path d="M100 24c-14 22-20 54-20 86h40c0-32-6-64-20-86z" stroke="var(--cornsilk)" strokeWidth="1.5" strokeLinejoin="round" />
     {/* Nose highlight */}

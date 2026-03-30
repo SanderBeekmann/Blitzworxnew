@@ -107,6 +107,16 @@
     }
   }
 
+  /* How It Worx step illustration animations */
+  @keyframes hiw-typing-dot { 0%,80% { opacity:0.2 } 40% { opacity:1 } }
+  @keyframes hiw-draw { from { stroke-dashoffset: 1 } to { stroke-dashoffset: 0 } }
+  @keyframes hiw-pulse-line { 0%,100% { opacity:0.15 } 50% { opacity:0.6 } }
+  @keyframes hiw-flash { 0%,100% { opacity:0 } 2% { opacity:1 } 6% { opacity:0.8 } 15% { opacity:0 } }
+  @keyframes hiw-exhaust { 0% { opacity:0.5; transform:scaleY(1) } 50% { opacity:0.2; transform:scaleY(1.3) } 100% { opacity:0.5; transform:scaleY(1) } }
+  @keyframes hiw-cursor-blink { 0%,100% { opacity:1 } 50% { opacity:0 } }
+  @keyframes hiw-float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-4px) } }
+  @keyframes hiw-block-in { 0% { opacity:0; transform:translateY(6px) } 100% { opacity:1; transform:translateY(0) } }
+
   /* Secondary CTA: outline with fill from bottom on hover */
   .btn-secondary-cta {
     @apply relative overflow-hidden;
@@ -216,6 +226,32 @@
     animation: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Marquee carousel animations */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 25s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 25s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-left,
+  .animate-marquee-right {
+    animation: none;
   }
 }
 

@@ -92,9 +92,12 @@ export function HeroSection() {
               <Link
                 key={href}
                 href={href}
-                className="dienst-link text-small md:text-body text-dry-sage/60 hover:text-cornsilk transition-colors opacity-0 motion-reduce:opacity-100"
+                className="dienst-link relative group text-small md:text-body text-dry-sage/60 hover:text-cornsilk transition-colors opacity-0 motion-reduce:opacity-100"
               >
                 {label}
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-caption text-ink bg-cornsilk rounded-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  Ontdek dienst
+                </span>
               </Link>
             ))}
           </nav>
