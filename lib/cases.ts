@@ -8,6 +8,8 @@ export interface Case {
   imageHover?: string;
   /** Images shown during scroll on case detail page. Falls back to [image, imageHover].filter(Boolean) */
   images?: string[];
+  /** Scroll demo video (MP4) for case detail page */
+  video?: string;
   /** Optional website URL for case CTA */
   websiteUrl?: string;
   /** Show placeholder with "Coming soon" instead of images */
