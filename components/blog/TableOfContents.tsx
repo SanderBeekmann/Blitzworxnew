@@ -27,12 +27,13 @@ export function TableOfContents({ headings, className }: { headings: Heading[]; 
       </button>
 
       {open && (
-        <ol className="mt-4 space-y-2">
+        <ul className="mt-4 space-y-2">
           {headings.map((h) => (
             <li
               key={h.id}
-              className={h.level === 3 ? 'ml-5' : ''}
+              className={`flex items-baseline gap-2 ${h.level === 3 ? 'ml-5' : ''}`}
             >
+              <span className="text-grey-olive shrink-0">-</span>
               <a
                 href={`#${h.id}`}
                 className="text-dry-sage hover:text-cornsilk transition-colors text-body leading-relaxed"
@@ -41,7 +42,7 @@ export function TableOfContents({ headings, className }: { headings: Heading[]; 
               </a>
             </li>
           ))}
-        </ol>
+        </ul>
       )}
     </nav>
   );

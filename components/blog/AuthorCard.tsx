@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export function AuthorCard({ className }: { className?: string }) {
@@ -11,8 +12,14 @@ export function AuthorCard({ className }: { className?: string }) {
         }}
         aria-hidden
       />
-      <div className="relative shrink-0 w-14 h-14 rounded-full bg-ebony flex items-center justify-center text-cornsilk font-bold text-h3">
-        SB
+      <div className="relative shrink-0 w-14 h-14 rounded-full overflow-hidden">
+        <Image
+          src="/assets/images/Sander.webp"
+          alt="Sander Beekman"
+          fill
+          className="object-cover"
+          sizes="56px"
+        />
       </div>
       <div className="relative">
         <p className="font-bold text-cornsilk text-body">Sander Beekman</p>
