@@ -6,6 +6,7 @@ import type { Post } from '@/lib/posts';
 import { siteUrl } from '@/lib/site';
 import { CategoryFilter } from '@/components/blog/CategoryFilter';
 import { GradientBlob } from '@/components/ui/GradientBlob';
+import { getPodcastBlogPosts } from '@/lib/podcast-blog';
 
 export const metadata: Metadata = {
   title: 'Blog | Tips over webdesign, development en branding',
@@ -14,14 +15,19 @@ export const metadata: Metadata = {
   alternates: { canonical: '/blog' },
 };
 
-export default function BlogPage({
+export const revalidate = 3600;
+
+export default async function BlogPage({
   searchParams,
 }: {
   searchParams: { categorie?: string };
 }) {
   const activeCategory = searchParams.categorie as Post['category'] | undefined;
 
-  const sortedPosts = [...posts]
+  const podcastPosts = await getPodcastBlogPosts();
+  const allPosts = [...posts, ...podcastPosts];
+
+  const sortedPosts = allPosts
     .filter((p) => !activeCategory || p.category === activeCategory)
     .sort(
       (a, b) => new Date(b.dateISO).getTime() - new Date(a.dateISO).getTime(),
