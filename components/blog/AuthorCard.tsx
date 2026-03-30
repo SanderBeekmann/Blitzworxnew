@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-export function AuthorCard() {
+export function AuthorCard({ className }: { className?: string }) {
   return (
-    <section className="relative mt-12 flex items-start gap-5 p-6 border border-ebony rounded-sm overflow-hidden">
+    <section className={`relative flex items-start gap-5 p-6 border border-ebony rounded-sm overflow-hidden ${className ?? ''}`}>
       <div
         className="absolute inset-0 pointer-events-none"
         style={{

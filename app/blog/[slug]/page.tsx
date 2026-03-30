@@ -16,6 +16,7 @@ import { TableOfContents } from '@/components/blog/TableOfContents';
 import { RelatedPosts } from '@/components/blog/RelatedPosts';
 import { BlogCTA } from '@/components/blog/BlogCTA';
 import { AuthorCard } from '@/components/blog/AuthorCard';
+import { BlogFAQ } from '@/components/blog/BlogFAQ';
 
 interface BlogPostProps {
   params: Promise<{ slug: string }>;
@@ -160,71 +161,52 @@ export default async function BlogPostPage({ params }: BlogPostProps) {
             </nav>
           </FadeIn>
 
-          <article className="mt-12 md:mt-16 max-w-prose">
-            <header>
-              <div className="flex items-center gap-3 mb-4">
-                <Link
-                  href={`/blog?categorie=${post.category}`}
-                  className="text-caption uppercase tracking-wider text-grey-olive hover:text-cornsilk transition-colors border border-ebony px-3 py-1 rounded-sm"
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 lg:gap-16 mt-12 md:mt-16">
+            {/* Article content */}
+            <article className="max-w-prose">
+              <header>
+                <div className="flex items-center gap-3 mb-4">
+                  <Link
+                    href={`/blog?categorie=${post.category}`}
+                    className="text-caption uppercase tracking-wider text-grey-olive hover:text-cornsilk transition-colors border border-ebony px-3 py-1 rounded-sm"
+                  >
+                    {categoryLabels[post.category]}
+                  </Link>
+                  <span className="text-caption text-grey-olive">
+                    {post.readingTime} min leestijd
+                  </span>
+                </div>
+                <h1 className="text-hero md:text-hero-lg font-bold text-cornsilk">
+                  {post.title}
+                </h1>
+                <time
+                  dateTime={post.dateISO}
+                  className="mt-4 block text-body text-grey-olive"
                 >
-                  {categoryLabels[post.category]}
-                </Link>
-                <span className="text-caption text-grey-olive">
-                  {post.readingTime} min leestijd
-                </span>
-              </div>
-              <h1 className="text-hero md:text-hero-lg font-bold text-cornsilk">
-                {post.title}
-              </h1>
-              <time
-                dateTime={post.dateISO}
-                className="mt-4 block text-body text-grey-olive"
-              >
-                {post.date}
-              </time>
-            </header>
+                  {post.date}
+                </time>
+              </header>
 
-            <FadeIn delay={0.1}>
-              <TableOfContents headings={headings} />
+              <FadeIn delay={0.1}>
+                <div className="mt-12">
+                  <MarkdownContent content={post.content} />
+                </div>
+                <BlogCTA category={post.category} />
+              </FadeIn>
+            </article>
 
-              <div className="mt-12">
-                <MarkdownContent content={post.content} />
-              </div>
-
-              {/* FAQ section rendered from post data */}
-              {post.faqs && post.faqs.length > 0 && (
-                <section className="mt-16">
-                  <h2 className="text-h2 font-bold text-cornsilk mb-8">Veelgestelde vragen</h2>
-                  <div className="space-y-6">
-                    {post.faqs.map((faq, i) => (
-                      <details
-                        key={i}
-                        className="group border border-ebony rounded-sm"
-                      >
-                        <summary className="cursor-pointer p-5 text-body font-bold text-cornsilk flex items-center justify-between list-none [&::-webkit-details-marker]:hidden">
-                          {faq.question}
-                          <span className="text-grey-olive group-open:rotate-45 transition-transform duration-300 text-h3 shrink-0 ml-4">
-                            +
-                          </span>
-                        </summary>
-                        <div className="grid grid-rows-[0fr] group-open:grid-rows-[1fr] transition-[grid-template-rows] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                          <div className="overflow-hidden">
-                            <p className="px-5 pb-5 text-body text-dry-sage leading-relaxed">
-                              {faq.answer}
-                            </p>
-                          </div>
-                        </div>
-                      </details>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              <AuthorCard />
-              <BlogCTA category={post.category} />
-              <RelatedPosts posts={related} />
-            </FadeIn>
-          </article>
+            {/* Sidebar */}
+            <aside className="lg:sticky lg:top-8 lg:self-start space-y-8">
+              <FadeIn delay={0.2}>
+                <div className="space-y-8">
+                  <AuthorCard />
+                  <TableOfContents headings={headings} />
+                  <BlogFAQ faqs={post.faqs} />
+                  <RelatedPosts posts={related} variant="sidebar" />
+                </div>
+              </FadeIn>
+            </aside>
+          </div>
         </div>
       </main>
     </>

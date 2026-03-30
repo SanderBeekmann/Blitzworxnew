@@ -8,7 +8,7 @@ interface Heading {
   level: number;
 }
 
-export function TableOfContents({ headings }: { headings: Heading[] }) {
+export function TableOfContents({ headings, className }: { headings: Heading[]; className?: string }) {
   const [open, setOpen] = useState(true);
 
   if (headings.length < 3) return null;
@@ -16,7 +16,7 @@ export function TableOfContents({ headings }: { headings: Heading[] }) {
   return (
     <nav
       aria-label="Inhoudsopgave"
-      className="my-8 border border-ebony rounded-sm bg-ink/50 p-6"
+      className={`border border-ebony rounded-sm bg-ink/50 p-6 ${className ?? ''}`}
     >
       <button
         onClick={() => setOpen(!open)}

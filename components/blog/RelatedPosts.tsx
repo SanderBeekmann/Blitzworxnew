@@ -2,13 +2,22 @@ import Link from 'next/link';
 import type { Post } from '@/lib/posts';
 import { categoryLabels } from '@/lib/posts';
 
-export function RelatedPosts({ posts }: { posts: Post[] }) {
+interface RelatedPostsProps {
+  posts: Post[];
+  variant?: 'default' | 'sidebar';
+}
+
+export function RelatedPosts({ posts, variant = 'default' }: RelatedPostsProps) {
   if (posts.length === 0) return null;
 
+  const isSidebar = variant === 'sidebar';
+
   return (
-    <section className="mt-16 pt-12 border-t border-ebony">
-      <h2 className="text-h2 font-bold text-cornsilk">Gerelateerde artikelen</h2>
-      <div className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <section className={isSidebar ? '' : 'mt-16 pt-12 border-t border-ebony'}>
+      <h2 className={`font-bold text-cornsilk ${isSidebar ? 'text-h3' : 'text-h2'}`}>
+        {isSidebar ? 'Volgende artikelen' : 'Gerelateerde artikelen'}
+      </h2>
+      <div className={isSidebar ? 'mt-4 grid gap-4 grid-cols-1' : 'mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3'}>
         {posts.map((post) => (
           <Link
             key={post.slug}
