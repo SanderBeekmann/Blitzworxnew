@@ -121,7 +121,7 @@ function ContactOnboardingInner() {
         .then((data) => setAvailability((prev) => ({ ...prev, ...data })))
         .catch(() => {});
     }
-  }, [step, calendarMonth]);
+  }, [mode, step, calendarMonth]);
 
   function validateStep(): boolean {
     const err: Record<string, string> = {};

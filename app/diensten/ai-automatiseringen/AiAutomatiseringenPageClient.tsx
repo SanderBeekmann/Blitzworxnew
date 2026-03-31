@@ -158,27 +158,27 @@ function NodeFlowDiagram() {
 }
 
 // ── Streaming text: simulates AI processing log ──
-function StreamingLog() {
-  const lines = [
-    { prefix: '>', text: 'Verbinding met CRM...', delay: 0 },
-    { prefix: '  ', text: '142 leads opgehaald', delay: 800 },
-    { prefix: '>', text: 'AI-analyse gestart...', delay: 1600 },
-    { prefix: '  ', text: 'Leads gescoord en gecategoriseerd', delay: 2800 },
-    { prefix: '>', text: 'Acties uitgevoerd:', delay: 3800 },
-    { prefix: '  ', text: '23 follow-ups gepland', delay: 4600 },
-    { prefix: '  ', text: '8 high-priority leads gemarkeerd', delay: 5200 },
-    { prefix: '  ', text: '3 rapportages gegenereerd', delay: 5800 },
-  ];
+const STREAM_LINES = [
+  { prefix: '>', text: 'Verbinding met CRM...', delay: 0 },
+  { prefix: '  ', text: '142 leads opgehaald', delay: 800 },
+  { prefix: '>', text: 'AI-analyse gestart...', delay: 1600 },
+  { prefix: '  ', text: 'Leads gescoord en gecategoriseerd', delay: 2800 },
+  { prefix: '>', text: 'Acties uitgevoerd:', delay: 3800 },
+  { prefix: '  ', text: '23 follow-ups gepland', delay: 4600 },
+  { prefix: '  ', text: '8 high-priority leads gemarkeerd', delay: 5200 },
+  { prefix: '  ', text: '3 rapportages gegenereerd', delay: 5800 },
+];
 
+function StreamingLog() {
   const [visibleCount, setVisibleCount] = useState(0);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setVisibleCount(lines.length);
+      setVisibleCount(STREAM_LINES.length);
       return;
     }
 
-    const timers = lines.map((line, i) =>
+    const timers = STREAM_LINES.map((line, i) =>
       setTimeout(() => setVisibleCount(i + 1), line.delay + 1000)
     );
     return () => timers.forEach(clearTimeout);
@@ -193,13 +193,13 @@ function StreamingLog() {
         <span className="ml-3 text-[11px] text-grey-olive/50 tracking-wider">workflow.log</span>
       </div>
       <div className="p-5 space-y-1.5 min-h-[220px]">
-        {lines.slice(0, visibleCount).map((line, i) => (
+        {STREAM_LINES.slice(0, visibleCount).map((line, i) => (
           <p key={i} className={line.prefix === '>' ? 'text-dry-sage' : 'text-grey-olive/70'}>
             <span className="text-grey-olive/40 select-none">{line.prefix} </span>
             {line.text}
           </p>
         ))}
-        {visibleCount < lines.length && (
+        {visibleCount < STREAM_LINES.length && (
           <p className="text-dry-sage">
             <span className="text-grey-olive/40 select-none">{'> '}</span>
             <span className="inline-flex gap-1">
@@ -209,7 +209,7 @@ function StreamingLog() {
             </span>
           </p>
         )}
-        {visibleCount >= lines.length && (
+        {visibleCount >= STREAM_LINES.length && (
           <p className="mt-3 text-cornsilk/80">
             <span className="text-dry-sage select-none">{'>'} </span>
             Workflow compleet
