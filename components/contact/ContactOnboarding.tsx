@@ -18,7 +18,7 @@ const SERVICE_OPTIONS = [
   { id: 'onderhoud', label: 'Onderhoud', price: '€40/maand', description: 'Tot 2 uur aanpassingen per maand' },
   { id: 'hosting', label: 'Hosting', price: '€10/maand', description: 'Beheerde hosting met backups & SSL' },
   { id: 'domein', label: 'Domeinbeheer', price: '€5/maand', description: 'Registratie, DNS & verlenging' },
-  { id: 'email', label: 'E-mail op eigen domein', price: '€12,50/user/maand', description: 'Outlook of Gmail op jouw domein' },
+  { id: 'email', label: 'E-mail op eigen domein', price: '€15/user/maand', description: 'Outlook of Gmail op jouw domein' },
 ] as const;
 
 const COMBI_SERVICES = ['onderhoud', 'hosting', 'domein'];

@@ -212,7 +212,7 @@ export function MaintenanceSection({ title = 'Jouw website blijft in topvorm' }:
               {/* Price */}
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-[0.85rem] text-grey-olive/50">€</span>
-                <span className="text-h3 font-bold text-cornsilk leading-none">12,50</span>
+                <span className="text-h3 font-bold text-cornsilk leading-none">15</span>
                 <span className="text-small text-grey-olive/50">/user/maand</span>
               </div>
 
