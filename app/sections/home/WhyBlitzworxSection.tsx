@@ -21,6 +21,11 @@ const usps = [
     description:
       'Je werkt direct met de ontwerper, zonder tussenlagen. Korte lijnen, snelle feedback en een resultaat waar je écht achter staat.',
   },
+  {
+    title: 'Professionele fotografie inbegrepen',
+    description:
+      'Via mijn vaste partnerfotograaf regel ik een complete fotoshoot voor je website. Geen stockfoto\'s maar echte beelden die bij jouw merk passen.',
+  },
 ];
 
 const devices = [

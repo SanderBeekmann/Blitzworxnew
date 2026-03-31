@@ -6,6 +6,7 @@ import { HowItWorxSection } from './sections/home/HowItWorxSection';
 import { SkillsSection } from './sections/home/SkillsSection';
 import { TestimonialSection } from './sections/home/TestimonialSection';
 import { WhyBlitzworxSection } from './sections/home/WhyBlitzworxSection';
+import { PhotoshootSection } from './sections/home/PhotoshootSection';
 import { AnimatedGradient } from '@/components/layout/AnimatedGradient';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 import { GradientBlob } from '@/components/ui/GradientBlob';
@@ -41,6 +42,7 @@ export default function HomePage() {
           <HowItWorxSection />
           <MaintenanceSection />
           <WhyBlitzworxSection />
+          <PhotoshootSection />
           <SkillsSection />
           <TestimonialSection />
         </div>

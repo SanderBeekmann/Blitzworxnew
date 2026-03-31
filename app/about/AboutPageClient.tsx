@@ -3,11 +3,51 @@
 import { GradientBlob } from '@/components/ui/GradientBlob';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
+import { MagicText } from '@/components/ui/MagicText';
 import { SubtitleReveal } from '@/components/animations/SubtitleReveal';
-import { AboutScrollLine } from '@/components/animations/AboutScrollLine';
 import { Button } from '@/components/ui/Button';
+
+const services = [
+  {
+    title: 'Webdesign',
+    description: 'Websites die niet alleen mooi zijn, maar bezoekers ook aanzetten tot actie. Elk ontwerp is gebouwd om te converteren.',
+    href: '/diensten/webdesign',
+    span: '',
+  },
+  {
+    title: 'Fotografie',
+    description: 'Professionele beelden via mijn vaste partnerfotograaf. Authentieke foto\'s die jouw merk tot leven brengen.',
+    href: '/contact',
+    span: '',
+  },
+  {
+    title: 'Branding',
+    description: 'Een visuele identiteit die blijft hangen. Van logo tot huisstijl, consistent en herkenbaar op elk kanaal.',
+    href: '/diensten/branding',
+    span: '',
+  },
+  {
+    title: 'Development',
+    description: 'Schaalbare applicaties gebouwd met moderne technologie. Performance, veiligheid en een solide technische basis staan centraal.',
+    href: '/diensten/development',
+    span: 'md:row-span-2',
+  },
+  {
+    title: 'AI Automatiseringen',
+    description: 'Slimme workflows, chatbots en integraties die repetitieve taken overnemen. Meer focus op groei, minder op handwerk.',
+    href: '/diensten/ai-automatiseringen',
+    span: 'md:col-span-2',
+  },
+  {
+    title: 'Vindbaarheid',
+    description: 'Gevonden worden door de juiste mensen op het juiste moment. SEO, snelheid en technische optimalisatie die samen zorgen voor organische groei.',
+    href: '/contact',
+    span: '',
+  },
+];
 
 const SCROLL_HIDE_THRESHOLD = 60;
 
@@ -15,19 +55,10 @@ export function AboutPageClient() {
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const creatorImageRef = useRef<HTMLDivElement>(null);
-  const creatorParallaxRef = useRef<HTMLDivElement>(null);
-  const solutionsSectionRef = useRef<HTMLDivElement>(null);
-  const dashboardParallaxRef = useRef<HTMLDivElement>(null);
-  const desktopParallaxRef = useRef<HTMLDivElement>(null);
-  const phoneParallaxRef = useRef<HTMLDivElement>(null);
   const visionNumberRef = useRef<HTMLSpanElement>(null);
   const solutionsNumberRef = useRef<HTMLSpanElement>(null);
   const creatorNumberRef = useRef<HTMLSpanElement>(null);
-  const visionRuleRef = useRef<HTMLDivElement>(null);
-  const solutionsRuleRef = useRef<HTMLDivElement>(null);
-  const creatorRuleRef = useRef<HTMLDivElement>(null);
   const ctaRuleRef = useRef<HTMLDivElement>(null);
-  const visionItemsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setPrefersReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -36,7 +67,6 @@ export function AboutPageClient() {
   // ── Creator image clip-path reveal + desaturation ──
   useEffect(() => {
     const el = creatorImageRef.current;
-    const parallaxWrap = creatorParallaxRef.current;
     if (!el) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -46,7 +76,6 @@ export function AboutPageClient() {
       ([{ gsap }, { ScrollTrigger }]) => {
         gsap.registerPlugin(ScrollTrigger);
 
-        // Clip-path wipe reveal (right to left)
         gsap.set(el, { clipPath: 'inset(0 100% 0 0)' });
         gsap.to(el, {
           clipPath: 'inset(0 0% 0 0)',
@@ -59,7 +88,6 @@ export function AboutPageClient() {
           },
         });
 
-        // Grayscale → color on the photo
         const photo = el.querySelector('.creator-photo') as HTMLElement;
         if (photo) {
           gsap.set(photo, { filter: 'grayscale(100%)' });
@@ -75,69 +103,6 @@ export function AboutPageClient() {
             },
           });
         }
-
-        // Subtle parallax on the image wrapper
-        if (parallaxWrap) {
-          const section = parallaxWrap.closest('section');
-          gsap.to(parallaxWrap, {
-            y: -60,
-            scrollTrigger: {
-              trigger: section || parallaxWrap,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1,
-            },
-          });
-        }
-      }
-    );
-  }, []);
-
-  // ── Selling Solutions parallax composition ──
-  useEffect(() => {
-    const section = solutionsSectionRef.current;
-    const dashPx = dashboardParallaxRef.current;
-    const deskPx = desktopParallaxRef.current;
-    const phonePx = phoneParallaxRef.current;
-    if (!section || !dashPx || !deskPx || !phonePx) return;
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-
-    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
-      ([{ gsap }, { ScrollTrigger }]) => {
-        gsap.registerPlugin(ScrollTrigger);
-
-        // ── Parallax ──
-        gsap.to(dashPx, {
-          y: -80,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        });
-
-        gsap.to(deskPx, {
-          y: -200,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        });
-
-        gsap.to(phonePx, {
-          y: -300,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        });
       }
     );
   }, []);
@@ -189,7 +154,7 @@ export function AboutPageClient() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduced) return;
 
-    const ruleRefs = [visionRuleRef, solutionsRuleRef, creatorRuleRef, ctaRuleRef];
+    const ruleRefs = [ctaRuleRef];
 
     Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
       ([{ gsap }, { ScrollTrigger }]) => {
@@ -218,38 +183,6 @@ export function AboutPageClient() {
     );
   }, []);
 
-  // ── Vision items: stagger in ──
-  useEffect(() => {
-    const container = visionItemsRef.current;
-    if (!container) return;
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-
-    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
-      ([{ gsap }, { ScrollTrigger }]) => {
-        gsap.registerPlugin(ScrollTrigger);
-        const items = container.querySelectorAll('.vision-item');
-
-        gsap.fromTo(
-          items,
-          { opacity: 0, x: -30 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.7,
-            stagger: 0.15,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: container,
-              start: 'top 75%',
-              toggleActions: 'play none none none',
-            },
-          }
-        );
-      }
-    );
-  }, []);
 
 
   // ── Scroll indicator ──
@@ -266,9 +199,6 @@ export function AboutPageClient() {
     <div id="about-page" className="relative">
       <GradientBlob className="top-[60vh] right-[-5%] w-[350px] h-[280px] opacity-30" duration={24} delay={2} />
       <GradientBlob className="top-[220vh] left-[-8%] w-[400px] h-[350px] opacity-35" duration={19} delay={6} />
-      <div className="hidden md:block">
-        <AboutScrollLine />
-      </div>
 
       {/* ── HERO ── */}
       <section
@@ -328,204 +258,298 @@ export function AboutPageClient() {
         </FadeIn>
       </section>
 
-      {/* ── VISION — 01 ── */}
+      {/* ── MISSIE & VISIE ── */}
       <section
-        className="section relative z-20 bg-transparent min-h-screen flex flex-col justify-center"
-        aria-labelledby="vision-title"
+        className="section relative z-20 bg-transparent py-24 md:py-32"
+        aria-labelledby="missie-visie-title"
       >
         <div className="container-narrow relative z-20">
-          {/* Section number + rule */}
-          <div className="flex items-end gap-6 mb-12 md:mb-16">
-            <span
-              ref={visionNumberRef}
-              className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none motion-reduce:opacity-100"
-              style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
-              aria-hidden
+          <div className="flex flex-col items-center gap-28 md:gap-36">
+            {/* Missie */}
+            <div className="text-center max-w-2xl">
+              <FadeIn>
+                <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
+                  Missie
+                </span>
+              </FadeIn>
+              <TitleReveal
+                as="h2"
+                id="missie-visie-title"
+                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
+              >
+                Waarom Blitzworx?
+              </TitleReveal>
+              <MagicText
+                text="Ondernemers verdienen een online aanwezigheid die werkt. Ik bouw websites, systemen en automatiseringen die precies doen wat ze moeten doen, zodat jij je kunt richten op waar je goed in bent. Alles komt van een partij, want ik geloof dat design, techniek en strategie pas resultaat opleveren als ze op elkaar zijn afgestemd."
+                className="text-body text-dry-sage leading-relaxed justify-center"
+              />
+            </div>
+
+            {/* Visie */}
+            <div className="text-center max-w-2xl">
+              <FadeIn delay={0.15}>
+                <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
+                  Visie
+                </span>
+              </FadeIn>
+              <TitleReveal
+                as="h3"
+                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
+              >
+                Waar we naartoe werken
+              </TitleReveal>
+              <MagicText
+                text="AI verandert hoe bedrijven werken, en dat gaat alleen nog versnellen. Blitzworx wil daar voorop lopen. Ik streef ernaar een bedrijf te bouwen dat bedrijven helpt om AI concreet in te zetten in hun dagelijkse processen. Een eigen team, klanten door heel Nederland, en een aanpak waarbij technologie daadwerkelijk resultaat oplevert. Dat is waar ik naartoe werk."
+                className="text-body text-dry-sage leading-relaxed justify-center"
+                scrollOffset={['start 0.75', 'start 0.1']}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── HET COMPLETE PLAATJE — 01 ── */}
+      <section
+        className="section relative z-20 bg-transparent"
+        aria-labelledby="complete-plaatje-title"
+      >
+        <div className="container-narrow relative z-20">
+          {/* Section number */}
+          <span
+            ref={visionNumberRef}
+            className="block text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none mb-12 md:mb-16 motion-reduce:opacity-100"
+            style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
+            aria-hidden
+          >
+            01
+          </span>
+
+          <div className="max-w-2xl mb-16">
+            <TitleReveal
+              as="h2"
+              id="complete-plaatje-title"
+              className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
             >
-              01
-            </span>
-            <div
-              ref={visionRuleRef}
-              className="flex-1 h-px bg-ebony origin-left"
-              style={{ transform: 'scaleX(0)' }}
-              aria-hidden
+              Het complete online plaatje
+            </TitleReveal>
+            <MagicText
+              text="Een sterke online aanwezigheid vraagt meer dan alleen een mooie website. Het vraagt om beelden die je verhaal vertellen, een merk dat herkenbaar is en systemen die voor je werken. Bij Blitzworx krijg je dat allemaal van één partij, zodat alles naadloos op elkaar aansluit."
+              className="text-body text-dry-sage leading-relaxed"
             />
           </div>
 
-          {/* Asymmetric grid: wide left for title, narrow right for content */}
-          <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-8 md:gap-16 items-start">
-            <div>
-              <TitleReveal
-                as="h2"
-                id="vision-title"
-                className="text-h2 md:text-h2-lg font-bold text-cornsilk"
-              >
-                Mijn visie
-              </TitleReveal>
-              <FadeIn delay={0.2}>
-                <div className="mt-6 space-y-4 text-body text-dry-sage leading-relaxed">
-                  <p>
-                    Blitzworx gelooft in kwaliteit, creativiteit en resultaat. Mijn visie is simpel:
-                    ondernemers helpen groeien met een online omgeving die past bij hun ambities.
-                  </p>
-                  <p>
-                    Ik werk nauw samen, denk mee en lever maatwerk. Geen standaard templates,
-                    maar oplossingen die echt werken. Van eerste idee tot live website, en daarna.
-                  </p>
-                </div>
-              </FadeIn>
-            </div>
+          {/* Bento grid: 4 cols, 2 rows */}
+          <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 lg:gap-5">
+            {services.map((service, index) => {
+              const isDev = service.title === 'Development';
+              const isAI = service.title === 'AI Automatiseringen';
 
-            {/* Right: three pillars */}
-            <div ref={visionItemsRef} className="space-y-6 md:mt-2">
-              {[
-                { label: 'Kwaliteit', desc: 'Elk detail telt, van typografie tot performance.' },
-                { label: 'Creativiteit', desc: 'Onderscheidend ontwerp dat opvalt en blijft hangen.' },
-                { label: 'Resultaat', desc: 'Websites die converteren en meetbaar groeien.' },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="vision-item border-l-2 border-ebony pl-6 opacity-0 motion-reduce:opacity-100"
+              return (
+                <FadeIn
+                  key={service.title}
+                  delay={index * 0.08}
+                  className={`h-full ${service.span}`}
                 >
-                  <span className="text-caption font-mono tracking-wider uppercase text-grey-olive">
-                    {item.label}
-                  </span>
-                  <p className="mt-1 text-small text-dry-sage leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
+                  <Link href={service.href} className="block h-full">
+                    <article className={`group relative h-full p-6 lg:p-8 rounded-md bg-ink border border-ebony flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(254,250,220,0.15),0_0_48px_rgba(254,250,220,0.08)] ${isDev ? 'items-center justify-center text-center min-h-[280px]' : ''}`}>
+                      <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background: isDev
+                            ? 'radial-gradient(ellipse at 50% 20%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 50% 90%, rgba(84,92,82,0.08) 0%, transparent 50%)'
+                            : 'radial-gradient(ellipse at 30% 0%, rgba(202,202,170,0.06) 0%, transparent 60%), radial-gradient(ellipse at 80% 100%, rgba(84,92,82,0.08) 0%, transparent 50%)',
+                        }}
+                        aria-hidden
+                      />
+
+                      {/* Development: code bracket icon */}
+                      {isDev && (
+                        <svg
+                          width="64"
+                          height="64"
+                          viewBox="0 0 64 64"
+                          fill="none"
+                          className="mb-6 text-dry-sage/30 group-hover:text-dry-sage/50 transition-colors duration-300"
+                          aria-hidden
+                        >
+                          <path d="M24 16L8 32L24 48" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M40 16L56 32L40 48" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M36 8L28 56" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                        </svg>
+                      )}
+
+                      {isAI ? (
+                        <div className="flex items-stretch gap-6 flex-1">
+                          <div className="flex-1">
+                            <h3 className="text-h3 md:text-h2 font-semibold text-cornsilk">{service.title}</h3>
+                            <p className="mt-3 text-small text-dry-sage leading-relaxed">
+                              {service.description}
+                            </p>
+                          </div>
+                          {/* AI circuit/node vector */}
+                          <div className="hidden md:flex flex-1 items-center justify-center">
+                            <svg
+                              width="140"
+                              height="140"
+                              viewBox="0 0 120 120"
+                              fill="none"
+                              className="text-dry-sage/20 group-hover:text-dry-sage/40 transition-colors duration-300"
+                              aria-hidden
+                            >
+                              <style>{`
+                                @keyframes about-pulse-line {
+                                  0%, 100% { stroke-opacity: 0.3; }
+                                  50% { stroke-opacity: 1; }
+                                }
+                                @keyframes about-pulse-node {
+                                  0%, 100% { opacity: 0.4; }
+                                  50% { opacity: 1; }
+                                }
+                                .about-ai-line-1 { animation: about-pulse-line 3s ease-in-out infinite; }
+                                .about-ai-line-2 { animation: about-pulse-line 3s ease-in-out 0.5s infinite; }
+                                .about-ai-line-3 { animation: about-pulse-line 3s ease-in-out 1s infinite; }
+                                .about-ai-line-4 { animation: about-pulse-line 3s ease-in-out 1.5s infinite; }
+                                .about-ai-line-5 { animation: about-pulse-line 3s ease-in-out 0.75s infinite; }
+                                .about-ai-line-6 { animation: about-pulse-line 3s ease-in-out 1.25s infinite; }
+                                .about-ai-node { animation: about-pulse-node 2s ease-in-out infinite; }
+                              `}</style>
+                              <circle cx="60" cy="60" r="16" stroke="currentColor" strokeWidth="1.5" />
+                              <circle cx="60" cy="60" r="4" fill="currentColor" className="about-ai-node" />
+                              <line x1="60" y1="44" x2="60" y2="12" stroke="currentColor" strokeWidth="1.5" className="about-ai-line-1" />
+                              <line x1="60" y1="76" x2="60" y2="108" stroke="currentColor" strokeWidth="1.5" className="about-ai-line-2" />
+                              <line x1="44" y1="60" x2="12" y2="60" stroke="currentColor" strokeWidth="1.5" className="about-ai-line-3" />
+                              <line x1="76" y1="60" x2="108" y2="60" stroke="currentColor" strokeWidth="1.5" className="about-ai-line-4" />
+                              <line x1="71" y1="49" x2="95" y2="25" stroke="currentColor" strokeWidth="1.5" className="about-ai-line-5" />
+                              <line x1="49" y1="71" x2="25" y2="95" stroke="currentColor" strokeWidth="1.5" className="about-ai-line-6" />
+                              <circle cx="60" cy="12" r="5" stroke="currentColor" strokeWidth="1.5" />
+                              <circle cx="60" cy="108" r="5" stroke="currentColor" strokeWidth="1.5" />
+                              <circle cx="12" cy="60" r="5" stroke="currentColor" strokeWidth="1.5" />
+                              <circle cx="108" cy="60" r="5" stroke="currentColor" strokeWidth="1.5" />
+                              <circle cx="98" cy="22" r="4" stroke="currentColor" strokeWidth="1.5" />
+                              <circle cx="22" cy="98" r="4" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <h3 className={`text-h3 md:text-h2 font-semibold text-cornsilk ${isDev ? '' : ''}`}>{service.title}</h3>
+                          <p className={`mt-3 text-small text-dry-sage leading-relaxed flex-1 ${isDev ? 'max-w-xs' : ''}`}>
+                            {service.description}
+                          </p>
+                        </>
+                      )}
+
+                      <span className="mt-6 inline-flex items-center gap-1 text-small font-medium text-dry-sage group-hover:text-cornsilk transition-colors">
+                        Lees meer
+                        <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">&#8594;</span>
+                      </span>
+                    </article>
+                  </Link>
+                </FadeIn>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* ── SELLING SOLUTIONS — 02 ── */}
       <section
-        ref={solutionsSectionRef}
         className="section relative z-20 bg-transparent py-24 md:py-32"
         aria-labelledby="selling-solutions-title"
       >
         <div className="container-narrow relative z-20">
-          {/* Section number + rule — right-aligned */}
-          <div className="flex items-end gap-6 mb-12 md:mb-16 flex-row-reverse">
-            <span
-              ref={solutionsNumberRef}
-              className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none motion-reduce:opacity-100"
-              style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
-              aria-hidden
-            >
-              02
-            </span>
-            <div
-              ref={solutionsRuleRef}
-              className="flex-1 h-px bg-ebony origin-right"
-              style={{ transform: 'scaleX(0)' }}
-              aria-hidden
-            />
-          </div>
+          {/* Section number */}
+          <span
+            ref={solutionsNumberRef}
+            className="block text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none mb-12 md:mb-16 motion-reduce:opacity-100"
+            style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
+            aria-hidden
+          >
+            02
+          </span>
 
-          {/* Text content */}
-          <div className="max-w-2xl mb-20 md:mb-28">
-            <TitleReveal
-              as="h2"
-              id="selling-solutions-title"
-              className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
-            >
-              Selling solutions
-            </TitleReveal>
-            <FadeIn delay={0.2}>
-              <div className="space-y-4 text-body text-dry-sage leading-relaxed">
-                <p>
-                  Bij Blitzworx kijk ik verder dan alleen de voorkant van een website. Ik ontwerp en bouw complete digitale oplossingen die jouw bedrijf echt ondersteunen. Denk aan compacte CRM systemen, overzichtelijke dashboards en maatwerk backends die processen vereenvoudigen en inzicht geven.
-                </p>
-                <p>
-                  Alles wat ik bouw is afgestemd op jouw manier van werken. Geen overbodige complexiteit, maar slimme functies die tijd besparen en meegroeien met je onderneming.
-                </p>
+          {/* Two-column layout: text left, bento right */}
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-10 md:gap-14 lg:gap-20 items-start">
+            {/* Left: text */}
+            <div className="flex flex-col justify-center">
+              <TitleReveal
+                as="h2"
+                id="selling-solutions-title"
+                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
+              >
+                Selling solutions
+              </TitleReveal>
+              <MagicText
+                text="Bij Blitzworx kijk ik verder dan alleen de voorkant van een website. Ik ontwerp en bouw complete digitale oplossingen die jouw bedrijf echt ondersteunen. Denk aan compacte CRM systemen, overzichtelijke dashboards, geautomatiseerde workflows en maatwerk backends die processen vereenvoudigen en inzicht geven.
+Van professionele fotografie tot technische SEO, van AI-integraties tot een converterende website. Alles wat ik bouw is afgestemd op jouw manier van werken. Geen overbodige complexiteit, maar slimme functies die tijd besparen en meegroeien met je onderneming."
+                className="text-body text-dry-sage leading-relaxed"
+              />
+            </div>
+
+            {/* Right: bento grid with 3 images */}
+            <div className="grid grid-cols-2 grid-rows-2 gap-4 lg:gap-5">
+            {/* Top left: workspace photo - tall */}
+            <FadeIn className="md:row-span-2">
+              <div className="relative h-full min-h-[280px] md:min-h-0 overflow-hidden rounded-md">
+                <Image
+                  src="/assets/images/sander-building-at-desk.jpeg"
+                  alt="Sander aan het werk - code schrijven achter zijn bureau"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      'linear-gradient(to bottom, rgba(4,7,17,0.6) 0%, rgba(4,7,17,0.4) 40%, rgba(4,7,17,0.55) 100%)',
+                  }}
+                  aria-hidden
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                  <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
+                    SaaS applicatie
+                  </span>
+                </div>
               </div>
             </FadeIn>
-          </div>
-        </div>
 
-        {/* ── Parallax image composition ── */}
-        <div className="relative w-full" style={{ perspective: '1400px' }}>
-          {/* Ambient glow behind the composition */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[60%] rounded-full pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse at center, rgba(202,202,170,0.06) 0%, rgba(84,92,82,0.03) 40%, transparent 70%)',
-              filter: 'blur(60px)',
-            }}
-            aria-hidden
-          />
-
-          {/* Composition container */}
-          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 md:min-h-[700px] lg:min-h-[800px]">
-
-            {/* ─ LAYER 1 (back): Dashboard — centered, largest ─ */}
-            <div ref={dashboardParallaxRef} className="relative z-10 mx-auto w-full max-w-4xl will-change-transform">
-              <div className="relative rounded-lg overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.3)]">
+            {/* Top right: dashboard */}
+            <FadeIn delay={0.1}>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-md">
                 <Image
                   src="/assets/images/agencyos-dashboard.webp"
                   alt="AgencyOS dashboard - maatwerk CRM en projectbeheer"
-                  width={1200}
-                  height={675}
-                  className="w-full h-auto block"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 85vw, 900px"
-                  priority
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 45vw"
                 />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                  <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
+                    Dashboard
+                  </span>
+                </div>
               </div>
-              {/* Label */}
-              <div className="mt-4 flex items-center gap-3 justify-end">
-                <span className="text-[11px] font-mono tracking-[0.15em] uppercase text-grey-olive/50">
-                  Dashboard
-                </span>
-                <div className="w-8 h-px bg-dry-sage/20" aria-hidden />
-              </div>
-            </div>
+            </FadeIn>
 
-            {/* ─ LAYER 2 (mid): Desktop mockup — overlaps bottom-left ─ */}
-            <div ref={desktopParallaxRef} className="relative z-20 mt-6 md:-mt-40 lg:-mt-52 ml-0 md:-ml-8 lg:-ml-12 w-full md:w-[55%] max-w-xl will-change-transform">
-              <div className="relative rounded-lg overflow-hidden shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+            {/* Bottom right: GastVrijmoed */}
+            <FadeIn delay={0.2}>
+              <div className="relative aspect-[16/10] overflow-hidden rounded-md">
                 <Image
-                  src="/assets/images/blueshipmentmockup.webp"
-                  alt="Blue Shipment - maatwerk website voor logistiek"
-                  width={900}
-                  height={560}
-                  className="w-full h-auto block"
-                  sizes="(max-width: 768px) 85vw, 45vw"
+                  src="/assets/images/cases/gastvrijmoed-1.png"
+                  alt="GastVrijmoed - website voor ambachtelijk meubelmaker"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 45vw"
                 />
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                  <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
+                    E-commerce
+                  </span>
+                </div>
               </div>
-              {/* Label */}
-              <div className="mt-3 flex items-center gap-3">
-                <div className="w-6 h-px bg-dry-sage/20" aria-hidden />
-                <span className="text-[11px] font-mono tracking-[0.15em] uppercase text-grey-olive/50">
-                  UI/UX Design
-                </span>
-              </div>
+            </FadeIn>
             </div>
-
-            {/* ─ LAYER 3 (front): Phone mockup — overlaps right side, same browser frame style ─ */}
-            <div ref={phoneParallaxRef} className="relative md:absolute z-30 mt-6 md:mt-0 mx-auto md:mx-0 md:right-12 lg:right-16 md:bottom-8 w-[180px] sm:w-[200px] md:w-[220px] lg:w-[250px] will-change-transform">
-              <div className="relative rounded-lg overflow-hidden shadow-[0_12px_50px_rgba(0,0,0,0.5)]">
-                <Image
-                  src="/assets/images/iphonemockupblueship.webp"
-                  alt="Blue Shipment - mobiele weergave"
-                  width={560}
-                  height={1120}
-                  className="w-full h-auto block"
-                  sizes="(max-width: 768px) 140px, (max-width: 1024px) 220px, 250px"
-                />
-              </div>
-              {/* Label */}
-              <div className="mt-3 flex items-center gap-2 justify-center">
-                <div className="w-4 h-px bg-dry-sage/20" aria-hidden />
-                <span className="text-[10px] font-mono tracking-[0.15em] uppercase text-grey-olive/50">
-                  Responsive
-                </span>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
@@ -536,23 +560,15 @@ export function AboutPageClient() {
         aria-labelledby="creator-title"
       >
         <div className="container-narrow relative z-20">
-          {/* Section number + rule */}
-          <div className="flex items-end gap-6 mb-12 md:mb-16">
-            <span
-              ref={creatorNumberRef}
-              className="text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none motion-reduce:opacity-100"
-              style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
-              aria-hidden
-            >
-              03
-            </span>
-            <div
-              ref={creatorRuleRef}
-              className="flex-1 h-px bg-ebony origin-left"
-              style={{ transform: 'scaleX(0)' }}
-              aria-hidden
-            />
-          </div>
+          {/* Section number */}
+          <span
+            ref={creatorNumberRef}
+            className="block text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none mb-12 md:mb-16 motion-reduce:opacity-100"
+            style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
+            aria-hidden
+          >
+            03
+          </span>
 
           {/* Title — full width */}
           <TitleReveal
@@ -576,24 +592,15 @@ export function AboutPageClient() {
                   <div className="flex-1 h-px bg-ebony/50" aria-hidden />
                 </div>
               </FadeIn>
-              <FadeIn delay={0.35}>
-                <div className="space-y-4 text-body text-dry-sage leading-relaxed">
-                  <p>
-                    Als oprichter van Blitzworx combineer ik creativiteit met technische kennis.
-                    Mijn motivatie? Ondernemers helpen hun online doelen te bereiken met websites
-                    die echt werken.
-                  </p>
-                  <p>
-                    Van concept tot code. Ik begeleid het hele traject en zorg ervoor dat het
-                    resultaat past bij jouw visie en je doelgroep.
-                  </p>
-                </div>
-              </FadeIn>
+              <MagicText
+                text="Als oprichter van Blitzworx combineer ik creativiteit met technische kennis. Mijn motivatie? Ondernemers helpen hun online doelen te bereiken met een complete aanpak die echt werkt.
+Van concept tot code, van fotoshoot tot vindbaarheid. Ik begeleid het hele traject en zorg ervoor dat elk onderdeel past bij jouw visie en je doelgroep."
+                className="text-body text-dry-sage leading-relaxed"
+              />
             </div>
 
             {/* Right: Portrait photo with editorial treatment */}
-            <div className="relative order-1 md:order-2 will-change-transform" ref={creatorParallaxRef}>
-              {/* Rotated vertical label */}
+            <div className="relative order-1 md:order-2">
               <span
                 className="hidden lg:block absolute -left-12 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] font-mono tracking-[0.3em] uppercase text-grey-olive/30 whitespace-nowrap select-none"
                 aria-hidden
@@ -605,7 +612,6 @@ export function AboutPageClient() {
                 ref={creatorImageRef}
                 className="group relative motion-reduce:!clip-path-none"
               >
-                {/* Image container — portrait ratio with thin border */}
                 <div className="relative aspect-[3/4] w-full max-w-[440px] mx-auto md:mx-0 overflow-hidden border border-ebony/30">
                   <Image
                     src="/assets/images/sander.webp"
@@ -614,7 +620,6 @@ export function AboutPageClient() {
                     className="creator-photo object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105 motion-reduce:!filter-none"
                     sizes="(max-width: 768px) 100vw, 45vw"
                   />
-                  {/* Cinematic vignette — bottom-heavy */}
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
@@ -625,7 +630,6 @@ export function AboutPageClient() {
                   />
                 </div>
 
-                {/* Caption below image — right-aligned */}
                 <div className="mt-4 flex items-center gap-3 justify-end max-w-[440px] mx-auto md:mx-0">
                   <span className="text-[11px] font-mono tracking-[0.15em] uppercase text-grey-olive/50">
                     Zwolle, NL

@@ -24,14 +24,15 @@ const Word = ({ children, progress, range, className }: WordProps) => {
 interface MagicTextProps {
   text: string;
   className?: string;
+  scrollOffset?: [string, string];
 }
 
-export function MagicText({ text, className }: MagicTextProps) {
+export function MagicText({ text, className, scrollOffset = ['start 0.9', 'start 0.25'] }: MagicTextProps) {
   const container = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: ['start 0.9', 'start 0.25'],
+    offset: scrollOffset,
   });
 
   const tokens = text.split(/(\n\n|\n)/).flatMap((segment) =>

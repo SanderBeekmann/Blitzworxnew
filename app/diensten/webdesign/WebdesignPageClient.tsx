@@ -7,6 +7,7 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 
 import { Button } from '@/components/ui/Button';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
+import { PhotoshootSection } from '@/app/sections/home/PhotoshootSection';
 
 interface ScrollTriggerRef {
   kill: () => void;
@@ -58,7 +59,7 @@ const processPhases = [
   {
     label: 'Oplevering',
     description:
-      'Je geeft feedback, ik perfectioneer. Het definitieve ontwerp wordt development-ready opgeleverd, klaar om gebouwd te worden.',
+      'Je geeft feedback, ik perfectioneer. Per project zijn 3 revisierondes inbegrepen, zodat het eindresultaat precies klopt. Het definitieve ontwerp wordt development-ready opgeleverd, klaar om gebouwd te worden.',
   },
 ];
 
@@ -806,6 +807,8 @@ export function WebdesignPageClient() {
           </div>
         </div>
       </section>
+
+      <PhotoshootSection />
 
       <MaintenanceSection />
 

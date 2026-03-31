@@ -1,15 +1,32 @@
 'use client';
 
-import { useState, FormEvent, useEffect, useMemo } from 'react';
+import { useState, FormEvent, useEffect, useMemo, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
-const STEPS = 5;
+const PROJECT_STEPS = 5;
+const SERVICE_STEPS = 3;
+
 const PROJECT_TYPES = [
   { id: 'website', label: 'Nieuwe website' },
   { id: 'redesign', label: 'Website redesign' },
   { id: 'branding', label: 'Branding / huisstijl' },
   { id: 'other', label: 'Anders' },
 ] as const;
+
+const SERVICE_OPTIONS = [
+  { id: 'onderhoud', label: 'Onderhoud', price: '€40/maand', description: 'Tot 2 uur aanpassingen per maand' },
+  { id: 'hosting', label: 'Hosting', price: '€10/maand', description: 'Beheerde hosting met backups & SSL' },
+  { id: 'domein', label: 'Domeinbeheer', price: '€5/maand', description: 'Registratie, DNS & verlenging' },
+  { id: 'email', label: 'E-mail op eigen domein', price: '€12,50/user/maand', description: 'Outlook of Gmail op jouw domein' },
+] as const;
+
+const COMBI_SERVICES = ['onderhoud', 'hosting', 'domein'];
+
+const PAKKET_PRESELECT: Record<string, string[]> = {
+  compleet: ['onderhoud', 'hosting', 'domein'],
+  email: ['email'],
+};
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -50,10 +67,20 @@ function getCalendarDays(year: number, month: number) {
   return days;
 }
 
-export function ContactOnboarding() {
+function ContactOnboardingInner() {
+  const searchParams = useSearchParams();
+  const pakketParam = searchParams.get('pakket');
+  const hasDiensten = searchParams.has('diensten') || !!pakketParam;
+  const preselectedServices = pakketParam ? PAKKET_PRESELECT[pakketParam] ?? [] : [];
+
+  // Mode: 'project' (5 steps) or 'diensten' (3 steps)
+  const [mode, setMode] = useState<'project' | 'diensten'>(hasDiensten ? 'diensten' : 'project');
+  const totalSteps = mode === 'diensten' ? SERVICE_STEPS : PROJECT_STEPS;
+
   const [step, setStep] = useState(1);
   const [projectType, setProjectType] = useState<string | null>(null);
   const [otherText, setOtherText] = useState('');
+  const [selectedServices, setSelectedServices] = useState<string[]>(preselectedServices);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', message: '' });
   const [preferredDate, setPreferredDate] = useState<string | null>(null);
   const [preferredTime, setPreferredTime] = useState<string | null>(null);
@@ -66,8 +93,24 @@ export function ContactOnboarding() {
   const now = useMemo(() => new Date(), []);
   const [calendarMonth, setCalendarMonth] = useState({ year: now.getFullYear(), month: now.getMonth() });
 
+  const isCombi = COMBI_SERVICES.every((s) => selectedServices.includes(s));
+
+  function toggleService(id: string) {
+    setSelectedServices((prev) =>
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+    );
+  }
+
+  function toggleCombi() {
+    if (isCombi) {
+      setSelectedServices((prev) => prev.filter((s) => !COMBI_SERVICES.includes(s)));
+    } else {
+      setSelectedServices((prev) => [...new Set([...prev, ...COMBI_SERVICES])]);
+    }
+  }
+
   useEffect(() => {
-    if (step === 4) {
+    if (mode === 'project' && step === 4) {
       const { year, month } = calendarMonth;
       const firstDay = new Date(year, month, 1);
       const lastDay = new Date(year, month + 1, 0);
@@ -82,7 +125,12 @@ export function ContactOnboarding() {
 
   function validateStep(): boolean {
     const err: Record<string, string> = {};
-    if (step === 2) {
+
+    if (mode === 'diensten' && step === 1) {
+      if (selectedServices.length === 0) err.services = 'Selecteer minimaal een dienst';
+    }
+
+    if (mode === 'project' && step === 2 || mode === 'diensten' && step === 2) {
       const name = formData.name.trim();
       const email = formData.email.trim();
       const phone = formData.phone.trim();
@@ -94,24 +142,29 @@ export function ContactOnboarding() {
       const digitsOnly = phone.replace(/\D/g, '');
       if (!phone || digitsOnly.length < 9) err.phone = 'Vul een geldig telefoonnummer in (min. 9 cijfers)';
     }
-    if (step === 3) {
+
+    if (mode === 'project' && step === 3) {
       const msg = formData.message.trim();
       if (!msg || msg.length < 10) err.message = 'Vul een bericht in (min. 10 tekens)';
     }
-    if (step === 4) {
+
+    if (mode === 'project' && step === 4) {
       if (!preferredDate || !preferredTime) err.slot = 'Kies een datum en tijd voor je gesprek';
     }
+
     setErrors(err);
     return Object.keys(err).length === 0;
   }
 
   function handleNext() {
-    if (step === 1 && !projectType) return;
-    if (step === 1 && projectType === 'other' && otherText.trim().length < 2) return;
-    if ((step === 2 || step === 3 || step === 4) && !validateStep()) return;
+    if (mode === 'project' && step === 1 && !projectType) return;
+    if (mode === 'project' && step === 1 && projectType === 'other' && otherText.trim().length < 2) return;
+    if (mode === 'diensten' && step === 1 && !validateStep()) return;
+    if (step === 2 && !validateStep()) return;
+    if (mode === 'project' && (step === 3 || step === 4) && !validateStep()) return;
     setDirection('forward');
     setHasNavigated(true);
-    if (step < STEPS) setStep(step + 1);
+    if (step < totalSteps) setStep(step + 1);
   }
 
   function handleBack() {
@@ -141,19 +194,30 @@ export function ContactOnboarding() {
     if (!validateStep()) return;
     setStatus('submitting');
     try {
+      const payload = mode === 'diensten'
+        ? {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            company: formData.company.trim(),
+            message: `Diensten aanvraag: ${selectedServices.map((s) => SERVICE_OPTIONS.find((o) => o.id === s)?.label ?? s).join(', ')}${isCombi ? ' (combipakket)' : ''}`,
+            projectType: 'diensten',
+          }
+        : {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            company: formData.company.trim(),
+            message: formData.message.trim(),
+            projectType: projectType === 'other' ? `Anders: ${otherText.trim()}` : projectType,
+            preferredDate,
+            preferredTime,
+          };
+
       const res = await fetchWithRetry('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          phone: formData.phone.trim(),
-          company: formData.company.trim(),
-          message: formData.message.trim(),
-          projectType: projectType === 'other' ? `Anders: ${otherText.trim()}` : projectType,
-          preferredDate,
-          preferredTime,
-        }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error ?? 'Verzenden mislukt');
@@ -222,25 +286,26 @@ export function ContactOnboarding() {
 
       <div className="relative">
         <p className="text-caption font-mono tracking-[0.2em] uppercase text-dry-sage/50 mb-2">
-          Start je project
+          {mode === 'diensten' ? 'Diensten aanvragen' : 'Start je project'}
         </p>
         <h2 className="text-h2 md:text-h2-lg font-bold text-cornsilk">
-          Waar kan ik je mee helpen?
+          {mode === 'diensten' ? 'Welke diensten wil je afnemen?' : 'Waar kan ik je mee helpen?'}
         </h2>
 
         <div className="mt-6 h-1 rounded-full bg-ebony/40 overflow-hidden mb-8" aria-hidden>
           <div
             className="h-full rounded-full transition-[width] duration-500 ease-out"
             style={{
-              width: `${(step / STEPS) * 100}%`,
+              width: `${(step / totalSteps) * 100}%`,
               background: 'linear-gradient(90deg, rgba(202,202,170,0.6) 0%, rgba(254,250,220,1) 100%)',
             }}
           />
         </div>
 
       <form onSubmit={handleSubmit} noValidate>
-        {step === 1 && (
-          <div key="step-1" className={`space-y-6 ${hasNavigated ? (direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left') : ''}`}>
+        {/* Step 1: Project type selection (project mode) */}
+        {step === 1 && mode === 'project' && (
+          <div key="step-1-project" className={`space-y-6 ${hasNavigated ? (direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left') : ''}`}>
             <div className="flex flex-wrap gap-3">
               {PROJECT_TYPES.map(({ id, label }) => (
                 <button
@@ -272,6 +337,91 @@ export function ContactOnboarding() {
                   autoFocus
                 />
               </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 1: Service selection (diensten mode) */}
+        {step === 1 && mode === 'diensten' && (
+          <div key="step-1-diensten" className={`space-y-4 ${hasNavigated ? (direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left') : ''}`}>
+            {/* Combipakket toggle */}
+            <button
+              type="button"
+              onClick={toggleCombi}
+              className={`w-full text-left p-4 rounded-md border transition-all duration-300 ${
+                isCombi
+                  ? 'border-cornsilk bg-cornsilk/5'
+                  : 'border-ebony hover:border-grey-olive'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                  isCombi ? 'border-cornsilk bg-cornsilk' : 'border-grey-olive/50'
+                }`}>
+                  {isCombi && (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+                      <path d="M5 12l5 5L20 7" stroke="#040711" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <span className="block text-body font-medium text-cornsilk">Combipakket</span>
+                  <span className="block text-caption text-grey-olive/60">Onderhoud + Hosting + Domeinbeheer</span>
+                </div>
+                <div className="text-right shrink-0">
+                  <span className="block text-body font-bold text-cornsilk">€50/maand</span>
+                  <span className="block text-caption text-grey-olive/40 line-through">€55 los</span>
+                </div>
+              </div>
+            </button>
+
+            <div className="w-full h-px bg-ebony/40 my-2" aria-hidden />
+            <p className="text-caption text-grey-olive/50">Of selecteer losse diensten:</p>
+
+            {/* Individual services */}
+            {SERVICE_OPTIONS.map(({ id, label, price, description }) => {
+              const checked = selectedServices.includes(id);
+              const isPartOfCombi = COMBI_SERVICES.includes(id);
+              const dimmed = isCombi && isPartOfCombi;
+
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    if (dimmed) return;
+                    toggleService(id);
+                  }}
+                  className={`w-full text-left p-4 rounded-md border transition-all duration-300 ${
+                    dimmed
+                      ? 'border-ebony/30 opacity-40 cursor-not-allowed'
+                      : checked
+                        ? 'border-cornsilk bg-cornsilk/5'
+                        : 'border-ebony hover:border-grey-olive'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                      checked ? 'border-cornsilk bg-cornsilk' : 'border-grey-olive/50'
+                    }`}>
+                      {checked && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+                          <path d="M5 12l5 5L20 7" stroke="#040711" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="block text-small font-medium text-cornsilk">{label}</span>
+                      <span className="block text-caption text-grey-olive/50">{description}</span>
+                    </div>
+                    <span className="text-small text-dry-sage/70 shrink-0">{price}</span>
+                  </div>
+                </button>
+              );
+            })}
+
+            {errors.services && (
+              <p className="text-small text-red-600" role="alert">{errors.services}</p>
             )}
           </div>
         )}
@@ -353,7 +503,7 @@ export function ContactOnboarding() {
           </div>
         )}
 
-        {step === 3 && (
+        {step === 3 && mode === 'project' && (
           <div key="step-3" className={`space-y-4 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <div>
               <label htmlFor="onboard-message" className="block text-small font-medium text-dry-sage">
@@ -375,7 +525,7 @@ export function ContactOnboarding() {
           </div>
         )}
 
-        {step === 4 && (() => {
+        {step === 4 && mode === 'project' && (() => {
           const { year, month } = calendarMonth;
           const calDays = getCalendarDays(year, month);
           const todayKey = formatDateKey(new Date());
@@ -524,7 +674,38 @@ export function ContactOnboarding() {
           );
         })()}
 
-        {step === 5 && (
+        {/* Diensten confirmation (step 3 in diensten mode) */}
+        {step === 3 && mode === 'diensten' && (
+          <div key="step-3-diensten" className={`space-y-6 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
+            <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Diensten:</span>{' '}
+                {selectedServices.map((s) => SERVICE_OPTIONS.find((o) => o.id === s)?.label ?? s).join(', ')}
+                {isCombi && ' (combipakket)'}
+              </p>
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Naam:</span> {formData.name}
+              </p>
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Bedrijf:</span> {formData.company}
+              </p>
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">E-mail:</span> {formData.email}
+              </p>
+              <p className="text-small text-grey-olive">
+                <span className="text-dry-sage">Telefoon:</span> {formData.phone}
+              </p>
+            </div>
+            {status === 'error' && (
+              <p className="text-body text-red-600" role="alert">
+                Er ging iets mis. Probeer het later opnieuw of mail direct naar sander@blitzworx.nl.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Project confirmation (step 5 in project mode) */}
+        {step === 5 && mode === 'project' && (
           <div key="step-5" className={`space-y-6 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
               <p className="text-small text-grey-olive">
@@ -576,11 +757,14 @@ export function ContactOnboarding() {
             <div />
           )}
           <div className="flex-1" />
-          {step < STEPS ? (
+          {step < totalSteps ? (
             <button
               type="button"
               onClick={handleNext}
-              disabled={step === 1 && (!projectType || (projectType === 'other' && otherText.trim().length < 2))}
+              disabled={
+                (mode === 'project' && step === 1 && (!projectType || (projectType === 'other' && otherText.trim().length < 2))) ||
+                (mode === 'diensten' && step === 1 && selectedServices.length === 0)
+              }
               className="inline-flex items-center justify-center min-h-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Volgende
@@ -598,5 +782,13 @@ export function ContactOnboarding() {
       </form>
       </div>
     </div>
+  );
+}
+
+export function ContactOnboarding() {
+  return (
+    <Suspense fallback={null}>
+      <ContactOnboardingInner />
+    </Suspense>
   );
 }

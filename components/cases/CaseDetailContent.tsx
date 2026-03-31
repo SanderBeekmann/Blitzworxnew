@@ -23,39 +23,12 @@ function CaseVideo({ src, title }: { src: string; title: string }) {
   );
 }
 
-function ImageGrid({ images, title }: { images: string[]; title: string }) {
-  const visibleImages = images.slice(0, 4);
-
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      {visibleImages.map((src, i) => (
-        <div
-          key={src}
-          className="rounded-md overflow-hidden bg-ink-black"
-        >
-          <Image
-            src={src}
-            alt={`${title} — screenshot ${i + 1}`}
-            width={720}
-            height={450}
-            className="w-full h-auto block"
-            sizes="(max-width: 1024px) 45vw, 20vw"
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
 
 interface CaseDetailContentProps {
   caseItem: Case;
 }
 
 export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
-  const images = caseItem.imagePlaceholder
-    ? []
-    : (caseItem.images ?? [caseItem.image, caseItem.imageHover].filter((v): v is string => Boolean(v)));
-  const showPlaceholder = caseItem.imagePlaceholder || images.length === 0;
   const paragraphs = (caseItem.fullStory ?? caseItem.description).split(/\n\n+/);
 
   return (
@@ -118,34 +91,24 @@ export function CaseDetailContent({ caseItem }: CaseDetailContentProps) {
             </div>
           </FadeIn>
 
-          {/* Video + images */}
+          {/* Video + hero image */}
           <FadeIn delay={0.3}>
             <div className="space-y-6">
               {caseItem.video && (
                 <CaseVideo src={caseItem.video} title={caseItem.title} />
               )}
 
-              {showPlaceholder ? (
-                <div className="grid grid-cols-5 gap-3" style={{ gridTemplateRows: '160px 160px 160px' }}>
-                  <div
-                    className="col-span-3 row-span-2 rounded-md"
-                    style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(84,92,82,0.3) 0%, rgba(4,7,17,0.95) 70%)' }}
-                  />
-                  <div
-                    className="col-span-2 row-span-1 rounded-md"
-                    style={{ background: 'radial-gradient(ellipse at 70% 30%, rgba(84,92,82,0.2) 0%, rgba(4,7,17,0.95) 70%)' }}
-                  />
-                  <div
-                    className="col-span-2 row-span-2 rounded-md"
-                    style={{ background: 'radial-gradient(ellipse at 50% 80%, rgba(202,202,170,0.08) 0%, rgba(4,7,17,0.95) 70%)' }}
-                  />
-                  <div
-                    className="col-span-3 row-span-1 rounded-md"
-                    style={{ background: 'radial-gradient(ellipse at 80% 40%, rgba(84,92,82,0.25) 0%, rgba(4,7,17,0.95) 70%)' }}
+              {!caseItem.imagePlaceholder && (
+                <div className="rounded-md overflow-hidden bg-ink-black">
+                  <Image
+                    src={caseItem.image}
+                    alt={caseItem.title}
+                    width={760}
+                    height={570}
+                    className="w-full h-auto block"
+                    sizes="(max-width: 1024px) 90vw, 45vw"
                   />
                 </div>
-              ) : (
-                <ImageGrid images={images} title={caseItem.title} />
               )}
             </div>
           </FadeIn>

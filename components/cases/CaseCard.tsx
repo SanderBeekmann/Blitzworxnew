@@ -34,19 +34,8 @@ export function CaseCard({ caseItem }: CaseCardProps) {
               width={760}
               height={570}
               sizes="(max-width: 768px) 85vw, 380px"
-              className="w-full h-auto transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.03]"
+              className="w-full h-auto"
             />
-            {caseItem.imageHover && (
-              <Image
-                src={caseItem.imageHover}
-                alt=""
-                width={760}
-                height={570}
-                sizes="(max-width: 768px) 85vw, 380px"
-                className="absolute inset-0 w-full h-auto opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-                aria-hidden
-              />
-            )}
             {/* Subtle bottom fade into text area */}
             <div
               className="absolute inset-x-0 bottom-0 h-16 pointer-events-none"

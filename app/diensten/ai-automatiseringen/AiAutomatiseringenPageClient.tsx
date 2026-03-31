@@ -76,7 +76,7 @@ const processSteps = [
     number: '02',
     title: 'Ontwerp & prototype',
     description:
-      'Ik ontwerp de automatisering en bouw een werkend prototype dat je direct kunt testen. Snel zichtbaar resultaat, zonder maanden wachten.',
+      'Ik ontwerp de automatisering en bouw een werkend prototype dat je direct kunt testen. Per project zijn 3 revisierondes inbegrepen. Snel zichtbaar resultaat, zonder maanden wachten.',
   },
   {
     number: '03',

@@ -9,6 +9,7 @@ const PROJECT_LABELS: Record<string, string> = {
   website: 'Nieuwe website',
   redesign: 'Website redesign',
   branding: 'Branding / huisstijl',
+  diensten: 'Diensten aanvraag',
   other: 'Anders',
 };
 
@@ -49,6 +50,12 @@ function getBuiltInClientHtml(
   return emailShell(content);
 }
 
+function getBuiltInServiceClientHtml(services: string): string {
+  const safe = escapeHtml(services);
+  const content = `<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#fefadc">Bedankt voor je aanvraag!</h1><p style="margin:0 0 28px;color:#cacaaa;font-size:15px">Ik heb je diensten aanvraag ontvangen en neem zo snel mogelijk contact met je op om alles te bespreken.</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:28px"><tr><td style="padding:14px 0;border-bottom:1px solid #545c52;color:#8b8174;font-size:14px;width:140px">Aangevraagd</td><td style="padding:14px 0;border-bottom:1px solid #545c52;color:#fefadc">${safe}</td></tr></table><p style="margin:0 0 28px;color:#cacaaa;font-size:15px">Je kunt binnen 1 werkdag een reactie verwachten.</p><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#cacaaa;padding:14px 28px;text-align:center"><a href="https://blitzworx.nl" style="color:#040711;font-size:15px;font-weight:600;text-decoration:none;font-family:'Gilroy',system-ui,sans-serif">Bekijk onze website</a></td></tr></table><p style="margin:28px 0 0;color:#8b8174;font-size:13px">Heb je vragen? Mail naar <a href="mailto:sander@blitzworx.nl" style="color:#cacaaa;text-decoration:underline">sander@blitzworx.nl</a></p>`;
+  return emailShell(content);
+}
+
 function fillTemplate(
   html: string,
   vars: Record<string, string>
@@ -81,7 +88,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!preferredDate || !preferredTime) {
+    if (projectType !== 'diensten' && (!preferredDate || !preferredTime)) {
       return NextResponse.json(
         { error: 'Kies een datum en tijd voor je gesprek.' },
         { status: 400 }
@@ -127,17 +134,19 @@ export async function POST(request: Request) {
         clientId = newClient?.id ?? null;
       }
 
-      const { error: dbError } = await supabase.from('leads').insert({
+      const leadData: Record<string, unknown> = {
         name: name.trim(),
         email: email.trim(),
         phone: phone.trim(),
         message: message.trim(),
         project_type: projectType ?? 'other',
-        preferred_date: preferredDate,
-        preferred_time: preferredTime,
         phase: 'lead',
         client_id: clientId,
-      });
+      };
+      if (preferredDate) leadData.preferred_date = preferredDate;
+      if (preferredTime) leadData.preferred_time = preferredTime;
+
+      const { error: dbError } = await supabase.from('leads').insert(leadData);
 
       if (dbError) {
         console.error('Supabase insert error:', dbError);
@@ -198,8 +207,8 @@ export async function POST(request: Request) {
       phoneTel: phone.replace(/\D/g, ''),
       message: escapeHtml(message.trim()).replace(/\n/g, '<br>'),
       projectLabel: escapeHtml(projectLabel),
-      preferredDate: escapeHtml(preferredDate),
-      preferredTime: escapeHtml(preferredTime),
+      preferredDate: escapeHtml(preferredDate || ''),
+      preferredTime: escapeHtml(preferredTime || ''),
     };
 
     let leadHtml: string;
@@ -207,14 +216,22 @@ export async function POST(request: Request) {
     let leadSubject: string;
     let clientSubject: string;
 
+    const isDiensten = projectType === 'diensten';
+
     if (supabase) {
+      const templateSlugs = isDiensten
+        ? ['lead_notification', 'service_confirmation']
+        : ['lead_notification', 'client_confirmation'];
+
       const { data: templates } = await supabase
         .from('email_templates')
         .select('slug, subject, html_body')
-        .in('slug', ['lead_notification', 'client_confirmation']);
+        .in('slug', templateSlugs);
 
       const leadTpl = templates?.find((t) => t.slug === 'lead_notification');
-      const clientTpl = templates?.find((t) => t.slug === 'client_confirmation');
+      const clientTpl = templates?.find((t) =>
+        t.slug === (isDiensten ? 'service_confirmation' : 'client_confirmation')
+      );
 
       if (leadTpl?.html_body && clientTpl?.html_body) {
         leadHtml = fillTemplate(leadTpl.html_body, templateVars);
@@ -222,16 +239,24 @@ export async function POST(request: Request) {
         leadSubject = fillTemplate(leadTpl.subject, templateVars);
         clientSubject = fillTemplate(clientTpl.subject, templateVars);
       } else {
-        leadHtml = getBuiltInLeadHtml(projectLabel, name.trim(), email.trim(), phone.trim(), preferredDate, preferredTime, message.trim());
-        clientHtml = getBuiltInClientHtml(projectLabel, preferredDate, preferredTime);
-        leadSubject = `Lead: ${name.trim()} – ${projectLabel} – ${preferredDate} ${preferredTime}`;
-        clientSubject = 'Bedankt voor je bericht – Blitzworx';
+        leadHtml = getBuiltInLeadHtml(projectLabel, name.trim(), email.trim(), phone.trim(), preferredDate || '-', preferredTime || '-', message.trim());
+        clientHtml = isDiensten
+          ? getBuiltInServiceClientHtml(message.trim())
+          : getBuiltInClientHtml(projectLabel, preferredDate || '-', preferredTime || '-');
+        leadSubject = preferredDate ? `Lead: ${name.trim()} – ${projectLabel} – ${preferredDate} ${preferredTime}` : `Lead: ${name.trim()} – ${projectLabel}`;
+        clientSubject = isDiensten
+          ? 'Bedankt voor je aanvraag – Blitzworx'
+          : 'Bedankt voor je bericht – Blitzworx';
       }
     } else {
-      leadHtml = getBuiltInLeadHtml(projectLabel, name.trim(), email.trim(), phone.trim(), preferredDate, preferredTime, message.trim());
-      clientHtml = getBuiltInClientHtml(projectLabel, preferredDate, preferredTime);
-      leadSubject = `Lead: ${name.trim()} – ${projectLabel} – ${preferredDate} ${preferredTime}`;
-      clientSubject = 'Bedankt voor je bericht – Blitzworx';
+      leadHtml = getBuiltInLeadHtml(projectLabel, name.trim(), email.trim(), phone.trim(), preferredDate || '', preferredTime || '', message.trim());
+      clientHtml = isDiensten
+        ? getBuiltInServiceClientHtml(message.trim())
+        : getBuiltInClientHtml(projectLabel, preferredDate, preferredTime);
+      leadSubject = preferredDate ? `Lead: ${name.trim()} – ${projectLabel} – ${preferredDate} ${preferredTime}` : `Lead: ${name.trim()} – ${projectLabel}`;
+      clientSubject = isDiensten
+        ? 'Bedankt voor je aanvraag – Blitzworx'
+        : 'Bedankt voor je bericht – Blitzworx';
     }
 
     const fromAddress = `Blitzworx <${FROM_EMAIL}>`;

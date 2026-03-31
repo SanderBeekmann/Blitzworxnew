@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { upsertSubscriber, hasBeenSent, sendTemplateEmail } from '@/lib/email';
 
 export async function POST(
   request: Request,
@@ -22,7 +23,7 @@ export async function POST(
     // Find the podcast
     const { data: podcast, error: podcastError } = await supabase
       .from('podcasts')
-      .select('id, audio_url')
+      .select('id, title, audio_url, show_notes, description')
       .eq('slug', slug)
       .eq('status', 'published')
       .single();
@@ -66,6 +67,28 @@ export async function POST(
       .from('podcasts')
       .update({ download_count: (podcast.audio_url ? 1 : 0) })
       .eq('id', podcast.id);
+
+    // Subscribe + send welcome email (non-blocking)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://blitzworx.nl';
+    const subscriberId = await upsertSubscriber(email, name || null, 'podcast', slug, [slug]);
+
+    if (subscriberId) {
+      const alreadySent = await hasBeenSent(subscriberId, 'podcast_welcome');
+      if (!alreadySent) {
+        const showNotesPreview = (podcast.show_notes || podcast.description || '')
+          .substring(0, 200)
+          .replace(/[#*_]/g, '');
+
+        await sendTemplateEmail(email, 'podcast_welcome', {
+          name: name || 'daar',
+          podcast_title: podcast.title,
+          podcast_url: `${siteUrl}/podcasts/${slug}`,
+          show_notes_preview: showNotesPreview,
+          podcasts_url: `${siteUrl}/podcasts`,
+          contact_url: `${siteUrl}/contact`,
+        }, subscriberId);
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {

@@ -18,7 +18,7 @@ const capabilities = [
     label: 'Websites',
     title: 'Websites op maat',
     description:
-      'Geen templates, maar een oplossing die precies past bij jouw wensen en doelgroep. Snelle, toegankelijke websites gebouwd met moderne technieken.',
+      'Geen templates, maar een oplossing die precies past bij jouw wensen en doelgroep. Snelle, schaalbare websites gebouwd met moderne technieken.',
     tags: ['Next.js', 'React', 'Tailwind CSS'],
   },
   {
@@ -42,13 +42,6 @@ const capabilities = [
       'Na oplevering blijf ik meegroeien met je onderneming. Updates, optimalisaties en nieuwe features wanneer je ze nodig hebt.',
     tags: ['Monitoring', 'CI/CD', 'Netlify'],
   },
-  {
-    label: 'Toegankelijkheid',
-    title: 'EAA/WCAG-compliant',
-    description:
-      'Elke website voldoet aan de European Accessibility Act (WCAG 2.1 AA). Toegankelijk voor iedereen, juridisch in orde.',
-    tags: ['WCAG 2.1 AA', 'EAA', 'Accessibility'],
-  },
 ];
 
 const processSteps = [
@@ -68,7 +61,7 @@ const processSteps = [
     number: '03',
     title: 'Iteratief bouwen',
     description:
-      'Feature voor feature wordt het product compleet. Je ziet elke week voortgang en kunt direct feedback geven. Geen verrassingen bij oplevering.',
+      'Feature voor feature wordt het product compleet. Je ziet elke week voortgang en kunt direct feedback geven. Per project zijn 3 revisierondes inbegrepen. Geen verrassingen bij oplevering.',
   },
   {
     number: '04',
@@ -531,7 +524,7 @@ export function DevelopmentPageClient() {
         </div>
       </section>
 
-      <MaintenanceSection />
+      <MaintenanceSection title="Jouw project blijft in topvorm" />
 
       {/* ── CTA ── */}
       <section

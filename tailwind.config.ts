@@ -57,7 +57,7 @@ const config: Config = {
         '30': '7.5rem',
       },
       maxWidth: {
-        'container': '1200px',
+        'container': '75rem',
         'prose': '60ch',
       },
       borderRadius: {

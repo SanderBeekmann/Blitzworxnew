@@ -26,14 +26,14 @@
   --cta-secondary-hover-bg: var(--cornsilk);
   --cta-secondary-hover-text: var(--ink-black);
   --font-base: 16px;
-  --container-max: 1200px;
-  --gutter: 24px;
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-  --spacing-2xl: 64px;
+  --container-max: 75rem;
+  --gutter: 1.5rem;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 4rem;
 }
 
 @layer base {
@@ -41,9 +41,15 @@
     font-size: var(--font-base);
     scroll-behavior: auto;
     overflow-x: hidden;
-    /* Hide scrollbar, keep scroll functionality */
     scrollbar-width: none;
     -ms-overflow-style: none;
+  }
+
+  /* Scale down on small laptops (1024px-1440px) for breathing room */
+  @media (min-width: 1024px) and (max-width: 1440px) {
+    html {
+      font-size: 80%;
+    }
   }
 
   html::-webkit-scrollbar {
@@ -232,20 +238,20 @@
 /* Marquee carousel animations */
 @keyframes marquee-left {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(calc(-100% / 3)); }
 }
 
 @keyframes marquee-right {
-  0% { transform: translateX(-50%); }
+  0% { transform: translateX(calc(-100% / 3)); }
   100% { transform: translateX(0); }
 }
 
 .animate-marquee-left {
-  animation: marquee-left 25s linear infinite;
+  animation: marquee-left 48s linear infinite;
 }
 
 .animate-marquee-right {
-  animation: marquee-right 25s linear infinite;
+  animation: marquee-right 43s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -199,7 +199,7 @@ const steps = [
     number: '03',
     title: 'Bouw & Voortgang',
     description:
-      'Hier ontstaat het resultaat. Ik werk in korte cycli en deel tussentijds de voortgang, zodat je altijd weet waar het project staat. Aanpassingen verwerk ik direct in de volgende cyclus. Zodra de eerste versie klaar is kun je zelf testen, en ik licht elke keuze toe zodat je begrijpt wat er gebouwd wordt.',
+      'Hier ontstaat het resultaat. Ik werk in korte cycli en deel tussentijds de voortgang, zodat je altijd weet waar het project staat. Per project zijn 3 revisierondes inbegrepen. Aanpassingen verwerk ik direct in de volgende cyclus. Zodra de eerste versie klaar is kun je zelf testen, en ik licht elke keuze toe zodat je begrijpt wat er gebouwd wordt.',
   },
   {
     number: '04',
@@ -300,10 +300,10 @@ export function HowItWorxSection() {
 
         // Dot visibility
         if (!reduced) {
-          const dotPositions = [0, 1 / 3, 2 / 3, 1];
           dotsRef.current.forEach((dot, i) => {
             if (dot) {
-              dot.style.opacity = rawProgress >= dotPositions[i] ? '1' : '0';
+              const threshold = i / PANEL_COUNT;
+              dot.style.opacity = rawProgress >= threshold ? '1' : '0';
             }
           });
         }
@@ -404,16 +404,6 @@ export function HowItWorxSection() {
           </h2>
         </div>
 
-        {/* Step indicators */}
-        <div className="absolute bottom-10 left-8 lg:left-16 z-20 flex items-center gap-3 pointer-events-none">
-          {steps.map((step, i) => (
-            <div key={step.number} className="flex items-center gap-3">
-              <span className="text-caption font-mono text-grey-olive/60">{step.number}</span>
-              {i < PANEL_COUNT - 1 && <span className="w-6 h-px bg-ebony/40" />}
-            </div>
-          ))}
-        </div>
-
         {/* Horizontal scroll track */}
         <div
           ref={trackRef}
@@ -448,9 +438,7 @@ export function HowItWorxSection() {
             />
             {/* Dots at each step */}
             {steps.map((_, i) => {
-              const cx = PANEL_COUNT > 1
-                ? `${(i / (PANEL_COUNT - 1)) * 100}%`
-                : '50%';
+              const cx = `${((i * 100 + 50) / (PANEL_COUNT * 100)) * 100}%`;
               return (
                 <circle
                   key={i}
@@ -486,8 +474,8 @@ export function HowItWorxSection() {
                 <div className="absolute left-0 top-[15%] bottom-[15%] w-px bg-ebony/20" aria-hidden />
               )}
 
-              {/* Panel content */}
-              <div className="relative z-10 ml-8 lg:ml-16 max-w-xl xl:max-w-2xl mt-16">
+              {/* Panel content - centered */}
+              <div className="relative z-10 mx-auto max-w-xl xl:max-w-2xl mt-16 text-center px-8">
                 <span className="block text-caption font-mono tracking-[0.2em] uppercase text-grey-olive/50 mb-3">
                   {step.number}
                 </span>
@@ -496,7 +484,7 @@ export function HowItWorxSection() {
                   {step.title}
                 </h3>
 
-                <p className="text-body text-dry-sage/80 leading-relaxed max-w-lg">
+                <p className="text-body text-dry-sage/80 leading-relaxed max-w-lg mx-auto">
                   {step.description}
                 </p>
               </div>

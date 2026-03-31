@@ -12,6 +12,7 @@ const DIENSTEN = [
   { label: 'AI automatiseringen', href: '/diensten/ai-automatiseringen' },
   { label: 'Branding', href: '/diensten/branding' },
   { label: 'Webdesign', href: '/diensten/webdesign' },
+  { label: 'Fotografie', href: '#photoshoot-title' },
 ];
 
 export function HeroSection() {

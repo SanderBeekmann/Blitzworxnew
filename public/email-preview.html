@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Email Preview - Podcast Funnel</title>
+<style>
+  body { margin: 0; background: #1a1a2e; font-family: system-ui, sans-serif; }
+  .preview-nav { position: sticky; top: 0; z-index: 10; background: #1a1a2e; border-bottom: 1px solid #333; padding: 16px 24px; display: flex; gap: 8px; }
+  .preview-nav button { padding: 8px 16px; border: 1px solid #555; background: transparent; color: #ccc; border-radius: 6px; cursor: pointer; font-size: 13px; }
+  .preview-nav button.active { background: #cacaaa; color: #040711; border-color: #cacaaa; font-weight: 600; }
+  .preview-label { color: #cacaaa; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 16px 24px 4px; }
+  .preview-subject { color: #fefadc; font-size: 15px; padding: 4px 24px 16px; font-weight: 600; }
+  .email-frame { max-width: 640px; margin: 0 auto; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="preview-nav">
+  <button class="active" onclick="show(0)">1. Welkomstmail (direct)</button>
+  <button onclick="show(1)">2. Follow-up (dag 3)</button>
+  <button onclick="show(2)">3. Nieuwsbrief (dag 7)</button>
+</div>
+
+<!-- Email 1: Welcome -->
+<div class="email-container" id="email-0">
+<div class="preview-label">Onderwerp</div>
+<div class="preview-subject">Geniet van de volledige aflevering - De Toekomst van Webdesign in 2026</div>
+<div class="email-frame">
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>@font-face{font-family:'Gilroy';src:url('https://cdn.jsdelivr.net/npm/@qpokychuk/gilroy@1.0.2/src/Gilroy-Regular.woff') format('woff');font-weight:400}@font-face{font-family:'Gilroy';src:url('https://cdn.jsdelivr.net/npm/@qpokychuk/gilroy@1.0.2/src/Gilroy-Bold.woff') format('woff');font-weight:700}</style></head><body style="margin:0;padding:0;background:#040711;font-family:'Gilroy',system-ui,sans-serif;font-size:16px;line-height:1.6;color:#fefadc"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#040711"><tr><td align="center" style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px"><tr><td style="padding:40px 32px 32px;border-bottom:1px solid #545c52"><a href="https://blitzworx.nl" style="text-decoration:none;color:#fefadc;font-size:22px;font-weight:700;letter-spacing:0.5px;font-family:'Gilroy',system-ui,sans-serif">BLITZWORX</a></td></tr><tr><td style="padding:32px">
+<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#fefadc">Hey Lisa!</h1>
+<p style="margin:0 0 20px;color:#cacaaa;font-size:15px">Bedankt dat je de podcast ontgrendeld hebt. Hier is alles wat je nodig hebt.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+<tr><td style="background:#cacaaa;padding:14px 28px;text-align:center">
+<a href="https://blitzworx.nl/podcasts/toekomst-webdesign-2026" style="color:#040711;font-size:15px;font-weight:600;text-decoration:none;font-family:'Gilroy',system-ui,sans-serif">Beluister de volledige aflevering</a>
+</td></tr>
+</table>
+<p style="margin:0 0 10px;color:#8b8174;font-size:13px;font-weight:600">Waar gaat het over?</p>
+<p style="margin:0 0 24px;color:#cacaaa;font-size:14px">In deze aflevering bespreken we de laatste trends in webdesign: van AI-gedreven personalisatie tot motion design en de opkomst van headless architectuur. Praktische inzichten voor ondernemers die hun website naar het volgende niveau willen tillen.</p>
+<p style="margin:0 0 10px;color:#8b8174;font-size:13px;font-weight:600">Meer luisteren?</p>
+<p style="margin:0 0 24px;color:#cacaaa;font-size:14px">Bekijk al onze afleveringen op <a href="https://blitzworx.nl/podcasts" style="color:#cacaaa;text-decoration:underline">de podcastpagina</a>.</p>
+<p style="margin:24px 0 0;color:#8b8174;font-size:13px">Vragen of ideeeen voor een aflevering? Mail naar <a href="mailto:sander@blitzworx.nl" style="color:#cacaaa;text-decoration:underline">sander@blitzworx.nl</a></p>
+</td></tr><tr><td style="padding:24px 32px;border-top:1px solid #545c52"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><p style="margin:0 0 8px;color:#8b8174;font-size:13px">Webdesign That Worx!</p><p style="margin:0 0 8px;color:#545c52;font-size:12px">&copy; 2026 BLITZWORX. Alle rechten voorbehouden.</p><p style="margin:0"><a href="https://blitzworx.nl/api/email/unsubscribe?token=bGlzYUBiZWRyaWpmLm5s" style="color:#545c52;font-size:11px;text-decoration:underline">Uitschrijven</a></p></td><td align="right" valign="top"><a href="https://blitzworx.nl" style="color:#cacaaa;font-size:13px;text-decoration:none">blitzworx.nl</a></td></tr></table></td></tr></table></td></tr></table></body></html>
+</div>
+</div>
+
+<!-- Email 2: Follow-up dag 3 -->
+<div class="email-container hidden" id="email-1">
+<div class="preview-label">Onderwerp</div>
+<div class="preview-subject">Wat vond je van De Toekomst van Webdesign in 2026?</div>
+<div class="email-frame">
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>@font-face{font-family:'Gilroy';src:url('https://cdn.jsdelivr.net/npm/@qpokychuk/gilroy@1.0.2/src/Gilroy-Regular.woff') format('woff');font-weight:400}@font-face{font-family:'Gilroy';src:url('https://cdn.jsdelivr.net/npm/@qpokychuk/gilroy@1.0.2/src/Gilroy-Bold.woff') format('woff');font-weight:700}</style></head><body style="margin:0;padding:0;background:#040711;font-family:'Gilroy',system-ui,sans-serif;font-size:16px;line-height:1.6;color:#fefadc"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#040711"><tr><td align="center" style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px"><tr><td style="padding:40px 32px 32px;border-bottom:1px solid #545c52"><a href="https://blitzworx.nl" style="text-decoration:none;color:#fefadc;font-size:22px;font-weight:700;letter-spacing:0.5px;font-family:'Gilroy',system-ui,sans-serif">BLITZWORX</a></td></tr><tr><td style="padding:32px">
+<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#fefadc">Hey Lisa</h1>
+<p style="margin:0 0 20px;color:#cacaaa;font-size:15px">Een paar dagen geleden luisterde je naar onze podcast. Hopelijk heb je er iets aan gehad!</p>
+<p style="margin:0 0 10px;color:#8b8174;font-size:13px;font-weight:600">Wist je dat we ook schrijven over deze onderwerpen?</p>
+<p style="margin:0 0 24px;color:#cacaaa;font-size:14px">Op ons blog delen we praktische tips over webdesign, development en branding. <a href="https://blitzworx.nl/blog" style="color:#cacaaa;text-decoration:underline">Bekijk de nieuwste artikelen</a>.</p>
+<p style="margin:0 0 10px;color:#8b8174;font-size:13px;font-weight:600">Klaar om je online aanwezigheid te versterken?</p>
+<p style="margin:0 0 24px;color:#cacaaa;font-size:14px">Wij helpen ondernemers met websites, branding en slimme automatiseringen. Benieuwd wat we voor jou kunnen doen?</p>
+<table role="presentation" cellpadding="0" cellspacing="0">
+<tr><td style="background:#cacaaa;padding:14px 28px;text-align:center">
+<a href="https://blitzworx.nl/diensten" style="color:#040711;font-size:15px;font-weight:600;text-decoration:none;font-family:'Gilroy',system-ui,sans-serif">Bekijk onze diensten</a>
+</td></tr>
+</table>
+<p style="margin:24px 0 0;color:#8b8174;font-size:13px">Of plan direct een vrijblijvend gesprek via <a href="https://blitzworx.nl/contact" style="color:#cacaaa;text-decoration:underline">ons contactformulier</a>.</p>
+</td></tr><tr><td style="padding:24px 32px;border-top:1px solid #545c52"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><p style="margin:0 0 8px;color:#8b8174;font-size:13px">Webdesign That Worx!</p><p style="margin:0 0 8px;color:#545c52;font-size:12px">&copy; 2026 BLITZWORX. Alle rechten voorbehouden.</p><p style="margin:0"><a href="https://blitzworx.nl/api/email/unsubscribe?token=bGlzYUBiZWRyaWpmLm5s" style="color:#545c52;font-size:11px;text-decoration:underline">Uitschrijven</a></p></td><td align="right" valign="top"><a href="https://blitzworx.nl" style="color:#cacaaa;font-size:13px;text-decoration:none">blitzworx.nl</a></td></tr></table></td></tr></table></td></tr></table></body></html>
+</div>
+</div>
+
+<!-- Email 3: Newsletter invite dag 7 -->
+<div class="email-container hidden" id="email-2">
+<div class="preview-label">Onderwerp</div>
+<div class="preview-subject">Blijf voorop met AI - schrijf je in voor onze nieuwsbrief</div>
+<div class="email-frame">
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>@font-face{font-family:'Gilroy';src:url('https://cdn.jsdelivr.net/npm/@qpokychuk/gilroy@1.0.2/src/Gilroy-Regular.woff') format('woff');font-weight:400}@font-face{font-family:'Gilroy';src:url('https://cdn.jsdelivr.net/npm/@qpokychuk/gilroy@1.0.2/src/Gilroy-Bold.woff') format('woff');font-weight:700}</style></head><body style="margin:0;padding:0;background:#040711;font-family:'Gilroy',system-ui,sans-serif;font-size:16px;line-height:1.6;color:#fefadc"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#040711"><tr><td align="center" style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px"><tr><td style="padding:40px 32px 32px;border-bottom:1px solid #545c52"><a href="https://blitzworx.nl" style="text-decoration:none;color:#fefadc;font-size:22px;font-weight:700;letter-spacing:0.5px;font-family:'Gilroy',system-ui,sans-serif">BLITZWORX</a></td></tr><tr><td style="padding:32px">
+<h1 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#fefadc">Hey Lisa</h1>
+<p style="margin:0 0 20px;color:#cacaaa;font-size:15px">Je luisterde onlangs naar onze podcast. AI verandert razendsnel hoe we websites bouwen, klanten bereiken en bedrijven runnen. Wil je bijblijven?</p>
+<p style="margin:0 0 10px;color:#8b8174;font-size:13px;font-weight:600">Onze nieuwsbrief houdt je scherp</p>
+<ul style="margin:0 0 24px;padding-left:20px;color:#cacaaa;font-size:14px">
+<li style="margin-bottom:6px">Het laatste AI-nieuws dat relevant is voor ondernemers</li>
+<li style="margin-bottom:6px">Concrete toepassingen: hoe AI jouw bedrijf slimmer maakt</li>
+<li style="margin-bottom:6px">Nieuwe podcast afleveringen en diepgaande artikelen</li>
+<li style="margin-bottom:6px">Tips die je direct kunt toepassen - geen hype, wel resultaat</li>
+</ul>
+<p style="margin:0 0 20px;color:#cacaaa;font-size:14px">Maximaal 2x per maand, altijd relevant. Geen spam.</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+<tr><td style="background:#cacaaa;padding:14px 28px;text-align:center">
+<a href="https://blitzworx.nl/podcasts" style="color:#040711;font-size:15px;font-weight:600;text-decoration:none;font-family:'Gilroy',system-ui,sans-serif">Bekijk onze laatste content</a>
+</td></tr>
+</table>
+<p style="margin:0;color:#8b8174;font-size:13px">Wil je weten wat AI voor jouw bedrijf kan betekenen? <a href="https://blitzworx.nl/contact" style="color:#cacaaa;text-decoration:underline">Plan een vrijblijvend gesprek</a> - we denken graag mee.</p>
+</td></tr><tr><td style="padding:24px 32px;border-top:1px solid #545c52"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td><p style="margin:0 0 8px;color:#8b8174;font-size:13px">Webdesign That Worx!</p><p style="margin:0 0 8px;color:#545c52;font-size:12px">&copy; 2026 BLITZWORX. Alle rechten voorbehouden.</p><p style="margin:0"><a href="https://blitzworx.nl/api/email/unsubscribe?token=bGlzYUBiZWRyaWpmLm5s" style="color:#545c52;font-size:11px;text-decoration:underline">Uitschrijven</a></p></td><td align="right" valign="top"><a href="https://blitzworx.nl" style="color:#cacaaa;font-size:13px;text-decoration:none">blitzworx.nl</a></td></tr></table></td></tr></table></td></tr></table></body></html>
+</div>
+</div>
+
+<script>
+function show(index) {
+  document.querySelectorAll('.email-container').forEach((el, i) => {
+    el.classList.toggle('hidden', i !== index);
+  });
+  document.querySelectorAll('.preview-nav button').forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+}
+</script>
+</body>
+</html>

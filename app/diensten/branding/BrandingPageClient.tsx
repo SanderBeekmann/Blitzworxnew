@@ -60,7 +60,7 @@ const processSteps = [
     number: '03',
     title: 'Creatie',
     description:
-      'Ik ontwerp logo, kleuren, typografie en beeldtaal. Je ziet concepten, geeft feedback en samen komen we tot een identiteit die onderscheidt.',
+      'Ik ontwerp logo, kleuren, typografie en beeldtaal. Je ziet concepten, geeft feedback en samen komen we tot een identiteit die onderscheidt. Per project zijn 3 revisierondes inbegrepen.',
   },
   {
     number: '04',
@@ -84,7 +84,7 @@ const processPhases = [
   {
     label: 'Creatie',
     description:
-      'Ik ontwerp logo, kleuren, typografie en beeldtaal. Je ziet concepten, geeft feedback en samen komen we tot een identiteit die onderscheidt.',
+      'Ik ontwerp logo, kleuren, typografie en beeldtaal. Je ziet concepten, geeft feedback en samen komen we tot een identiteit die onderscheidt. Per project zijn 3 revisierondes inbegrepen.',
   },
   {
     label: 'Oplevering',
