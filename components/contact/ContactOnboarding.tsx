@@ -11,6 +11,8 @@ const PROJECT_TYPES = [
   { id: 'website', label: 'Nieuwe website' },
   { id: 'redesign', label: 'Website redesign' },
   { id: 'branding', label: 'Branding / huisstijl' },
+  { id: 'fotografie', label: 'Fotografie' },
+  { id: 'ai-automatiseringen', label: 'AI-automatiseringen' },
   { id: 'other', label: 'Anders' },
 ] as const;
 
