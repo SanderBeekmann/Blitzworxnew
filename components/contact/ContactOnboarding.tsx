@@ -105,7 +105,7 @@ function ContactOnboardingInner() {
     if (isCombi) {
       setSelectedServices((prev) => prev.filter((s) => !COMBI_SERVICES.includes(s)));
     } else {
-      setSelectedServices((prev) => [...new Set([...prev, ...COMBI_SERVICES])]);
+      setSelectedServices((prev) => Array.from(new Set([...prev, ...COMBI_SERVICES])));
     }
   }
 

@@ -32,7 +32,7 @@ export function MagicText({ text, className, scrollOffset = ['start 0.9', 'start
 
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: scrollOffset,
+    offset: scrollOffset as unknown as ["start 0.9", "start 0.25"],
   });
 
   const tokens = text.split(/(\n\n|\n)/).flatMap((segment) =>
