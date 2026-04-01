@@ -118,21 +118,39 @@ function WorkSlideshow() {
           aria-hidden
         />
 
+        {/* Arrow left */}
+        <button
+          onClick={() => setActive((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-cornsilk/10 text-cornsilk/80 hover:bg-black/60 hover:text-cornsilk transition-all duration-200"
+          aria-label="Vorige slide"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+
+        {/* Arrow right */}
+        <button
+          onClick={() => setActive((prev) => (prev + 1) % SLIDES.length)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm border border-cornsilk/10 text-cornsilk/80 hover:bg-black/60 hover:text-cornsilk transition-all duration-200"
+          aria-label="Volgende slide"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+
         {/* Label */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent z-20">
           <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
             {SLIDES[active].label}
           </span>
         </div>
 
         {/* Dots */}
-        <div className="absolute top-4 right-4 flex gap-2">
+        <div className="absolute top-4 right-4 z-30 flex gap-2">
           {SLIDES.map((_, i) => (
             <button
               key={i}
               onClick={() => setActive(i)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                i === active ? 'bg-cornsilk scale-125' : 'bg-cornsilk/30'
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 border border-cornsilk/30 ${
+                i === active ? 'bg-cornsilk scale-125' : 'bg-cornsilk/20'
               }`}
               aria-label={`Slide ${i + 1}`}
             />
@@ -140,7 +158,7 @@ function WorkSlideshow() {
         </div>
 
         {/* Timer bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-cornsilk/10">
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-cornsilk/10 z-20">
           <div
             className={`h-full bg-cornsilk/40 ${paused ? '' : 'animate-slide-timer'}`}
             style={{
@@ -361,7 +379,7 @@ export function AboutPageClient() {
                 Waar we naartoe werken
               </TitleReveal>
               <MagicText
-                text="AI verandert hoe bedrijven werken, en dat gaat alleen nog versnellen. Blitzworx wil daar voorop lopen. Ik streef ernaar een bedrijf te bouwen dat bedrijven helpt om AI concreet in te zetten in hun dagelijkse processen. Een eigen team, klanten door heel Nederland, en een aanpak waarbij technologie daadwerkelijk resultaat oplevert. Dat is waar ik naartoe werk."
+                text="AI verandert hoe bedrijven werken, en dat gaat alleen nog versnellen. Blitzworx wil daar voorop lopen. Ik streef ernaar een bedrijf te bouwen dat bedrijven helpt om AI concreet in te zetten in hun dagelijkse processen. Ik zie een toekomst voor me waar alleen bedrijven met een sterke online aanwezigheid overleven en help bedrijven graag om dit te verwezenlijken."
                 className="text-body text-dry-sage leading-relaxed justify-center"
                 scrollOffset={['start 0.75', 'start 0.1']}
               />
