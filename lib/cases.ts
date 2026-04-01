@@ -63,13 +63,12 @@ Ik heb een volledige webapp gebouwd met twee rollen: manager en medewerker. De m
 De technische basis is stevig. Next.js met TypeScript, Supabase als backend met row-level security, en shadcn/ui voor een strakke interface. Maandafsluitingen worden geëxporteerd naar Excel voor de boekhouding. De app is gebouwd als PWA zodat medewerkers hem als app op hun telefoon kunnen zetten.
 
 Loopt er in jouw bedrijf een proces dat sneller of slimmer kan? Ik bouw graag een oplossing die precies doet wat je nodig hebt.`,
-    image: '/assets/images/cases/michelangelo-1.png',
-    imageHover: '/assets/images/cases/michelangelo-2.png',
+    image: '/assets/images/mc-dashboard.webp',
+    imageHover: '/assets/images/mc-overzicht.webp',
     images: [
-      '/assets/images/cases/michelangelo-1.png',
-      '/assets/images/cases/michelangelo-2.png',
-      '/assets/images/cases/michelangelo-3.png',
-      '/assets/images/cases/michelangelo-4.png',
+      '/assets/images/mc-dashboard.webp',
+      '/assets/images/mc-overzicht.webp',
+      '/assets/images/mc-rooster.webp',
     ],
     websiteUrl: 'https://ristorante-michelangelo.netlify.app',
     year: '2026',

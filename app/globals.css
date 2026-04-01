@@ -122,6 +122,7 @@
   @keyframes hiw-cursor-blink { 0%,100% { opacity:1 } 50% { opacity:0 } }
   @keyframes hiw-float { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-4px) } }
   @keyframes hiw-block-in { 0% { opacity:0; transform:translateY(6px) } 100% { opacity:1; transform:translateY(0) } }
+  @keyframes slide-timer { 0% { width: 0% } 100% { width: 100% } }
 
   /* Secondary CTA: outline with fill from bottom on hover */
   .btn-secondary-cta {

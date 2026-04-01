@@ -51,13 +51,117 @@ const services = [
 
 const SCROLL_HIDE_THRESHOLD = 60;
 
+const SLIDES = [
+  {
+    src: '/assets/images/mc-dashboard.webp',
+    alt: 'Michelangelo dashboard - AI-gestuurd projectbeheer',
+    label: 'SaaS applicatie',
+    description: 'Maatwerk platform met AI-agents die dagelijkse taken automatiseren.',
+  },
+  {
+    src: '/assets/images/agencyos-dashboard.webp',
+    alt: 'AgencyOS dashboard - maatwerk CRM en projectbeheer',
+    label: 'Dashboard',
+    description: 'Intern CRM-systeem voor projectbeheer, leads en klantcommunicatie.',
+  },
+  {
+    src: '/assets/images/cases/gastvrijmoed-1.png',
+    alt: 'GastVrijmoed - website voor ambachtelijk meubelmaker',
+    label: 'E-commerce',
+    description: 'Webshop en portfolio voor een ambachtelijk meubelmaker.',
+  },
+];
+
+function WorkSlideshow() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setActive((prev) => (prev + 1) % SLIDES.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [paused]);
+
+  return (
+    <FadeIn>
+      <div
+        className="relative aspect-[16/10] overflow-hidden rounded-md"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        {SLIDES.map((slide, i) => (
+          <div
+            key={slide.src}
+            className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+            style={{ opacity: i === active ? 1 : 0 }}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={i === 0}
+            />
+          </div>
+        ))}
+
+        {/* Overlay gradient */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(4,7,17,0.3) 0%, rgba(4,7,17,0.15) 50%, rgba(4,7,17,0.6) 100%)',
+          }}
+          aria-hidden
+        />
+
+        {/* Label */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+          <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
+            {SLIDES[active].label}
+          </span>
+        </div>
+
+        {/* Dots */}
+        <div className="absolute top-4 right-4 flex gap-2">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                i === active ? 'bg-cornsilk scale-125' : 'bg-cornsilk/30'
+              }`}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Timer bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-cornsilk/10">
+          <div
+            className={`h-full bg-cornsilk/40 ${paused ? '' : 'animate-slide-timer'}`}
+            style={{
+              animation: paused ? 'none' : 'slide-timer 4s linear infinite',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Description */}
+      <p className="mt-3 text-small text-dry-sage/60 leading-relaxed transition-opacity duration-500">
+        {SLIDES[active].description}
+      </p>
+    </FadeIn>
+  );
+}
+
 export function AboutPageClient() {
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const creatorImageRef = useRef<HTMLDivElement>(null);
-  const visionNumberRef = useRef<HTMLSpanElement>(null);
-  const solutionsNumberRef = useRef<HTMLSpanElement>(null);
-  const creatorNumberRef = useRef<HTMLSpanElement>(null);
   const ctaRuleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -103,48 +207,6 @@ export function AboutPageClient() {
             },
           });
         }
-      }
-    );
-  }, []);
-
-  // ── Section numbers: count up on scroll ──
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return;
-
-    const refs = [
-      { ref: visionNumberRef, target: '01' },
-      { ref: solutionsNumberRef, target: '02' },
-      { ref: creatorNumberRef, target: '03' },
-    ];
-
-    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
-      ([{ gsap }, { ScrollTrigger }]) => {
-        gsap.registerPlugin(ScrollTrigger);
-
-        refs.forEach(({ ref, target }) => {
-          const el = ref.current;
-          if (!el) return;
-
-          gsap.fromTo(
-            el,
-            { opacity: 0, y: 60 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: el,
-                start: 'top 85%',
-                toggleActions: 'play none none none',
-              },
-              onStart: () => {
-                el.textContent = target;
-              },
-            }
-          );
-        });
       }
     );
   }, []);
@@ -314,16 +376,6 @@ export function AboutPageClient() {
         aria-labelledby="complete-plaatje-title"
       >
         <div className="container-narrow relative z-20">
-          {/* Section number */}
-          <span
-            ref={visionNumberRef}
-            className="block text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none mb-12 md:mb-16 motion-reduce:opacity-100"
-            style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
-            aria-hidden
-          >
-            01
-          </span>
-
           <div className="max-w-2xl mb-16">
             <TitleReveal
               as="h2"
@@ -458,17 +510,7 @@ export function AboutPageClient() {
         aria-labelledby="selling-solutions-title"
       >
         <div className="container-narrow relative z-20">
-          {/* Section number */}
-          <span
-            ref={solutionsNumberRef}
-            className="block text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none mb-12 md:mb-16 motion-reduce:opacity-100"
-            style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
-            aria-hidden
-          >
-            02
-          </span>
-
-          {/* Two-column layout: text left, bento right */}
+          {/* Two-column layout: text left, slideshow right */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1.2fr] gap-10 md:gap-14 lg:gap-20 items-start">
             {/* Left: text */}
             <div className="flex flex-col justify-center">
@@ -486,70 +528,8 @@ Van professionele fotografie tot technische SEO, van AI-integraties tot een conv
               />
             </div>
 
-            {/* Right: bento grid with 3 images */}
-            <div className="grid grid-cols-2 grid-rows-2 gap-4 lg:gap-5">
-            {/* Top left: workspace photo - tall */}
-            <FadeIn className="md:row-span-2">
-              <div className="relative h-full min-h-[280px] md:min-h-0 overflow-hidden rounded-md">
-                <Image
-                  src="/assets/images/sander-building-at-desk.jpeg"
-                  alt="Sander aan het werk - code schrijven achter zijn bureau"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                />
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background:
-                      'linear-gradient(to bottom, rgba(4,7,17,0.6) 0%, rgba(4,7,17,0.4) 40%, rgba(4,7,17,0.55) 100%)',
-                  }}
-                  aria-hidden
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                  <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
-                    SaaS applicatie
-                  </span>
-                </div>
-              </div>
-            </FadeIn>
-
-            {/* Top right: dashboard */}
-            <FadeIn delay={0.1}>
-              <div className="relative aspect-[16/10] overflow-hidden rounded-md">
-                <Image
-                  src="/assets/images/agencyos-dashboard.webp"
-                  alt="AgencyOS dashboard - maatwerk CRM en projectbeheer"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                  <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
-                    Dashboard
-                  </span>
-                </div>
-              </div>
-            </FadeIn>
-
-            {/* Bottom right: GastVrijmoed */}
-            <FadeIn delay={0.2}>
-              <div className="relative aspect-[16/10] overflow-hidden rounded-md">
-                <Image
-                  src="/assets/images/cases/gastvrijmoed-1.png"
-                  alt="GastVrijmoed - website voor ambachtelijk meubelmaker"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                  <span className="text-[11px] font-mono tracking-[0.2em] uppercase text-cornsilk/80">
-                    E-commerce
-                  </span>
-                </div>
-              </div>
-            </FadeIn>
-            </div>
+            {/* Right: slideshow */}
+            <WorkSlideshow />
           </div>
         </div>
       </section>
@@ -560,16 +540,6 @@ Van professionele fotografie tot technische SEO, van AI-integraties tot een conv
         aria-labelledby="creator-title"
       >
         <div className="container-narrow relative z-20">
-          {/* Section number */}
-          <span
-            ref={creatorNumberRef}
-            className="block text-[5rem] md:text-[7rem] lg:text-[9rem] font-bold leading-none select-none mb-12 md:mb-16 motion-reduce:opacity-100"
-            style={{ color: 'rgba(139,129,116,0.08)', opacity: 0 }}
-            aria-hidden
-          >
-            03
-          </span>
-
           {/* Title — full width */}
           <TitleReveal
             as="h2"
