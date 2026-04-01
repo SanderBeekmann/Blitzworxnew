@@ -80,7 +80,7 @@ function ContactOnboardingInner() {
   const totalSteps = mode === 'diensten' ? SERVICE_STEPS : PROJECT_STEPS;
 
   const [step, setStep] = useState(1);
-  const [projectType, setProjectType] = useState<string | null>(null);
+  const [projectTypes, setProjectTypes] = useState<string[]>([]);
   const [otherText, setOtherText] = useState('');
   const [selectedServices, setSelectedServices] = useState<string[]>(preselectedServices);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', message: '' });
@@ -159,8 +159,8 @@ function ContactOnboardingInner() {
   }
 
   function handleNext() {
-    if (mode === 'project' && step === 1 && !projectType) return;
-    if (mode === 'project' && step === 1 && projectType === 'other' && otherText.trim().length < 2) return;
+    if (mode === 'project' && step === 1 && projectTypes.length === 0) return;
+    if (mode === 'project' && step === 1 && projectTypes.includes('other') && otherText.trim().length < 2) return;
     if (mode === 'diensten' && step === 1 && !validateStep()) return;
     if (step === 2 && !validateStep()) return;
     if (mode === 'project' && (step === 3 || step === 4) && !validateStep()) return;
@@ -211,7 +211,7 @@ function ContactOnboardingInner() {
             phone: formData.phone.trim(),
             company: formData.company.trim(),
             message: formData.message.trim(),
-            projectType: projectType === 'other' ? `Anders: ${otherText.trim()}` : projectType,
+            projectType: projectTypes.map((t) => t === 'other' ? `Anders: ${otherText.trim()}` : t).join(', '),
             preferredDate,
             preferredTime,
           };
@@ -226,7 +226,7 @@ function ContactOnboardingInner() {
       setConfirmedDate(preferredDate && preferredTime ? `${formatDisplayDate(preferredDate)} om ${preferredTime}` : null);
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });
-      setProjectType(null);
+      setProjectTypes([]);
       setOtherText('');
       setPreferredDate(null);
       setPreferredTime(null);
@@ -313,9 +313,11 @@ function ContactOnboardingInner() {
                 <button
                   key={id}
                   type="button"
-                  onClick={() => setProjectType(id)}
+                  onClick={() => setProjectTypes((prev) =>
+                    prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]
+                  )}
                   className={`px-4 py-3 rounded-md border font-medium transition-all duration-300 ease-out ${
-                    projectType === id
+                    projectTypes.includes(id)
                       ? 'border-cornsilk bg-cornsilk text-ink'
                       : 'border-ebony text-dry-sage hover:border-grey-olive hover:text-cornsilk'
                   }`}
@@ -324,7 +326,7 @@ function ContactOnboardingInner() {
                 </button>
               ))}
             </div>
-            {projectType === 'other' && (
+            {projectTypes.includes('other') && (
               <div className="mt-4">
                 <label htmlFor="onboard-other" className="block text-small font-medium text-dry-sage mb-2">
                   Namelijk:
@@ -712,7 +714,7 @@ function ContactOnboardingInner() {
             <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Project:</span>{' '}
-                {projectType === 'other' ? `Anders: ${otherText.trim()}` : (PROJECT_TYPES.find((p) => p.id === projectType)?.label ?? '-')}
+                {projectTypes.map((t) => t === 'other' ? `Anders: ${otherText.trim()}` : (PROJECT_TYPES.find((p) => p.id === t)?.label ?? t)).join(', ') || '-'}
               </p>
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Naam:</span> {formData.name}
@@ -764,7 +766,7 @@ function ContactOnboardingInner() {
               type="button"
               onClick={handleNext}
               disabled={
-                (mode === 'project' && step === 1 && (!projectType || (projectType === 'other' && otherText.trim().length < 2))) ||
+                (mode === 'project' && step === 1 && (projectTypes.length === 0 || (projectTypes.includes('other') && otherText.trim().length < 2))) ||
                 (mode === 'diensten' && step === 1 && selectedServices.length === 0)
               }
               className="inline-flex items-center justify-center min-h-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
