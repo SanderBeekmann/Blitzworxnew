@@ -10,6 +10,7 @@ import { useEffect, useRef } from 'react';
 export function AboutIntroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const rulerRef = useRef<HTMLDivElement>(null);
+  const strokeRef = useRef<SVGRectElement>(null);
   const cleanupRef = useRef<(() => void)[]>([]);
 
   // ── All animations via IntersectionObserver — zero ScrollTrigger ──
@@ -46,6 +47,20 @@ export function AboutIntroSection() {
         onVisible(ruler, () => {
           gsap.fromTo(ruler, { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power2.out' });
         }, 0.1);
+      }
+
+      const stroke = strokeRef.current;
+      if (stroke) {
+        const length = stroke.getTotalLength();
+        stroke.style.strokeDasharray = String(length);
+        stroke.style.strokeDashoffset = String(length);
+        onVisible(stroke.parentElement || stroke, () => {
+          gsap.to(stroke, {
+            strokeDashoffset: 0,
+            duration: 2,
+            ease: 'power2.inOut',
+          });
+        }, 0.15);
       }
 
       cleanupRef.current = [() => observers.forEach((io) => io.disconnect())];
@@ -91,15 +106,53 @@ export function AboutIntroSection() {
           </div>
 
           <FadeIn delay={0.3}>
-            <div className="relative w-full max-w-sm mx-auto md:mx-0 md:ml-auto">
+            <div className="relative w-full max-w-[27.6rem] mx-auto md:mx-0 md:ml-auto">
               <Image
-                src="/assets/images/Sander.webp"
+                src="/assets/images/fotoshoot/image00001.webp"
                 alt="Sander, oprichter en creative developer bij Blitzworx"
-                width={500}
-                height={600}
-                className="w-full h-auto rounded-sm"
+                width={1000}
+                height={1200}
+                quality={95}
+                className="w-full h-auto"
                 sizes="(max-width: 768px) 100vw, 45vw"
               />
+              <svg
+                className="pointer-events-none absolute -inset-[1.5px] h-[calc(100%+3px)] w-[calc(100%+3px)] overflow-visible"
+                aria-hidden
+              >
+                <rect
+                  ref={strokeRef}
+                  x="1.5"
+                  y="1.5"
+                  width="calc(100% - 3px)"
+                  height="calc(100% - 3px)"
+                  fill="none"
+                  stroke="rgb(202 202 170 / 0.9)"
+                  strokeWidth="3"
+                  style={{ strokeDasharray: 9999, strokeDashoffset: 9999 }}
+                />
+              </svg>
+              <a
+                href="/contact"
+                className="absolute -top-4 -right-4 md:-top-5 md:-right-5 z-10 inline-flex items-center gap-2 bg-cornsilk px-5 py-2.5 text-small font-medium !text-ink-black shadow-card transition-transform duration-300 hover:-translate-y-0.5"
+                style={{ color: '#040711' }}
+              >
+                Kennismaken?
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <path d="M7 17L17 7" />
+                  <path d="M8 7h9v9" />
+                </svg>
+              </a>
             </div>
           </FadeIn>
         </div>

@@ -4,7 +4,6 @@ import { posts } from '@/lib/posts';
 import { siteUrl } from '@/lib/site';
 import { supabase } from '@/lib/supabase';
 import { getAllLandingPages } from '@/lib/landing-pages';
-import { listMirrorPaths } from '@/lib/markdown-mirror';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fixed date for static pages - update manually on significant content changes
@@ -63,21 +62,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // Markdown mirrors for AI crawlers (llms.txt spec)
-  const mirrorPaths = await listMirrorPaths();
-  const mirrorPages: MetadataRoute.Sitemap = mirrorPaths.map((p) => ({
-    url: `${siteUrl}${p}`,
-    lastModified: staticLastModified,
-    changeFrequency: 'weekly' as const,
-    priority: 0.4,
-  }));
-
   return [
     ...staticPages,
     ...casePages,
     ...blogPages,
     ...podcastPages,
     ...landingPageEntries,
-    ...mirrorPages,
   ];
 }

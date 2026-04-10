@@ -25,7 +25,7 @@ export function Footer() {
               <FooterLogo />
             </div>
             <p className="mt-2 text-small max-w-prose px-4 sm:px-0 md:px-0">
-              AI-development voor ondernemers die online willen groeien.
+              Webdesign, development en branding op maat voor ondernemers.
             </p>
             <div className="mt-4 flex items-center gap-4 px-4 sm:px-0 md:px-0">
               <a

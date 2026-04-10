@@ -6,49 +6,54 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 import { MagicText } from '@/components/ui/MagicText';
 import { Button } from '@/components/ui/Button';
 
-const ROW_1_PHOTOS = [
-  '/assets/images/photos/photo-13.webp',
-  '/assets/images/photos/photo-3.webp',
-  '/assets/images/photos/photo-19.webp',
-  '/assets/images/photos/photo-7.webp',
-  '/assets/images/photos/photo-22.webp',
-  '/assets/images/photos/photo-1.webp',
-  '/assets/images/photos/photo-14.webp',
-  '/assets/images/photos/photo-9.webp',
-  '/assets/images/photos/photo-16.webp',
-  '/assets/images/photos/photo-5.webp',
-  '/assets/images/photos/photo-21.webp',
-  '/assets/images/photos/photo-11.webp',
+interface Photo {
+  src: string;
+  alt: string;
+}
+
+const ROW_1_PHOTOS: Photo[] = [
+  { src: '/assets/images/photos/photo-13.webp', alt: 'Zakelijke portretfoto voor bedrijfswebsite' },
+  { src: '/assets/images/photos/photo-3.webp', alt: 'Professionele bedrijfsfotografie op locatie' },
+  { src: '/assets/images/photos/photo-19.webp', alt: 'Team aan het werk op kantoor' },
+  { src: '/assets/images/photos/photo-7.webp', alt: 'Sfeerbeeld van werkplek voor website' },
+  { src: '/assets/images/photos/photo-22.webp', alt: 'Ondernemer in actie tijdens fotoshoot' },
+  { src: '/assets/images/photos/photo-1.webp', alt: 'Portretfoto voor professionele uitstraling online' },
+  { src: '/assets/images/photos/photo-14.webp', alt: 'Bedrijfsruimte vastgelegd voor branding' },
+  { src: '/assets/images/photos/photo-9.webp', alt: 'Detail van product tijdens fotosessie' },
+  { src: '/assets/images/photos/photo-16.webp', alt: 'Buitenopname voor zakelijke website' },
+  { src: '/assets/images/photos/photo-5.webp', alt: 'Professioneel portret voor bedrijfsprofiel' },
+  { src: '/assets/images/photos/photo-21.webp', alt: 'Werkproces vastgelegd op locatie' },
+  { src: '/assets/images/photos/photo-11.webp', alt: 'Sfeervolle bedrijfsfoto voor online presentatie' },
 ];
-const ROW_2_PHOTOS = [
-  '/assets/images/photos/photo-10.webp',
-  '/assets/images/photos/photo-4.webp',
-  '/assets/images/photos/photo-18.webp',
-  '/assets/images/photos/photo-8.webp',
-  '/assets/images/photos/photo-23.webp',
-  '/assets/images/photos/photo-2.webp',
-  '/assets/images/photos/photo-15.webp',
-  '/assets/images/photos/photo-6.webp',
-  '/assets/images/photos/photo-20.webp',
-  '/assets/images/photos/photo-12.webp',
-  '/assets/images/photos/photo-17.webp',
+const ROW_2_PHOTOS: Photo[] = [
+  { src: '/assets/images/photos/photo-10.webp', alt: 'Authentieke bedrijfsfotografie voor website' },
+  { src: '/assets/images/photos/photo-4.webp', alt: 'Ondernemer op de werkvloer' },
+  { src: '/assets/images/photos/photo-18.webp', alt: 'Zakelijke fotoshoot voor merkidentiteit' },
+  { src: '/assets/images/photos/photo-8.webp', alt: 'Productfotografie voor webshop' },
+  { src: '/assets/images/photos/photo-23.webp', alt: 'Locatiefoto voor professionele website' },
+  { src: '/assets/images/photos/photo-2.webp', alt: 'Portretfotografie voor bedrijfswebsite' },
+  { src: '/assets/images/photos/photo-15.webp', alt: 'Interieur vastgelegd voor online aanwezigheid' },
+  { src: '/assets/images/photos/photo-6.webp', alt: 'Team portret voor about-pagina' },
+  { src: '/assets/images/photos/photo-20.webp', alt: 'Dronebeeld van bedrijfslocatie' },
+  { src: '/assets/images/photos/photo-12.webp', alt: 'Natuurlijke bedrijfsfoto op locatie' },
+  { src: '/assets/images/photos/photo-17.webp', alt: 'Sfeerbeeld voor website en social media' },
 ];
 
-function MarqueeRow({ photos, direction }: { photos: string[]; direction: 'left' | 'right' }) {
+function MarqueeRow({ photos, direction }: { photos: Photo[]; direction: 'left' | 'right' }) {
   const animClass = direction === 'left' ? 'animate-marquee-left' : 'animate-marquee-right';
   return (
     <div className="overflow-hidden" aria-hidden="true">
       <div className={`flex ${animClass}`} style={{ width: 'max-content' }}>
         {[0, 1, 2].map((copy) => (
           <div key={copy} className="flex shrink-0">
-            {photos.map((src, i) => (
+            {photos.map((photo, i) => (
               <div
                 key={`${copy}-${i}`}
                 className="relative shrink-0 w-56 md:w-72 aspect-[4/5] bg-ebony/15 overflow-hidden rounded-sm mr-4"
               >
                 <Image
-                  src={src}
-                  alt=""
+                  src={photo.src}
+                  alt={photo.alt}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 448px, 576px"

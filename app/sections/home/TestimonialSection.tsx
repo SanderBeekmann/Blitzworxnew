@@ -12,6 +12,13 @@ const testimonials = [
     role: 'Co-founder',
     company: 'BlueShipment',
   },
+  {
+    quote:
+      'Sander heeft voor ons een mooie website gebouwd die perfect aansloot op onze wensen. Dacht goed mee over toevoegingen van de kleine details, voor de beste ervaring op de site. Communicatie ging ook gemakkelijk. Samengevat, zeer tevreden!',
+    author: 'FleetCare Connect',
+    role: '',
+    company: 'FleetCare Connect',
+  },
 ];
 
 export function TestimonialSection() {
@@ -25,9 +32,9 @@ export function TestimonialSection() {
         >
           Wat anderen zeggen
         </TitleReveal>
-        <div className="flex justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((testimonial, index) => (
-            <FadeIn key={testimonial.author} delay={index * 0.1} className="w-full max-w-2xl">
+            <FadeIn key={testimonial.author} delay={index * 0.1} className="w-full">
               <blockquote className="p-6 rounded-md bg-dry-sage border border-ebony flex flex-col h-full transition-all duration-600 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:border-dry-sage/60 hover:shadow-[0_0_32px_rgba(254,250,220,0.12),0_0_64px_rgba(202,202,170,0.18),0_0_96px_rgba(254,250,220,0.06)] hover:-translate-y-0.5">
                 <p className="text-body text-ink leading-relaxed flex-1">
                   &ldquo;{testimonial.quote}&rdquo;

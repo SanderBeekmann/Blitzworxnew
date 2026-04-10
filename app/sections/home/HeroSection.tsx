@@ -60,7 +60,7 @@ export function HeroSection() {
             </TitleReveal>
             <FadeIn delay={0.5}>
               <p className="mt-2 text-body md:text-small lg:text-h3 xl:text-body 2xl:text-h3 text-dry-sage/80 whitespace-nowrap">
-                Applicaties & Automatiseringen op maat
+                Websites & Applicaties op maat
               </p>
             </FadeIn>
             <FadeIn delay={0.9}>

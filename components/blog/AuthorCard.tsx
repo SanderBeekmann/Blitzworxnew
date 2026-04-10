@@ -14,11 +14,12 @@ export function AuthorCard({ className }: { className?: string }) {
       />
       <div className="relative shrink-0 w-14 h-14 rounded-full overflow-hidden">
         <Image
-          src="/assets/images/Sander.webp"
+          src="/assets/images/fotoshoot/image00004.webp"
           alt="Sander Beekman"
-          fill
-          className="object-cover"
-          sizes="56px"
+          width={224}
+          height={224}
+          quality={95}
+          className="h-full w-full object-cover"
         />
       </div>
       <div className="relative">

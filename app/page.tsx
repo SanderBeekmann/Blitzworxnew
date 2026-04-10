@@ -14,11 +14,11 @@ import { GradientBlob } from '@/components/ui/GradientBlob';
 export const metadata: Metadata = {
   title: 'Development, UI/UX Design & Branding voor Ondernemers',
   description:
-    'Blitzworx is een AI-development partner voor ondernemers die online willen groeien. Webdesign, development en branding vanuit Zwolle.',
+    'Blitzworx bouwt websites, webapplicaties en bedrijfstools op maat voor ondernemers die online willen groeien. Webdesign, development en branding vanuit Zwolle.',
   openGraph: {
     title: 'Blitzworx | Development That Worx!',
     description:
-      'AI-development voor ondernemers die online willen groeien. Webdesign, development en branding.',
+      'Webdesign, development en branding op maat voor ondernemers. Websites en webapplicaties die werken.',
     url: '/',
   },
   alternates: {

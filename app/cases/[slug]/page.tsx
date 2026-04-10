@@ -68,9 +68,30 @@ export default async function CaseDetailPage({ params }: CasePageProps) {
     name: caseItem.title,
     description: caseItem.description,
     author: { '@id': `${siteUrl}/#organization` },
-    datePublished: caseItem.year,
+    creator: { '@id': `${siteUrl}/#organization` },
+    datePublished: `${caseItem.year}-01-01`,
     url: `${siteUrl}/cases/${slug}`,
+    about: {
+      '@type': 'Organization',
+      name: caseItem.client,
+    },
     ...(hasImage && { image: absoluteImageUrl(caseItem.image) }),
+    ...(caseItem.testimonial && {
+      review: {
+        '@type': 'Review',
+        reviewBody: caseItem.testimonial.quote,
+        author: {
+          '@type': 'Person',
+          name: caseItem.testimonial.author,
+          jobTitle: caseItem.testimonial.role,
+        },
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: '5',
+          bestRating: '5',
+        },
+      },
+    }),
   };
 
   return (

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .slice(0, 155);
 
   return {
-    title: `${page.title} | BlitzWorx`,
+    title: page.title,
     description,
     alternates: { canonical: `/${slug}` },
     openGraph: {
@@ -68,7 +68,7 @@ export default async function LandingPageRoute({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: 'BlitzWorx',
-    description: 'Webdesign, development en AI-automatiseringen voor ondernemers',
+    description: 'Webdesign, development, branding, fotografie en automatiseringen op maat voor ondernemers',
     url: siteUrl,
     telephone: '+31612345678',
     address: {

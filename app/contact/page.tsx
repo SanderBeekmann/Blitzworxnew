@@ -6,7 +6,7 @@ import { PhoneLink } from '@/components/contact/PhoneLink';
 import { GradientBlob } from '@/components/ui/GradientBlob';
 
 export const metadata: Metadata = {
-  title: 'Contact — Plan een Vrijblijvend Gesprek',
+  title: 'Contact - Plan een Vrijblijvend Gesprek',
   description:
     'Neem contact op met Blitzworx. E-mail, telefoon of vul het formulier in voor een vrijblijvend gesprek over je website of merk.',
   openGraph: {

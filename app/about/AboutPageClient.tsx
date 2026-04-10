@@ -602,7 +602,7 @@ Van concept tot code, van fotoshoot tot vindbaarheid. Ik begeleid het hele traje
               >
                 <div className="relative aspect-[3/4] w-full max-w-[440px] mx-auto md:mx-0 overflow-hidden border border-ebony/30">
                   <Image
-                    src="/assets/images/sander.webp"
+                    src="/assets/images/fotoshoot/image00004.webp"
                     alt="Sander, oprichter van Blitzworx"
                     fill
                     className="creator-photo object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-105 motion-reduce:!filter-none"

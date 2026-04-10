@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: '%s | Blitzworx',
   },
   description:
-    'Blitzworx is een AI-development partner voor ondernemers die online willen groeien. UI/UX design, development en branding.',
+    'Blitzworx bouwt websites, webapplicaties en bedrijfstools op maat. Webdesign, development en branding vanuit Zwolle.',
   openGraph: {
     type: 'website',
     locale: 'nl_NL',
@@ -54,7 +54,8 @@ export default function RootLayout({
         '@id': `${siteUrl}/#organization`,
         name: 'Blitzworx',
         url: siteUrl,
-        description: 'AI-development voor ondernemers die online willen groeien. UI/UX design, development en branding.',
+        description: 'Webdesign, development en branding op maat voor ondernemers die online willen groeien.',
+        foundingDate: '2025',
         logo: { '@type': 'ImageObject', url: `${siteUrl}/assets/images/og-image.png` },
         sameAs: [
           'https://www.linkedin.com/company/blitzworx/',
@@ -79,7 +80,7 @@ export default function RootLayout({
         '@id': `${siteUrl}/#website`,
         url: siteUrl,
         name: 'Blitzworx',
-        description: 'Blitzworx is een AI-development partner voor ondernemers die online willen groeien.',
+        description: 'Blitzworx bouwt websites, webapplicaties en bedrijfstools op maat voor ondernemers die online willen groeien.',
         publisher: { '@id': `${siteUrl}/#organization` },
         inLanguage: 'nl-NL',
       },
@@ -89,7 +90,14 @@ export default function RootLayout({
         name: 'UI/UX Design',
         description: 'Professioneel UI/UX design voor ondernemers. Van concept tot visueel ontwerp dat past bij jouw merk.',
         provider: { '@id': `${siteUrl}/#organization` },
+        url: `${siteUrl}/diensten/webdesign`,
         areaServed: 'NL',
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'EUR',
+          price: '1500',
+          description: 'Maatwerk website vanaf EUR 1.500',
+        },
       },
       {
         '@type': 'Service',
@@ -97,6 +105,7 @@ export default function RootLayout({
         name: 'Development',
         description: 'Op maat gemaakte websites en webapplicaties. Van eenvoudige sites tot complexe dashboards en backends.',
         provider: { '@id': `${siteUrl}/#organization` },
+        url: `${siteUrl}/diensten/development`,
         areaServed: 'NL',
       },
       {
@@ -105,6 +114,7 @@ export default function RootLayout({
         name: 'Branding',
         description: 'Merkidentiteit en huisstijl. Van logo tot complete visuele identiteit voor jouw onderneming.',
         provider: { '@id': `${siteUrl}/#organization` },
+        url: `${siteUrl}/diensten/branding`,
         areaServed: 'NL',
       },
       {
@@ -113,6 +123,7 @@ export default function RootLayout({
         name: 'AI Automatiseringen',
         description: 'Slimme AI-workflows, chatbots en integraties voor ondernemers. Automatiseer repetitieve taken en bespaar tijd.',
         provider: { '@id': `${siteUrl}/#organization` },
+        url: `${siteUrl}/diensten/ai-automatiseringen`,
         areaServed: 'NL',
       },
       {
@@ -120,10 +131,9 @@ export default function RootLayout({
         '@id': `${siteUrl}/#localbusiness`,
         name: 'Blitzworx',
         url: siteUrl,
-        description: 'AI-development partner voor ondernemers in Nederland. UI/UX design, development en branding.',
+        description: 'Webdesign, development, branding, fotografie en automatiseringen op maat voor ondernemers in Nederland.',
         logo: { '@type': 'ImageObject', url: `${siteUrl}/assets/images/og-image.png` },
         image: `${siteUrl}/assets/images/og-image.png`,
-        telephone: '',
         email: 'sander@blitzworx.nl',
         priceRange: '$$',
         areaServed: {

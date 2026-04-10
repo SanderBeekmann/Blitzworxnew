@@ -229,14 +229,18 @@ export function RecentCasesSection() {
             WebkitOverflowScrolling: 'touch',
           }}
         >
-          {loopedCases.map((caseItem, i) => (
-            <div
-              key={`${caseItem.slug}-${i}`}
-              className="case-slide shrink-0 w-[85vw] sm:w-[70vw] md:w-[350px] lg:w-[380px] opacity-0 motion-reduce:opacity-100"
-            >
-              <CaseCard caseItem={caseItem} />
-            </div>
-          ))}
+          {loopedCases.map((caseItem, i) => {
+            const isOriginal = i >= cases.length && i < cases.length * 2;
+            return (
+              <div
+                key={`${caseItem.slug}-${i}`}
+                className="case-slide shrink-0 w-[85vw] sm:w-[70vw] md:w-[350px] lg:w-[380px] opacity-0 motion-reduce:opacity-100"
+                {...(!isOriginal && { 'aria-hidden': true })}
+              >
+                <CaseCard caseItem={caseItem} headingAs={isOriginal ? 'h3' : 'span'} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

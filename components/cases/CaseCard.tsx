@@ -6,9 +6,10 @@ import type { Case } from '@/lib/cases';
 
 interface CaseCardProps {
   caseItem: Case;
+  headingAs?: 'h3' | 'span';
 }
 
-export function CaseCard({ caseItem }: CaseCardProps) {
+export function CaseCard({ caseItem, headingAs: Heading = 'h3' }: CaseCardProps) {
   return (
     <Link
       href={`/cases/${caseItem.slug}`}
@@ -50,9 +51,9 @@ export function CaseCard({ caseItem }: CaseCardProps) {
 
       {/* Text area */}
       <div className="px-5 pb-5 pt-3 flex-1 flex flex-col min-h-0">
-        <h3 className="text-h3 font-semibold text-cornsilk group-hover:text-dry-sage transition-colors duration-500">
+        <Heading className="text-h3 font-semibold text-cornsilk group-hover:text-dry-sage transition-colors duration-500">
           {caseItem.title}
-        </h3>
+        </Heading>
         <div className="mt-3 flex items-center justify-between">
           <p className="text-small text-grey-olive">{caseItem.client}</p>
           <span className="text-caption font-mono text-grey-olive/40">{caseItem.year}</span>
