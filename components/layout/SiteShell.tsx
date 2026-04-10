@@ -9,6 +9,7 @@ import { ScrollProgressIndicator } from '@/components/ui/ScrollProgressIndicator
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
+  const isIntake = pathname?.startsWith('/intake');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -16,10 +17,12 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   // Preload GSAP + ScrollTrigger so animations trigger on first paint
   useEffect(() => {
-    import('@/lib/gsap').then(({ loadGsap }) => loadGsap());
-  }, []);
+    if (!isIntake) {
+      import('@/lib/gsap').then(({ loadGsap }) => loadGsap());
+    }
+  }, [isIntake]);
 
-  if (isAdmin) {
+  if (isAdmin || isIntake) {
     return <main className="flex-1">{children}</main>;
   }
 
