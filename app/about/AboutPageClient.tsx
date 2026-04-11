@@ -338,52 +338,57 @@ export function AboutPageClient() {
         </FadeIn>
       </section>
 
-      {/* ── MISSIE & VISIE ── */}
+      {/* ── MISSIE ── */}
       <section
-        className="section relative z-20 bg-transparent py-24 md:py-32"
+        className="relative z-20 bg-transparent md:min-h-screen flex items-center py-24 md:py-0"
         aria-labelledby="missie-visie-title"
       >
-        <div className="container-narrow relative z-20">
-          <div className="flex flex-col items-center gap-28 md:gap-36">
-            {/* Missie */}
-            <div className="text-center max-w-2xl">
-              <FadeIn>
-                <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
-                  Missie
-                </span>
-              </FadeIn>
-              <TitleReveal
-                as="h2"
-                id="missie-visie-title"
-                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
-              >
-                Waarom Blitzworx?
-              </TitleReveal>
-              <MagicText
-                text="Ondernemers verdienen een online aanwezigheid die werkt. Ik bouw websites, systemen en automatiseringen die precies doen wat ze moeten doen, zodat jij je kunt richten op waar je goed in bent. Alles komt van een partij, want ik geloof dat design, techniek en strategie pas resultaat opleveren als ze op elkaar zijn afgestemd."
-                className="text-body text-dry-sage leading-relaxed justify-center"
-              />
-            </div>
+        <div className="container-narrow relative z-20 w-full">
+          <div className="text-center max-w-2xl mx-auto">
+            <FadeIn>
+              <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
+                Missie
+              </span>
+            </FadeIn>
+            <TitleReveal
+              as="h2"
+              id="missie-visie-title"
+              className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
+            >
+              Waarom Blitzworx?
+            </TitleReveal>
+            <MagicText
+              text="Ondernemers verdienen een online aanwezigheid die werkt. Ik bouw websites, systemen en automatiseringen die precies doen wat ze moeten doen, zodat jij je kunt richten op waar je goed in bent. Alles komt van een partij, want ik geloof dat design, techniek en strategie pas resultaat opleveren als ze op elkaar zijn afgestemd."
+              className="text-body text-dry-sage leading-relaxed justify-center"
+            />
+          </div>
+        </div>
+      </section>
 
-            {/* Visie */}
-            <div className="text-center max-w-2xl">
-              <FadeIn delay={0.15}>
-                <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
-                  Visie
-                </span>
-              </FadeIn>
-              <TitleReveal
-                as="h3"
-                className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
-              >
-                Waar we naartoe werken
-              </TitleReveal>
-              <MagicText
-                text="AI verandert hoe bedrijven werken, en dat gaat alleen nog versnellen. Blitzworx wil daar voorop lopen. Ik streef ernaar een bedrijf te bouwen dat bedrijven helpt om AI concreet in te zetten in hun dagelijkse processen. Ik zie een toekomst voor me waar alleen bedrijven met een sterke online aanwezigheid overleven en help bedrijven graag om dit te verwezenlijken."
-                className="text-body text-dry-sage leading-relaxed justify-center"
-                scrollOffset={['start 0.75', 'start 0.1']}
-              />
-            </div>
+      {/* ── VISIE ── */}
+      <section
+        className="relative z-20 bg-transparent md:min-h-screen flex items-center py-24 md:py-0"
+        aria-labelledby="visie-title"
+      >
+        <div className="container-narrow relative z-20 w-full">
+          <div className="text-center max-w-2xl mx-auto">
+            <FadeIn delay={0.15}>
+              <span className="block text-caption font-mono tracking-[0.3em] uppercase text-grey-olive/50 mb-4">
+                Visie
+              </span>
+            </FadeIn>
+            <TitleReveal
+              as="h3"
+              id="visie-title"
+              className="text-h2 md:text-h2-lg font-bold text-cornsilk mb-6"
+            >
+              Waar we naartoe werken
+            </TitleReveal>
+            <MagicText
+              text="AI verandert hoe bedrijven werken, en dat gaat alleen nog versnellen. Blitzworx wil daar voorop lopen. Ik streef ernaar een bedrijf te bouwen dat bedrijven helpt om AI concreet in te zetten in hun dagelijkse processen. Ik zie een toekomst voor me waar alleen bedrijven met een sterke online aanwezigheid overleven en help bedrijven graag om dit te verwezenlijken."
+              className="text-body text-dry-sage leading-relaxed justify-center"
+              scrollOffset={['start 0.75', 'start 0.1']}
+            />
           </div>
         </div>
       </section>
