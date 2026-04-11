@@ -1212,6 +1212,339 @@ Je hoeft niet alles tegelijk te doen. Begin met deze 3 stappen:
 Wil je hulp bij het vergroten van je online zichtbaarheid? [Neem contact op met Blitzworx](/contact) en ik maak samen met jou een plan dat werkt voor jouw bedrijf.
     `.trim(),
   },
+  {
+    slug: 'wix-alternatief-voor-bedrijven',
+    title: 'Wix alternatief voor bedrijven: waarom MKB beter af is met maatwerk',
+    description:
+      'Op zoek naar een Wix alternatief? Ontdek waarom een maatwerk website meer klanten oplevert dan een Wix template. Vergelijk prijzen, SEO, snelheid en mogelijkheden.',
+    date: '11 april 2026',
+    dateISO: '2026-04-11',
+    category: 'webdesign',
+    tags: ['wix alternatief', 'maatwerk website', 'website laten maken', 'MKB', 'SEO'],
+    readingTime: 11,
+    featured: false,
+    faqs: [
+      {
+        question: 'Wat is een goed alternatief voor Wix?',
+        answer: 'Een maatwerk website is het beste Wix alternatief voor MKB. Je krijgt een uniek design, betere SEO voor de Nederlandse markt, snellere laadtijden en de mogelijkheid om uit te breiden met functionaliteit die bij je bedrijf past. Andere alternatieven zijn WordPress (geschikt voor wie zelf wil klussen) en Squarespace (mooie templates, maar vergelijkbare beperkingen als Wix).',
+      },
+      {
+        question: 'Wat kost een maatwerk website vergeleken met Wix?',
+        answer: 'Wix kost EUR 10 tot EUR 25 per maand. Een maatwerk website van Blitzworx begint vanaf EUR 1.500 eenmalig plus EUR 59 tot EUR 79 per maand voor beheer. Het verschil in het eerste jaar is ongeveer EUR 1.900, maar een maatwerk website haalt meer klanten binnen door betere vindbaarheid en conversie.',
+      },
+      {
+        question: 'Kan een Wix website gevonden worden in Google?',
+        answer: 'Wix sites kunnen gevonden worden, maar scoren gemiddeld lager in de Nederlandse zoekresultaten dan maatwerk sites. Dit komt door tragere laadtijden, beperkte controle over technische SEO en generieke templates. Voor MKB dat serieus op klanten uit Google rekent, is maatwerk een betere investering.',
+      },
+      {
+        question: 'Wanneer is Wix wel een goede keuze?',
+        answer: 'Wix is prima voor particulieren, hobbyprojecten, startende ZZPers met minimaal budget of voor een online visitekaartje. Als je geen ambitie hebt om via Google klanten te werven en alles zelf wilt doen, kun je met Wix prima uit de voeten.',
+      },
+    ],
+    content: `
+## Wix alternatief voor bedrijven: waarom MKB overstapt naar maatwerk
+
+Wix is wereldwijd een van de meest gebruikte website builders. De drempel is laag, de prijs lijkt aantrekkelijk en je bent binnen een middag online. Toch zie ik als eigenaar van Blitzworx regelmatig ondernemers die na een jaar of twee Wix ontgroeid zijn en op zoek gaan naar een alternatief. In dit artikel leg ik uit waarom dat gebeurt, wanneer Wix wel en niet past, en welke alternatieven er zijn voor MKB dat serieus wil groeien via hun website.
+
+Volgens onderzoek van [BrightEdge](https://www.brightedge.com) komt **53% van alle websiteverkeer** uit organische zoekresultaten. Als je website niet goed vindbaar is in Google, mis je dus ruim de helft van je potentiele bezoekers. En dat is precies waar veel Wix sites tegenaan lopen.
+
+## Waarom ondernemers zoeken naar een Wix alternatief
+
+Ondernemers die bij mij komen met een Wix site hebben vaak dezelfde klachten. Het begint meestal met een van deze signalen:
+
+- De website wordt niet gevonden in Google, ook niet op hun eigen bedrijfsnaam
+- Het design ziet er hetzelfde uit als dat van drie concurrenten in dezelfde branche
+- Ze lopen vast zodra ze iets willen dat niet standaard in Wix zit
+- Het maandelijkse abonnement is opgelopen tot meer dan ze verwacht hadden
+- De laadtijd is traag, vooral op mobiel
+- Support is alleen in het Engels en gaat via helpdesk tickets
+
+Dat zijn geen technische klachten. Het zijn groeiklachten. De website past niet meer bij waar het bedrijf naartoe wil.
+
+## Wix vs maatwerk website: de eerlijke vergelijking
+
+Laat ik eerst duidelijk zijn: Wix doet bepaalde dingen goed. Het is gebruiksvriendelijk, de drempel is laag en je kunt zonder technische kennis iets online zetten. Voor een specifiek publiek is dat precies wat je zoekt. Maar voor gevestigde MKB bedrijven loopt dit vaak spaak.
+
+### 1. Design en uniciteit
+
+Wix werkt met templates. Je kiest een template, past de kleuren aan, plaatst je logo en je content, en klaar. Het voordeel is snelheid. Het nadeel is dat dezelfde template door duizenden andere bedrijven wordt gebruikt.
+
+Bij een maatwerk website krijg je een ontwerp dat speciaal voor jouw bedrijf is gemaakt. De kleuren, typografie, indeling en animaties passen bij jouw merk en branche. Als potentiele klanten op je site landen, zien ze iets wat ze niet eerder hebben gezien. Dat maakt indruk en wekt vertrouwen.
+
+### 2. SEO en vindbaarheid
+
+Dit is waar Wix het meeste tekortschiet voor MKB. Wix sites zijn technisch beperkt in wat je kunt aanpassen voor SEO. Je hebt beperkte controle over:
+
+- De HTML structuur van de pagina
+- Meta tags en schema markup
+- URL structuur
+- Laadsnelheid (Wix laadt veel overbodige scripts)
+- Mobile performance
+
+Bij een maatwerk website in Next.js (wat ik gebruik bij Blitzworx) heb je volledige controle. Elke pagina is technisch geoptimaliseerd voor de Nederlandse zoekmarkt. Dat merk je in je Google posities, en dat vertaalt zich naar klanten.
+
+### 3. Laadsnelheid
+
+Volgens [Google](https://web.dev/lcp) verlaat **53% van de mobiele bezoekers** een website die langer dan 3 seconden laadt. Elke seconde vertraging verlaagt conversie met **7%** (bron: Akamai).
+
+Wix sites scoren gemiddeld traag op Core Web Vitals, de snelheidsmetriek die Google gebruikt als rankingfactor. Dat komt doordat Wix veel onnodige JavaScript en styling laadt die nodig is voor hun editor, maar niet voor de uiteindelijke bezoeker. Een maatwerk website laadt alleen wat nodig is en is daardoor aanzienlijk sneller.
+
+### 4. Uitbreidbaarheid
+
+Op een gegeven moment wil je meer dan een informatieve website. Je wilt een boekingsformulier dat koppelt met je agenda. Een klantportaal. Een planning tool voor je team. Een offertegenerator. Bij Wix ben je afhankelijk van wat hun App Market biedt en dat is beperkt.
+
+Bij maatwerk kan alles. Een van mijn klanten begon met een simpele website en we hebben later een complete app gebouwd voor hun horecabedrijf: roostering, urenregistratie en beschikbaarheid van personeel. Dat is mogelijk omdat de website niet vastzit aan een platform.
+
+### 5. Eigendom en vendor lock-in
+
+Bij Wix huur je eigenlijk een website. Stop je met betalen, dan gaat je site offline. Wil je overstappen naar een andere partij, dan moet je vrijwel alles opnieuw bouwen omdat Wix content niet eenvoudig te exporteren is.
+
+Bij een maatwerk website ben je eigenaar van wat je laat bouwen. De code, de content, het design. Als je ooit wilt overstappen of uitbreiden kun je dat doen zonder vast te zitten.
+
+## Wix vs alternatieven: vergelijkingstabel
+
+| Aspect | Wix | Squarespace | WordPress | Maatwerk (Blitzworx) |
+|--------|-----|-------------|-----------|---------------------|
+| Kosten eerste jaar | EUR 120 tot EUR 300 | EUR 156 tot EUR 504 | EUR 200 tot EUR 2.000 (met hulp) | EUR 2.200 tot EUR 2.500 |
+| Uniek design | Nee (template) | Nee (template) | Deels (theme) | Ja (volledig op maat) |
+| SEO controle | Beperkt | Beperkt | Goed | Volledig |
+| Laadsnelheid | Traag | Gemiddeld | Varieert | Zeer snel |
+| Uitbreidbaar | App Market | Beperkt | Plugins | Onbeperkt |
+| Nederlandse support | Nee | Nee | Afhankelijk | Ja |
+| Eigendom | Huur | Huur | Ja | Ja |
+| Onderhoud | Zelf doen | Zelf doen | Zelf of uitbesteed | Digitaal Beheer |
+
+## Wanneer Wix prima is
+
+Ik wil eerlijk zijn. Wix is niet slecht, het past alleen niet bij elk type bedrijf. Wix is een goede keuze als je:
+
+- Net begint als ZZPer en minder dan EUR 500 hebt te besteden
+- Alleen een online visitekaartje nodig hebt met je contactgegevens
+- Het leuk vindt om zelf te knutselen aan je site
+- Geen ambitie hebt om via Google klanten te werven
+- Een tijdelijke landingspagina nodig hebt voor een eenmalig project
+
+Voor die situaties is Wix precies goed genoeg en bespaart het je geld.
+
+## Wanneer je Wix ontgroeid bent
+
+Je bedrijf groeit. Je hebt inmiddels vaste klanten, een paar medewerkers en je begint te merken dat je website niet meegroeit. Herken je een van deze situaties?
+
+**Situatie 1: Je wordt niet gevonden.** Je concurrent staat op positie 1 in Google op de zoekterm waar jij voor betaalt via Google Ads. Je betaalt dus voor verkeer dat je concurrent gratis krijgt. Dat is het moment om te investeren in een SEO geoptimaliseerde maatwerk site.
+
+**Situatie 2: Je uitstraling klopt niet meer.** Je bedrijf heeft zich ontwikkeld en de template die je twee jaar geleden koos past niet meer bij waar je nu staat. Een maatwerk website die je merk weerspiegelt is een investering in hoe klanten je zien.
+
+**Situatie 3: Je wilt digitaliseren.** Je team is uren per week kwijt aan handmatig werk dat je wilt automatiseren. Roostering via WhatsApp, offertes in losse Word documenten, projectadministratie in Excel. Een maatwerk website kan de basis worden voor een volledig digitaal platform.
+
+**Situatie 4: Je wilt schalen.** Je bedrijf gaat groeien en je wilt dat je systemen meegroeien. Bij Wix loop je tegen een plafond aan. Bij maatwerk is er geen plafond.
+
+## Wat kost de overstap?
+
+Dit is vaak het bezwaar. Wix kost EUR 10 tot EUR 25 per maand, dus EUR 120 tot EUR 300 per jaar. Een maatwerk website kost vanaf EUR 1.500 eenmalig, plus EUR 59 tot EUR 79 per maand voor Digitaal Beheer (updates, support, kleine aanpassingen).
+
+Eerste jaar maatwerk: EUR 2.208 tot EUR 2.448. Het verschil met Wix is dus ongeveer EUR 2.000 in het eerste jaar. Daarna loopt het verschil gelijk op, ongeveer EUR 600 tot EUR 900 per jaar extra voor maatwerk.
+
+Is dat de investering waard? Dat hangt af van wat een klant voor jou waard is. In de meeste branches is een nieuwe klant tussen de EUR 500 en EUR 5.000 waard. Een maatwerk site die per maand 1 tot 2 extra klanten oplevert uit Google verdient de investering binnen een paar maanden terug.
+
+## Checklist: is het tijd om Wix vaarwel te zeggen?
+
+Beantwoord onderstaande vragen eerlijk. Als je er meer dan 3 met ja beantwoordt, is het tijd om over maatwerk na te denken.
+
+- Word je website niet gevonden in Google op zoektermen die relevant zijn voor je bedrijf?
+- Heb je het gevoel dat je huidige site niet meer bij je bedrijf past?
+- Heb je functies in gedachten die Wix niet kan leveren?
+- Betaal je voor Wix features die je niet gebruikt?
+- Heb je klanten gehad die opmerkten dat je site er verouderd uitziet?
+- Wil je meer dan alleen een website, bijvoorbeeld een klantportaal of planning tool?
+- Ben je bereid om eenmalig te investeren om maandelijks meer te verdienen?
+
+## De volgende stap
+
+Als je na het lezen van dit artikel denkt dat maatwerk een logische stap is, maar je twijfelt nog, dan denk ik graag vrijblijvend met je mee. Ik kijk naar je huidige situatie en geef een eerlijk advies over wat bij jouw bedrijf past. Soms is dat inderdaad maatwerk, soms blijkt dat je voorlopig nog prima met Wix uit de voeten kunt. Geen verkooppraatje, gewoon een eerlijk gesprek.
+
+[Neem contact op met Blitzworx](/contact) voor een vrijblijvend advies, of bekijk mijn [webdesign diensten](/diensten/webdesign) om te zien wat er mogelijk is.
+    `.trim(),
+  },
+  {
+    slug: 'webapp-op-maat-vs-standaard-software',
+    title: 'Webapp op maat vs standaard software: wat is slimmer voor MKB?',
+    description:
+      'Twijfel je tussen standaard software en een webapp op maat? Vergelijk kosten, flexibiliteit en resultaat. Ontdek wanneer maatwerk zich terugverdient voor jouw bedrijf.',
+    date: '11 april 2026',
+    dateISO: '2026-04-11',
+    category: 'development',
+    tags: ['webapp op maat', 'maatwerk software', 'digitalisering', 'MKB', 'bedrijfsautomatisering'],
+    readingTime: 12,
+    featured: false,
+    faqs: [
+      {
+        question: 'Wat is het verschil tussen standaard software en een webapp op maat?',
+        answer: 'Standaard software is een kant en klare oplossing die voor veel bedrijven is gebouwd (zoals Planday, Exact Online of Trello). Een webapp op maat is speciaal voor jouw bedrijf ontwikkeld en past precies bij jouw werkwijze. Standaard software is goedkoper in aanschaf, maar je past je processen aan de software aan. Bij maatwerk past de software zich aan jouw processen aan.',
+      },
+      {
+        question: 'Wat kost een webapp op maat?',
+        answer: 'Een webapp op maat bij Blitzworx werkt via een eenmalige installatieprijs plus een maandelijks abonnement met een minimale looptijd van 2 jaar. De exacte prijs hangt af van de complexiteit en scope. Een simpele interne tool kan starten vanaf een paar duizend euro, complexere systemen met meerdere gebruikersrollen en integraties zijn hoger. In een intakegesprek maak ik een concrete prijsindicatie op basis van jouw wensen.',
+      },
+      {
+        question: 'Wanneer verdient een webapp op maat zich terug?',
+        answer: 'Reken uit hoeveel uur je team per week kwijt is aan handmatig werk dat geautomatiseerd kan worden. Vermenigvuldig met het uurloon en 48 weken. Als dat meer is dan de jaarkosten van een webapp op maat, verdient de investering zich terug. Voor de meeste MKB bedrijven met 5 of meer medewerkers is dat vaak het geval.',
+      },
+      {
+        question: 'Kan ik later uitbreiden als mijn bedrijf groeit?',
+        answer: 'Ja. Een groot voordeel van maatwerk is dat de applicatie met je bedrijf meegroeit. Nieuwe functies, extra gebruikers, koppelingen met andere systemen: het kan allemaal omdat de code van jou is. Bij standaard software ben je afhankelijk van wat de leverancier biedt en in welk tempo zij updates uitrollen.',
+      },
+    ],
+    content: `
+## Webapp op maat vs standaard software: wat is slimmer voor MKB?
+
+Als ondernemer met een MKB bedrijf van 5 tot 50 medewerkers sta je vroeg of laat voor dezelfde keuze. Je team is uren per week kwijt aan handmatig werk, je gebruikt drie losse tools die niet met elkaar praten, en je weet dat het slimmer kan. De vraag is alleen: kies je voor standaard software die al bestaat, of laat je iets op maat bouwen? In dit artikel help ik je die keuze te maken, met concrete cijfers, voorbeelden uit de praktijk en een eerlijke afweging van voor en nadelen.
+
+Volgens onderzoek van [McKinsey](https://www.mckinsey.com) spenderen kenniswerkers gemiddeld **28% van hun werkweek** aan administratieve taken die grotendeels geautomatiseerd kunnen worden. Voor een MKB bedrijf met 10 medewerkers betekent dat bijna 3 volledige medewerkers die bezig zijn met werk dat software kan doen.
+
+## Het probleem met standaard software
+
+Standaard software is overal. Trello voor projecten, Planday voor roostering, Exact voor boekhouding, HubSpot voor klantbeheer. Elk probleem heeft wel een app. Het klinkt handig, en voor sommige bedrijven is het dat ook. Maar ik hoor van mijn klanten steeds weer dezelfde klachten.
+
+### Klacht 1: je past je processen aan de software aan
+
+Standaard software is gebouwd voor de gemiddelde gebruiker. Maar jouw bedrijf is niet gemiddeld. Jouw werkwijze is anders dan die van je concurrent, en dat is vaak precies waarom klanten voor jou kiezen. Maar standaard software dwingt je om in hun sjabloon te werken.
+
+Voorbeeld: een horecaondernemer die Planday gebruikte voor roostering. Zijn team werkt met flexibele shifts, wissels op korte termijn en seizoenspieken. Planday kon dat wel, maar alleen door allerlei workarounds. Het team gebruikte uiteindelijk WhatsApp voor de snelle wissels en Planday alleen voor de officiele administratie. Zo had hij twee systemen voor wat eigenlijk een proces is.
+
+### Klacht 2: je betaalt voor features die je niet gebruikt
+
+Standaard software prijst vaak per gebruiker, per maand, per feature bundle. Je kiest een abonnement dat net voldoet, maar je krijgt vaak een pakket vol features die je nooit gebruikt. Een rapportagemodule voor een multinational terwijl jij een MKB bedrijf bent. Een API integratie met Salesforce terwijl jij geen Salesforce gebruikt.
+
+Voor 10 gebruikers bij een gemiddelde HR tool betaal je al snel EUR 300 tot EUR 500 per maand. Reken maar uit: dat is EUR 3.600 tot EUR 6.000 per jaar voor software waar je 30% van gebruikt.
+
+### Klacht 3: je data zit vast
+
+Standaard software bewaart jouw data op hun servers, in hun formaat. Stap je over, dan moet je data exporteren (als dat al kan), converteren en importeren in een nieuw systeem. In de praktijk zie ik dat bedrijven vastzitten aan software omdat de overstap te veel moeite kost, ook al past het systeem niet meer.
+
+### Klacht 4: updates gaan op hun tempo, niet jouw tempo
+
+Een feature die je graag wilt? Je kunt het aanvragen, maar of en wanneer het gebouwd wordt bepaalt de leverancier. In de tussentijd werk je met een systeem dat niet optimaal is.
+
+### Klacht 5: je gebruikt 3 tools voor 1 proces
+
+Dit is de belangrijkste. Omdat standaard software gebouwd is voor een specifiek probleem, heb je vaak meerdere tools nodig voor een volledig proces. Een tool voor planning, een voor urenregistratie, een voor communicatie. Ze praten niet met elkaar, dus data wordt handmatig overgezet. Dat is inefficient en foutgevoelig.
+
+## Wanneer standaard software de juiste keuze is
+
+Ik wil eerlijk zijn. Standaard software is niet slecht, het past alleen niet altijd. Kies standaard software als:
+
+- Je proces past 1 op 1 in wat de software biedt, zonder workarounds
+- Je team is klein (minder dan 5 personen) en je hebt geen speciale wensen
+- Het probleem is generiek (boekhouding volgens Nederlandse regels, e mail marketing)
+- Je wilt snel beginnen zonder ontwikkelingstraject
+- Het budget voor software is onder EUR 100 per maand
+
+Voor boekhouding is Exact of Moneybird vaak prima. Voor e mail is Mailchimp logisch. Voor website analytics is Google Analytics gratis en goed genoeg. Vind het wiel niet opnieuw uit als het wiel al bestaat.
+
+## Wanneer een webapp op maat slimmer is
+
+Maatwerk is de juiste keuze als je een van deze situaties herkent.
+
+**1. Je team heeft workarounds bedacht naast de standaard software.** Dat is een signaal dat de software niet past bij je werkelijke proces. De workarounds zijn waar de echte productiviteit zit, en die kun je in maatwerk juist centraal stellen.
+
+**2. Je betaalt per maand voor meerdere tools die samen duurder zijn dan maatwerk.** Reken het eens uit: alle SaaS abonnementen opgeteld per jaar. Vaak blijkt dat een maatwerk oplossing binnen 2 tot 3 jaar goedkoper is.
+
+**3. Je workflow is een belangrijk onderdeel van je onderscheidend vermogen.** Als hoe je werkt een reden is waarom klanten voor jou kiezen, dan is het zonde om je proces aan te passen aan software. Laat de software zich aanpassen aan jouw manier van werken.
+
+**4. Je hebt unieke data die je wilt beheren op jouw manier.** Bijvoorbeeld specifieke klantinformatie, projectgegevens of metingen die niet in standaard systemen passen.
+
+**5. Je combineert nu 3 of meer losse tools voor een proces.** Dit is vaak het duidelijkste signaal. Als je WhatsApp gebruikt voor communicatie, Excel voor de planning en Moneybird voor de facturen, en die drie niet samenwerken, dan is er veel winst te behalen met een tool die alles verbindt.
+
+## Wat kost een webapp op maat?
+
+Dit is vaak het eerste bezwaar: maatwerk klinkt duur. Laten we eerlijk rekenen.
+
+Bij Blitzworx werk ik met een model van eenmalige installatieprijs plus een maandelijks abonnement, met een minimale looptijd van 2 jaar. De exacte prijs hangt af van de complexiteit en scope van het project. Een eenvoudige interne tool kan starten vanaf een paar duizend euro eenmalig, complexere systemen met meerdere gebruikersrollen, integraties en dashboards zijn hoger.
+
+Ter vergelijking: voor 10 gebruikers bij een standaard tool als Planday betaal je ongeveer EUR 300 per maand, of EUR 3.600 per jaar. Over 2 jaar is dat EUR 7.200. Plus de tijd die je team kwijt is aan workarounds.
+
+Een maatwerk webapp van vergelijkbare complexiteit kost over 2 jaar vaak in dezelfde orde, maar je krijgt er dan een systeem voor terug dat exact past. Na de 2 jaar blijven alleen de maandelijkse beheerkosten over, terwijl je met standaard software elke maand blijft betalen voor licenties.
+
+## Bewezen voorbeeld: Michelangelo horeca app
+
+Ik noem dit voorbeeld vaker omdat het precies laat zien wat maatwerk kan doen. Een horecabedrijf betaalde honderden euros per maand voor standaard roosteringsoftware. Het team werkte er maar half mee en deed de rest via WhatsApp. Roosters werden uitgedeeld, medewerkers vroegen wissels aan via de app, en de manager moest alles handmatig verwerken in het systeem.
+
+Ik heb voor hen een webapp op maat gebouwd met 23 concrete requirements: roosters, urenregistratie, beschikbaarheid van medewerkers, push notificaties en een Progressive Web App die op elke telefoon werkt als een echte app. Opgeleverd in 5 sprints.
+
+Het resultaat: het team werkt nu met 1 systeem in plaats van 2. De manager is niet meer uren per week kwijt aan handmatig invoeren. Medewerkers kunnen direct zien wanneer ze werken en wisselen aanvragen zonder tussenkomst. En de kosten zijn lager dan wat ze voorheen aan standaard software betaalden.
+
+## Hoe weet je of maatwerk zich terugverdient?
+
+Doe deze rekensom:
+
+1. Tel op hoeveel uren per week je team kwijt is aan handmatig werk dat software kan doen (roostering overschrijven, offertes handmatig opmaken, data van het ene systeem naar het andere kopieren)
+2. Vermenigvuldig met het gemiddelde uurloon (inclusief werkgeverslasten, bijvoorbeeld EUR 35 per uur)
+3. Vermenigvuldig met 48 werkweken per jaar
+4. Trek daarnaast je huidige SaaS abonnementen bij elkaar op
+
+Voorbeeld voor een MKB bedrijf met 10 medewerkers:
+- 5 uur per week handmatig werk bij de manager: 5 x EUR 50 x 48 = EUR 12.000 per jaar
+- 3 uur per week overschrijven bij 3 medewerkers: 9 x EUR 30 x 48 = EUR 12.960 per jaar
+- SaaS tools (Planday, Exact, Trello, etc.): EUR 6.000 per jaar
+- Totale verborgen kosten: **EUR 30.960 per jaar**
+
+Een maatwerk webapp van EUR 15.000 eenmalig plus EUR 200 per maand (EUR 2.400 per jaar) is in dit voorbeeld al in het eerste jaar goedkoper dan de verborgen kosten van standaard software, en bespaart vanaf jaar 2 ruim EUR 25.000 per jaar.
+
+## Vergelijkingstabel
+
+| Aspect | Standaard software | Webapp op maat |
+|--------|-------------------|----------------|
+| Aanschaf | Laag (abonnement) | Hoger (eenmalig + maandelijks) |
+| Totale kosten over 3 jaar | Stijgen met gebruikers | Dalen na installatie |
+| Past bij jouw werkwijze | Jij past je aan | Software past zich aan |
+| Overbodige features | Ja, vaak veel | Nee, alleen wat je nodig hebt |
+| Koppelingen met andere tools | Beperkt | Onbeperkt |
+| Uitbreidbaar | Afhankelijk van leverancier | Wanneer jij wilt |
+| Eigendom van data | Bij leverancier | Bij jou |
+| Implementatietijd | Snel (dagen) | Langer (weken tot maanden) |
+| Onderhoud | Inbegrepen | Via beheerpakket |
+| Schaalbaar | Tot waar leverancier meedoet | Onbeperkt |
+
+## Hoe kies je tussen maatwerk en standaard?
+
+Gebruik deze checklist om je keuze te maken.
+
+Kies voor standaard software als je 3 of meer ja beantwoordt:
+
+- Is je proces standaard en zonder bijzonderheden?
+- Heeft je team minder dan 5 mensen die het systeem gebruiken?
+- Werken bestaande tools goed genoeg zonder workarounds?
+- Is snel beginnen belangrijker dan perfect passen?
+- Heb je beperkt budget en accepteer je compromissen?
+
+Kies voor maatwerk als je 3 of meer ja beantwoordt:
+
+- Heb je een unieke werkwijze die je niet wilt veranderen?
+- Gebruik je nu 3 of meer losse tools die niet samenwerken?
+- Betalen je huidige SaaS abonnementen samen meer dan EUR 500 per maand?
+- Zijn je medewerkers uren per week kwijt aan handmatig werk?
+- Wil je dat je systemen met je bedrijf meegroeien zonder plafond?
+- Zie je digitalisering als een investering, niet alleen als kostenpost?
+
+## Wat is het proces bij Blitzworx?
+
+Als je kiest voor maatwerk, hoe gaat dat dan in zijn werk? Zo werk ik bij Blitzworx:
+
+1. **Intake gesprek.** We gaan zitten en ik stel vragen over hoe jullie werken. Geen techniek, maar de werkelijke processen: wie doet wat, wanneer, en waar loopt het vast?
+2. **Scope bepalen.** Samen bepalen we wat de app moet kunnen. Niet alles tegelijk, maar de belangrijkste 80% eerst.
+3. **Prijsvoorstel.** Je krijgt een concreet prijsvoorstel met eenmalige installatieprijs en maandelijks abonnement. Geen uurtje factuurtje, geen verrassingen.
+4. **Eerste opzet.** Ik bouw een eerste werkende versie die je kunt uitproberen.
+5. **Feedback verwerken.** Maximaal 3 revisierondes waarin we de app bijslijpen.
+6. **Oplevering en training.** De app gaat live en je team krijgt uitleg.
+7. **Doorlopend beheer.** Updates, support en kleine aanpassingen via het beheerpakket.
+
+## De volgende stap
+
+Twijfel je of maatwerk iets voor jouw bedrijf is? Ik denk graag vrijblijvend met je mee. Tijdens een intake gesprek kijk ik samen met jou naar je huidige situatie en geef ik een eerlijk advies. Soms is maatwerk inderdaad de juiste keuze, soms blijkt dat standaard software voorlopig prima voldoet. Geen verkooppraatje, gewoon een eerlijk gesprek waar je wat aan hebt.
+
+[Neem contact op met Blitzworx](/contact) voor een vrijblijvend gesprek, of bekijk mijn [development diensten](/diensten/development) om te zien wat er mogelijk is met maatwerk webapplicaties.
+    `.trim(),
+  },
 ];
 
 export function getPostBySlug(slug: string): Post | undefined {
