@@ -340,7 +340,7 @@ export function AboutPageClient() {
 
       {/* ── MISSIE ── */}
       <section
-        className="relative z-20 bg-transparent md:min-h-screen flex items-center py-24 md:py-0"
+        className="relative z-20 bg-transparent md:min-h-[70vh] flex items-center py-16 md:py-0"
         aria-labelledby="missie-visie-title"
       >
         <div className="container-narrow relative z-20 w-full">
@@ -367,7 +367,7 @@ export function AboutPageClient() {
 
       {/* ── VISIE ── */}
       <section
-        className="relative z-20 bg-transparent md:min-h-screen flex items-center py-24 md:py-0"
+        className="relative z-20 bg-transparent md:min-h-[70vh] flex items-center py-16 md:py-0"
         aria-labelledby="visie-title"
       >
         <div className="container-narrow relative z-20 w-full">
