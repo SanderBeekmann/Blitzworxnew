@@ -156,47 +156,52 @@ export async function POST(request: Request) {
         );
       }
 
-      // Sync to AgencyOS contacts table (same database)
+      // Auto-create onboarding session for the BlitzWorx dashboard
+      // This links the contact form submission to the intake/questionnaire flow
       try {
-        const { data: existingContact } = await supabase
-          .from('contacts')
-          .select('id')
-          .eq('email', emailNorm)
-          .single();
+        // Map contact project type to onboarding type
+        const onboardingTypeMap: Record<string, string> = {
+          website: 'website',
+          redesign: 'website',
+          branding: 'website',
+          diensten: 'automatisering',
+          other: 'website',
+        };
+        const onboardingType = onboardingTypeMap[projectType ?? 'other'] ?? 'website';
 
-        if (!existingContact) {
-          const { data: newContact } = await supabase.from('contacts').insert({
-            naam: name.trim(),
-            email: emailNorm,
-            bedrijf: company?.trim() || '-',
-            telefoon: phone.trim(),
-            status: 'lead',
-            bron: 'formulier',
-            notities: `${projectLabel} — ${message.trim()}`,
-          }).select('id').single();
-
-          if (newContact) {
-            // Create follow-up task in AgencyOS
-            await supabase.from('tasks').insert({
-              titel: `Follow-up: ${name.trim()} — ${company?.trim() || 'blitzworx.nl'}`,
-              type: 'follow_up',
-              prioriteit: 'hoog',
-              status: 'open',
-              contact_id: newContact.id,
-              deadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-            });
-
-            // Log activity
-            await supabase.from('activities').insert({
-              type: 'notitie',
-              inhoud: `Nieuwe lead via blitzworx.nl contactformulier: ${name.trim()}`,
-              contact_id: newContact.id,
-            });
-          }
+        // Build notes combining all available context
+        const noteLines: string[] = [];
+        noteLines.push(`Contactformulier aanvraag: ${projectLabel}`);
+        if (company?.trim()) noteLines.push(`Bedrijf: ${company.trim()}`);
+        if (preferredDate && preferredTime) {
+          noteLines.push(`Gesprek gepland: ${preferredDate} om ${preferredTime}`);
         }
-      } catch (syncErr) {
-        // Non-blocking: don't fail the form submission if AgencyOS sync fails
-        console.error('AgencyOS contacts sync error:', syncErr);
+        noteLines.push('');
+        noteLines.push('Bericht van klant:');
+        noteLines.push(message.trim());
+
+        // Check if a pending/sent session already exists for this email
+        const { data: existingSession } = await supabase
+          .from('onboarding_sessions')
+          .select('id')
+          .eq('client_email', email.trim())
+          .in('status', ['pending', 'questionnaire_sent'])
+          .maybeSingle();
+
+        if (!existingSession) {
+          await supabase.from('onboarding_sessions').insert({
+            client_name: name.trim(),
+            client_email: email.trim(),
+            company_name: company?.trim() || null,
+            project_type: onboardingType,
+            notes: noteLines.join('\n'),
+            status: 'pending',
+            questions: null,
+          });
+        }
+      } catch (onboardingErr) {
+        // Non-blocking: don't fail the form submission
+        console.error('Onboarding session create error:', onboardingErr);
       }
     }
 
