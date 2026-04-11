@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FadeIn } from '@/components/animations/FadeIn';
+import { VerticalScrollLine } from '@/components/animations/VerticalScrollLine';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { MagicText } from '@/components/ui/MagicText';
 import { SubtitleReveal } from '@/components/animations/SubtitleReveal';
@@ -364,6 +365,11 @@ export function AboutPageClient() {
           </div>
         </div>
       </section>
+
+      {/* ── VERTICALE LIJN TUSSEN MISSIE EN VISIE ── */}
+      <div className="relative z-20">
+        <VerticalScrollLine className="h-24 md:h-40" />
+      </div>
 
       {/* ── VISIE ── */}
       <section
