@@ -257,7 +257,7 @@ export function IntakeFlow({ token }: { token: string }) {
               Welkom{session.client_name ? `, ${session.client_name}` : ''}
             </h1>
             <p className="text-dry-sage max-w-md leading-relaxed mb-8">
-              Fijn dat je met BLITZWORX aan de slag gaat. Beantwoord een paar korte vragen zodat we precies weten wat je nodig hebt.
+              Bedankt voor je contact! Ik kijk er naar uit om met elkaar in contact te gaan. Voordat we elkaar spreken zou ik graag nog wat meer informatie willen om een zo goed mogelijke start van het project te realiseren. Tot snel!
             </p>
             <div className="flex items-center gap-6 text-sm text-grey-olive mb-10">
               <div className="flex items-center gap-2">
