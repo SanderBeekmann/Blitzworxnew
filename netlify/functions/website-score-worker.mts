@@ -1,7 +1,6 @@
 import type { Config } from "@netlify/functions";
 import { createClient } from "@supabase/supabase-js";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://blitzworx.nl";
+import { runFullAnalysis } from "../../lib/website-score-analysis.js";
 
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -38,29 +37,9 @@ export default async function handler(req: Request) {
     .eq("id", jobId);
 
   try {
-    // Call the internal analysis endpoint (no timeout pressure here)
-    const res = await fetch(`${SITE_URL}/api/tools/website-score/analyze`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }),
-    });
+    // Run analysis directly (15 min timeout in background function)
+    const result = await runFullAnalysis(url);
 
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({ error: "Unknown error" }));
-      await supabase
-        .from("website_score_jobs")
-        .update({
-          status: "failed",
-          error: errData.error || `HTTP ${res.status}`,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", jobId);
-      return new Response("Analysis failed", { status: 200 });
-    }
-
-    const result = await res.json();
-
-    // Store completed result
     await supabase
       .from("website_score_jobs")
       .update({
@@ -72,6 +51,8 @@ export default async function handler(req: Request) {
 
     return new Response("OK", { status: 200 });
   } catch (err: any) {
+    console.error("Worker analysis failed:", err);
+
     await supabase
       .from("website_score_jobs")
       .update({
