@@ -60,7 +60,28 @@ export function AboutIntroSection() {
     >
       <div className="container-narrow relative z-10 w-full">
         {/* Centered text block */}
-        <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
+        <div className="relative text-center max-w-4xl mx-auto mb-16 md:mb-20">
+          <a
+            href="/contact"
+            className="absolute -top-2 -right-4 md:top-0 md:-right-8 lg:-right-16 z-10 inline-flex items-center gap-2 bg-cornsilk px-5 py-2.5 text-small font-medium shadow-card transition-transform duration-300 hover:-translate-y-0.5 rotate-6"
+            style={{ color: '#040711', transformOrigin: 'center center' }}
+          >
+            Kennismaken?
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <path d="M7 17L17 7" />
+              <path d="M8 7h9v9" />
+            </svg>
+          </a>
           <h2
             id="about-intro-title"
             className="text-hero md:text-hero-lg lg:text-hero-xl xl:text-hero-2xl font-bold text-cornsilk mb-8 md:mb-10"
@@ -75,7 +96,7 @@ export function AboutIntroSection() {
 
           <FadeIn delay={0.6}>
             <MagicText
-              text={"Ik ben Sander, oprichter van Blitzworx. Als developer combineer ik AI-gedreven tools met technische expertise om websites en applicaties te bouwen die er niet alleen goed uitzien, maar ook echt resultaat opleveren.\nEen vast aanspreekpunt, directe communicatie en volledige betrokkenheid bij elk detail. Ik kan niet alleen de website ontwikkelen, maar ook alle achterliggende processen. Van geautomatiseerde e-mails in huisstijl tot complete systemen die je bedrijfsvoering optimaliseren."}
+              text={"Ik ben Sander, oprichter van Blitzworx.\nAls developer combineer ik technische expertise met AI-gedreven tools om websites en applicaties te bouwen die er niet alleen goed uitzien, maar ook echt resultaat opleveren.\n\nEen vast aanspreekpunt, directe communicatie en volledige betrokkenheid bij elk detail. Ik kan niet alleen de website ontwikkelen, maar ook alle achterliggende processen. Van geautomatiseerde e-mails in huisstijl tot complete systemen die je bedrijfsvoering optimaliseren."}
               className="text-body text-dry-sage leading-relaxed max-w-prose mx-auto justify-center text-center"
             />
           </FadeIn>
@@ -109,27 +130,6 @@ export function AboutIntroSection() {
               style={{ strokeDasharray: 9999, strokeDashoffset: 9999 }}
             />
           </svg>
-          <a
-            href="/contact"
-            className="absolute -bottom-4 -right-4 md:-bottom-5 md:-right-5 z-10 inline-flex items-center gap-2 bg-cornsilk px-5 py-2.5 text-small font-medium !text-ink-black shadow-card transition-transform duration-300 hover:-translate-y-0.5"
-            style={{ color: '#040711' }}
-          >
-            Kennismaken?
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-            >
-              <path d="M7 17L17 7" />
-              <path d="M8 7h9v9" />
-            </svg>
-          </a>
         </div>
 
         <FadeIn delay={0.8}>

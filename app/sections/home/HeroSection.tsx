@@ -66,7 +66,7 @@ export function HeroSection() {
 
   return (
       <div
-        className="relative h-[100dvh] md:h-screen z-0 flex flex-col justify-center"
+        className="relative min-h-[100dvh] md:h-screen z-0 flex flex-col justify-center"
         aria-hidden
       >
         {/* Glassmorphism border frame + trapezium as one seamless layer */}
@@ -117,10 +117,10 @@ export function HeroSection() {
           aria-hidden
         />
         <section
-          className="absolute inset-0 z-10 grid grid-cols-1 md:grid-cols-2 items-center"
+          className="relative md:absolute md:inset-0 z-10 grid grid-cols-1 md:grid-cols-2 items-center min-h-[100dvh] md:min-h-0"
           aria-labelledby="hero-title"
         >
-          <div className="px-6 sm:px-10 md:px-6 lg:px-[3.5vw] xl:px-[7vw] 2xl:px-[11vw] text-center md:text-left">
+          <div className="px-6 pt-32 md:pt-0 sm:px-10 md:px-6 lg:px-[3.5vw] xl:px-[7vw] 2xl:px-[11vw] text-center md:text-left">
             <TitleReveal
               as="h1"
               id="hero-title"
@@ -145,7 +145,7 @@ export function HeroSection() {
               </div>
             </FadeIn>
           </div>
-          <div className="hidden md:flex flex-col items-center justify-center px-4 lg:px-6 overflow-visible min-h-[200px]">
+          <div className="flex flex-col items-center justify-center px-6 pt-16 pb-24 md:pt-0 md:pb-0 md:px-4 lg:px-6 overflow-visible min-h-[200px]">
             <FadeIn delay={1.2} className="w-full max-w-xl">
               <div className="relative w-full">
                 {/* Ambient glow */}
@@ -200,7 +200,7 @@ export function HeroSection() {
           </div>
         </section>
 
-        <div ref={dienstenRef} className="absolute -bottom-1 inset-x-0 flex justify-center z-20 opacity-0">
+        <div ref={dienstenRef} className="hidden md:flex absolute -bottom-1 inset-x-0 justify-center z-20 opacity-0">
           {/* Trapezium background - clipped separately, sized to match nav */}
           <div
             ref={navRef}
