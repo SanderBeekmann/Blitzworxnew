@@ -4,6 +4,7 @@ import { TitleReveal } from '@/components/animations/TitleReveal';
 import { ContactOnboarding } from '@/components/contact/ContactOnboarding';
 import { PhoneLink } from '@/components/contact/PhoneLink';
 import { GradientBlob } from '@/components/ui/GradientBlob';
+import { siteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Contact - Plan een Vrijblijvend Gesprek',
@@ -54,10 +55,23 @@ const faqPageJsonLd = {
   })),
 };
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: `${siteUrl}/contact` },
+  ],
+};
+
 export default function ContactPage() {
   return (
     <div className="relative">
       <GradientBlob className="top-[10vh] left-[-10%] w-[300px] h-[350px] opacity-35" duration={23} delay={5} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd) }}

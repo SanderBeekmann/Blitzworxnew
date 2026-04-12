@@ -21,6 +21,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/diensten/ai-automatiseringen`, lastModified: staticLastModified, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${siteUrl}/blog`, lastModified: staticLastModified, changeFrequency: 'weekly' as const, priority: 0.7 },
     { url: `${siteUrl}/podcasts`, lastModified: staticLastModified, changeFrequency: 'weekly' as const, priority: 0.7 },
+    { url: `${siteUrl}/website-score`, lastModified: staticLastModified, changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: `${siteUrl}/privacy`, lastModified: staticLastModified, changeFrequency: 'yearly' as const, priority: 0.3 },
   ];
 
   const blogPages = posts.map((p) => ({
