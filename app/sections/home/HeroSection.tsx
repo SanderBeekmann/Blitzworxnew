@@ -19,6 +19,7 @@ const DIENSTEN = [
 export function HeroSection() {
   const dienstenRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const topTrapRef = useRef<HTMLDivElement>(null);
   const [heroUrl, setHeroUrl] = useState('');
   const router = useRouter();
 
@@ -64,6 +65,44 @@ export function HeroSection() {
     });
   }, []);
 
+  // Hide top trapezium with navbar, only show when at top of page
+  useEffect(() => {
+    const trap = topTrapRef.current;
+    if (!trap) return;
+
+    trap.style.transition = 'transform 300ms ease-out';
+    let navVisible = true;
+
+    const update = () => {
+      const atTop = window.scrollY < 10;
+      trap.style.transform = navVisible && atTop
+        ? 'translateX(-50%) translateY(0)'
+        : 'translateX(-50%) translateY(-100%)';
+    };
+
+    const onNavChange = (e: Event) => {
+      navVisible = (e as CustomEvent<{ visible: boolean }>).detail.visible;
+      update();
+    };
+
+    let rafId: number | null = null;
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        update();
+        rafId = null;
+      });
+    };
+
+    window.addEventListener('navbar-visibility-change', onNavChange);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('navbar-visibility-change', onNavChange);
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
       <div
         className="relative min-h-[100dvh] md:h-screen z-0 flex flex-col justify-center"
@@ -103,6 +142,7 @@ export function HeroSection() {
           />
           {/* Top trapezium - same opacity, flows into top border */}
           <div
+            ref={topTrapRef}
             className="absolute top-0 left-1/2 -translate-x-1/2 w-[40%] lg:w-[36%] xl:w-[32%] h-14 md:h-16 lg:h-[4.5rem] backdrop-blur-xl"
             style={{
               clipPath: 'polygon(0 0, 100% 0, calc(100% - 30px) 100%, 30px 100%)',
