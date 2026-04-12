@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 
 const DIENSTEN = [
   { label: 'Development', href: '/diensten/development' },
@@ -17,6 +18,16 @@ const DIENSTEN = [
 
 export function HeroSection() {
   const dienstenRef = useRef<HTMLDivElement>(null);
+  const [heroUrl, setHeroUrl] = useState('');
+  const router = useRouter();
+
+  function handleUrlSubmit(e: FormEvent) {
+    e.preventDefault();
+    const params = heroUrl.trim()
+      ? `?url=${encodeURIComponent(heroUrl.trim())}`
+      : '';
+    router.push(`/website-score${params}`);
+  }
 
   useEffect(() => {
     const container = dienstenRef.current;
@@ -35,7 +46,7 @@ export function HeroSection() {
       gsap.fromTo(
         links,
         { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, delay: 2.8, ease: 'power3.out' }
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, delay: 2.3, ease: 'power3.out' }
       );
     });
   }, []);
@@ -73,14 +84,44 @@ export function HeroSection() {
                 </Button>
               </div>
             </FadeIn>
-            <FadeIn delay={0.5}>
-              <div className="mt-10 flex justify-center md:hidden">
-                <BlitzworxGraphic className="w-full max-w-[10rem] h-auto opacity-40" />
+          </div>
+          <div className="hidden md:flex flex-col items-center justify-center px-4 lg:px-6 overflow-visible min-h-[200px]">
+            <FadeIn delay={1.2} className="w-full max-w-xl">
+              <div className="relative w-full">
+                {/* Ambient glow */}
+                <div
+                  className="relative overflow-hidden rounded-lg p-8 lg:p-10 border border-white/[0.08] shadow-[0_2px_4px_rgba(0,0,0,0.2),0_8px_16px_rgba(0,0,0,0.25),0_24px_48px_rgba(0,0,0,0.3),0_48px_96px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl"
+                  style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(202,202,170,0.04) 100%)' }}
+                >
+                  <BlitzworxGraphic className="absolute top-5 right-5 lg:top-6 lg:right-6 w-8 lg:w-10 h-auto" />
+                  <h2 className="text-[1.4rem] lg:text-[1.6rem] font-bold text-cornsilk leading-tight pr-12">
+                    Hoe scoort jouw website?
+                  </h2>
+                  <p className="mt-2 text-body text-cornsilk leading-snug">
+                    Gratis analyse en advies op basis van je URL
+                  </p>
+
+                  {/* Form */}
+                  <form onSubmit={handleUrlSubmit} className="mt-6 flex flex-col gap-3">
+                    <input
+                      type="text"
+                      value={heroUrl}
+                      onChange={(e) => setHeroUrl(e.target.value)}
+                      placeholder="bijv. jouwbedrijf.nl"
+                      className="w-full min-h-[52px] px-5 py-4 text-body rounded-md border border-ebony bg-ink text-cornsilk placeholder:text-grey-olive focus:border-dry-sage focus:ring-2 focus:ring-dry-sage/30 focus:outline-none transition-colors"
+                    />
+                    <Button type="submit" variant="primary" className="w-full min-h-[52px] text-body">
+                      Start de test
+                    </Button>
+                  </form>
+
+                  {/* Trust line */}
+                  <p className="mt-4 text-center text-caption text-grey-olive/60 tracking-wide">
+                    <span className="text-dry-sage/90">Gratis</span> - 30 seconden
+                  </p>
+                </div>
               </div>
             </FadeIn>
-          </div>
-          <div className="hidden md:flex items-center justify-center px-8 overflow-visible min-h-[200px]">
-            <BlitzworxGraphic className="w-full max-w-[10rem] md:max-w-[12rem] lg:max-w-[16rem] xl:max-w-[14rem] 2xl:max-w-[18rem] h-auto" />
           </div>
         </section>
 

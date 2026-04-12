@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { FloatingLogo } from '@/components/ui/FloatingLogo';
 
 
 /* Step illustration SVGs - animated lineart matching site palette */
@@ -377,6 +378,7 @@ export function HowItWorxSection() {
       className="relative"
       style={{ height: `${PANEL_COUNT * 100}vh` }}
     >
+      <FloatingLogo className="bottom-[10%] left-[5%] z-0" />
       <section
         ref={sectionRef}
         className="absolute top-0 left-0 w-full h-screen overflow-hidden"

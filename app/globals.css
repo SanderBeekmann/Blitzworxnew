@@ -281,3 +281,21 @@
     opacity: 0.9;
   }
 }
+
+@keyframes card-glow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[card-glow_6s_ease-in-out_infinite\] {
+    animation: none;
+    opacity: 0.6;
+  }
+}

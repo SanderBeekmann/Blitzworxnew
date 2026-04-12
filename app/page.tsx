@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { FloatingLogo } from '@/components/ui/FloatingLogo';
 import { HeroSection } from './sections/home/HeroSection';
 import { AboutIntroSection } from './sections/home/AboutIntroSection';
 import { RecentCasesSection } from './sections/home/RecentCasesSection';
@@ -30,7 +31,6 @@ export default function HomePage() {
   return (
     <div className="relative">
       <GradientBlob className="top-[85vh] right-[-8%] w-[400px] h-[300px] opacity-35" duration={22} />
-      <GradientBlob className="top-[280vh] left-[-12%] w-[350px] h-[400px] opacity-30" duration={18} delay={4} />
       <GradientBlob className="top-[420vh] right-[3%] w-[300px] h-[250px] opacity-35" duration={25} delay={8} />
       <AnimatedGradient className="relative">
         <HeroSection />

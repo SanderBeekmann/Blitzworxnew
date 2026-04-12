@@ -301,6 +301,15 @@ export function Header() {
                 ))}
                 <li className="pt-4 w-full text-left">
                   <Link
+                    href="/website-score"
+                    onClick={handleMenuLinkClick}
+                    className="inline-flex items-center justify-start min-h-[52px] w-full px-6 py-4 btn-secondary-cta font-semibold rounded-md"
+                  >
+                    Check je website!
+                  </Link>
+                </li>
+                <li className="pt-2 w-full text-left">
+                  <Link
                     href="/contact"
                     onClick={handleMenuLinkClick}
                     className="inline-flex items-center justify-start min-h-[52px] w-full px-6 py-4 bg-dry-sage text-ink font-semibold rounded-md hover:bg-cornsilk hover:shadow-[0_0_32px_rgba(254,250,220,0.18)] transition-all duration-300"
@@ -448,7 +457,15 @@ export function Header() {
           })}
         </ul>
 
-        <div className="flex items-center justify-end gap-4 justify-self-end">
+        <div className="flex items-center justify-end gap-3 justify-self-end">
+          <Link
+            href="/website-score"
+            className={`hidden md:inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-5 py-3 btn-secondary-cta font-medium rounded-md transition-opacity duration-300 text-small ${
+              showCta ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          >
+            Check je website!
+          </Link>
           <Link
             href="/contact"
             className={`hidden md:inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk transition-colors transition-opacity duration-300 ${
