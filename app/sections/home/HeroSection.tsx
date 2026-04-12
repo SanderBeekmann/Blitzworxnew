@@ -43,13 +43,15 @@ export function HeroSection() {
     }
 
     import('gsap').then(({ gsap }) => {
-      // Trapezium slides up from below
+      // Entire diensten bar slides up from below
+      gsap.fromTo(
+        container,
+        { y: '100%', opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, delay: 1.8, ease: 'power3.out' }
+      );
+      // Make background visible (no longer animated separately)
       if (navRef.current) {
-        gsap.fromTo(
-          navRef.current,
-          { y: '100%', opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, delay: 1.8, ease: 'power3.out' }
-        );
+        navRef.current.style.opacity = '1';
       }
 
       // Diensten stagger after trapezium lands
@@ -198,14 +200,20 @@ export function HeroSection() {
           </div>
         </section>
 
-        <div ref={dienstenRef} className="absolute -bottom-1 inset-x-0 flex justify-center z-20">
-          <nav
+        <div ref={dienstenRef} className="absolute -bottom-1 inset-x-0 flex justify-center z-20 opacity-0">
+          {/* Trapezium background - clipped separately, sized to match nav */}
+          <div
             ref={navRef}
-            className="relative inline-flex justify-center gap-x-8 gap-y-3 flex-wrap px-16 lg:px-20 xl:px-24 h-14 md:h-16 lg:h-[4.5rem] items-center opacity-0 backdrop-blur-xl"
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[85%] sm:w-[70%] md:w-[60%] lg:w-[50%] xl:w-[45%] h-14 md:h-16 lg:h-[4.5rem] opacity-0 backdrop-blur-xl"
             style={{
               clipPath: 'polygon(30px 0, calc(100% - 30px) 0, 100% 100%, 0 100%)',
               background: 'linear-gradient(180deg, rgba(4,7,17,0.6) 0%, rgb(4,7,17) 100%)',
             }}
+            aria-hidden
+          />
+          {/* Links layer - no clip-path so tooltips are visible */}
+          <nav
+            className="relative inline-flex justify-center gap-x-8 gap-y-3 flex-wrap px-16 lg:px-20 xl:px-24 h-14 md:h-16 lg:h-[4.5rem] items-center"
             aria-label="Diensten"
           >
             {DIENSTEN.map(({ label, href }) => (
@@ -215,8 +223,9 @@ export function HeroSection() {
                 className="dienst-link relative group text-small md:text-body text-dry-sage/60 hover:text-cornsilk transition-colors opacity-0 motion-reduce:opacity-100"
               >
                 {label}
-                <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 text-caption text-ink bg-cornsilk rounded-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                  Ontdek dienst
+                <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 text-caption font-medium text-ink bg-cornsilk whitespace-nowrap rounded-sm opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-out pointer-events-none shadow-soft">
+                  {label === 'Fotografie' ? 'Bekijk pakketten' : `Ontdek ${label.toLowerCase()}`}
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-cornsilk rotate-45" />
                 </span>
               </Link>
             ))}
