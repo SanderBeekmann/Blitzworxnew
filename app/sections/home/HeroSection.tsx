@@ -18,7 +18,7 @@ const DIENSTEN = [
 
 export function HeroSection() {
   const dienstenRef = useRef<HTMLDivElement>(null);
-  const navRef = useRef<HTMLElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
   const [heroUrl, setHeroUrl] = useState('');
   const router = useRouter();
 
