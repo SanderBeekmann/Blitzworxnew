@@ -391,11 +391,11 @@ export function WebsiteScoreResults({
           }`}
           aria-hidden={!isUnlocked}
         >
-          <TechnicalAnalysis categories={results.categories} />
-
           {results.aiAnalysis && results.aiAnalysis.contentFindings.length > 0 && (
             <ContentReview findings={results.aiAnalysis.contentFindings} />
           )}
+
+          <TechnicalAnalysis categories={results.categories} />
         </div>
 
         {!isUnlocked && (

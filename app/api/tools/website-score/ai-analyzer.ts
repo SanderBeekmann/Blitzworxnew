@@ -170,9 +170,9 @@ Schrijf 3 korte, puntige paragrafen (gescheiden door dubbele newlines):
 
 **Paragraaf 1 - Wat werkt** (1-2 zinnen): Benoem specifiek wat deze site goed doet. Refereer naar concrete elementen die je in de data ziet (een specifieke heading, een trust signal, een duidelijke CTA). Geen generieke complimenten.
 
-**Paragraaf 2 - Grootste knelpunten** (2-3 zinnen): Benoem de 2-3 grootste problemen die bezoekers waarschijnlijk doen afhaken. Koppel technische problemen aan zakelijke impact. Bijvoorbeeld: "Je pagina laadt in 4.2 seconden op mobiel - onderzoek toont dat 53% van bezoekers afhaakt na 3 seconden."
+**Paragraaf 2 - Totaalbeeld** (3-5 zinnen): Geef een eerlijk totaalbeeld van de website. Benoem zowel content/marketing als technische aspecten. Hoe staat de site ervoor qua vindbaarheid, overtuigingskracht, snelheid en gebruiksvriendelijkheid? Koppel problemen aan zakelijke impact waar mogelijk. Bijvoorbeeld: "Je pagina laadt in 4.2 seconden op mobiel - onderzoek toont dat 53% van bezoekers afhaakt na 3 seconden."
 
-**Paragraaf 3 - Een prioriteit** (1-2 zinnen): Als deze ondernemer maar 1 ding mag verbeteren, wat zou dat zijn? Kies het punt met de hoogste impact-per-effort ratio.
+**Paragraaf 3 - Waar te beginnen** (1-2 zinnen): Als deze ondernemer maar 1 ding mag verbeteren, wat zou dat zijn? Kies het punt met de hoogste impact-per-effort ratio.
 
 Stijlregels voor de summary:
 - Spreek de ondernemer direct aan met "je" en "jouw"

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { FloatingLogo } from '@/components/ui/FloatingLogo';
 
 
 /* Step illustration SVGs - animated lineart matching site palette */
@@ -241,7 +240,7 @@ export function HowItWorxSection() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Initialize timeline stroke
-    if (timelineLine) {
+    if (timelineLine && timelineLine.getBBox().width > 0) {
       const lineLength = timelineLine.getTotalLength();
       timelineLine.style.strokeDasharray = `${lineLength}`;
       timelineLine.style.strokeDashoffset = reduced ? '0' : `${lineLength}`;
@@ -294,7 +293,7 @@ export function HowItWorxSection() {
         progress.style.transform = `scaleX(${rawProgress})`;
 
         // Timeline draw
-        if (timelineLine && !reduced) {
+        if (timelineLine && !reduced && timelineLine.getBBox().width > 0) {
           const lineLength = timelineLine.getTotalLength();
           timelineLine.style.strokeDashoffset = `${lineLength * (1 - rawProgress)}`;
         }
@@ -378,7 +377,6 @@ export function HowItWorxSection() {
       className="relative"
       style={{ height: `${PANEL_COUNT * 100}vh` }}
     >
-      <FloatingLogo className="bottom-[10%] left-[5%] z-0" />
       <section
         ref={sectionRef}
         className="absolute top-0 left-0 w-full h-screen overflow-hidden"

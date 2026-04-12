@@ -8,7 +8,7 @@ import { SkillsSection } from './sections/home/SkillsSection';
 import { TestimonialSection } from './sections/home/TestimonialSection';
 import { WhyBlitzworxSection } from './sections/home/WhyBlitzworxSection';
 import { PhotoshootSection } from './sections/home/PhotoshootSection';
-import { AnimatedGradient } from '@/components/layout/AnimatedGradient';
+import { HeroShader } from '@/components/animations/HeroShader';
 import { MaintenanceSection } from '@/components/sections/MaintenanceSection';
 import { GradientBlob } from '@/components/ui/GradientBlob';
 
@@ -32,10 +32,13 @@ export default function HomePage() {
     <div className="relative">
       <GradientBlob className="top-[85vh] right-[-8%] w-[400px] h-[300px] opacity-35" duration={22} />
       <GradientBlob className="top-[420vh] right-[3%] w-[300px] h-[250px] opacity-35" duration={25} delay={8} />
-      <AnimatedGradient className="relative">
-        <HeroSection />
-        <AboutIntroSection />
-      </AnimatedGradient>
+      <div className="relative">
+        <HeroShader className="absolute top-0 left-0 right-0 z-0 h-[100dvh] md:h-screen" />
+        <div className="relative z-10">
+          <HeroSection />
+          <AboutIntroSection />
+        </div>
+      </div>
       <div className="relative z-10">
         <div className="relative z-30">
           <RecentCasesSection />

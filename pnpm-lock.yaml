@@ -17,6 +17,9 @@ importers:
       '@mendable/firecrawl-js':
         specifier: ^4.18.2
         version: 4.18.2
+      '@paper-design/shaders-react':
+        specifier: ^0.0.74
+        version: 0.0.74(@types/react@18.3.28)(react@18.3.1)
       '@supabase/supabase-js':
         specifier: ^2.97.0
         version: 2.103.0
@@ -404,6 +407,18 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@paper-design/shaders-react@0.0.74':
+    resolution: {integrity: sha512-p9ud9widOGQjrVBiNvGNrr0ICKkytFj4bkLd3dRKaNOHZreUYj76yaQQS+Monlpz3BuLiI/4Tvikbrs8gcJUVw==}
+    peerDependencies:
+      '@types/react': ^18 || ^19
+      react: ^18 || ^19
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@paper-design/shaders@0.0.74':
+    resolution: {integrity: sha512-8w8HJasgkRc6qb9cyQ8IWYrO66FEawCVkRhWXsrOetqZKHibONXN4em/hGEcgThY+b5mED4oplU/GglVdUH+uw==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -2808,6 +2823,15 @@ snapshots:
       fastq: 1.20.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@paper-design/shaders-react@0.0.74(@types/react@18.3.28)(react@18.3.1)':
+    dependencies:
+      '@paper-design/shaders': 0.0.74
+      react: 18.3.1
+    optionalDependencies:
+      '@types/react': 18.3.28
+
+  '@paper-design/shaders@0.0.74': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true

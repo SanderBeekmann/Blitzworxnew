@@ -18,6 +18,7 @@ const DIENSTEN = [
 
 export function HeroSection() {
   const dienstenRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
   const [heroUrl, setHeroUrl] = useState('');
   const router = useRouter();
 
@@ -42,6 +43,16 @@ export function HeroSection() {
     }
 
     import('gsap').then(({ gsap }) => {
+      // Trapezium slides up from below
+      if (navRef.current) {
+        gsap.fromTo(
+          navRef.current,
+          { y: '100%', opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, delay: 1.8, ease: 'power3.out' }
+        );
+      }
+
+      // Diensten stagger after trapezium lands
       const links = container.querySelectorAll('.dienst-link');
       gsap.fromTo(
         links,
@@ -56,11 +67,58 @@ export function HeroSection() {
         className="relative h-[100dvh] md:h-screen z-0 flex flex-col justify-center"
         aria-hidden
       >
+        {/* Glassmorphism border frame + trapezium as one seamless layer */}
+        <div className="hidden md:block absolute inset-0 z-20 pointer-events-none" aria-hidden>
+          {/* Left */}
+          <div
+            className="absolute top-0 left-0 bottom-0 w-3 lg:w-4 backdrop-blur-md"
+            style={{ background: 'linear-gradient(180deg, rgba(4,7,17,0.75) 0%, rgba(4,7,17,0.55) 50%, rgba(4,7,17,0.75) 100%)' }}
+          />
+          {/* Right */}
+          <div
+            className="absolute top-0 right-0 bottom-0 w-3 lg:w-4 backdrop-blur-md"
+            style={{ background: 'linear-gradient(180deg, rgba(4,7,17,0.75) 0%, rgba(4,7,17,0.55) 50%, rgba(4,7,17,0.75) 100%)' }}
+          />
+          {/* Top */}
+          <div
+            className="absolute top-0 left-0 right-0 h-3 lg:h-4 backdrop-blur-md"
+            style={{ background: 'linear-gradient(90deg, rgba(4,7,17,0.75) 0%, rgba(4,7,17,0.55) 50%, rgba(4,7,17,0.75) 100%)' }}
+          />
+          {/* Bottom - fades to full opacity */}
+          <div
+            className="absolute bottom-0 left-0 right-0 h-3 lg:h-4 backdrop-blur-md"
+            style={{ background: 'rgba(4,7,17,0.85)' }}
+          />
+          {/* Bottom fade band - transitions to 100% ink below the border */}
+          <div
+            className="absolute -bottom-12 left-0 right-0 h-12"
+            style={{ background: 'linear-gradient(180deg, rgba(4,7,17,0.85) 0%, rgb(4,7,17) 100%)' }}
+          />
+          {/* Inner edge glow - single continuous line */}
+          <div
+            className="absolute inset-3 lg:inset-4 rounded-sm"
+            style={{ boxShadow: '0 0 8px rgba(255,255,255,0.03), inset 0 0 1px rgba(255,255,255,0.06)' }}
+          />
+          {/* Top trapezium - same opacity, flows into top border */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[40%] lg:w-[36%] xl:w-[32%] h-14 md:h-16 lg:h-[4.5rem] backdrop-blur-xl"
+            style={{
+              clipPath: 'polygon(0 0, 100% 0, calc(100% - 30px) 100%, 30px 100%)',
+              background: 'linear-gradient(180deg, rgba(4,7,17,0.75) 0%, rgba(4,7,17,0.6) 100%)',
+            }}
+          />
+        </div>
+        {/* Dark overlay for text readability */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{ background: 'linear-gradient(to right, rgba(4,7,17,0.98) 0%, rgba(4,7,17,0.85) 40%, rgba(4,7,17,0.6) 70%, rgba(4,7,17,0.4) 100%)' }}
+          aria-hidden
+        />
         <section
-          className="absolute inset-0 grid grid-cols-1 md:grid-cols-2 items-center"
+          className="absolute inset-0 z-10 grid grid-cols-1 md:grid-cols-2 items-center"
           aria-labelledby="hero-title"
         >
-          <div className="px-6 sm:px-10 md:px-6 lg:px-[4vw] xl:px-[8vw] 2xl:px-[12vw] text-center md:text-left">
+          <div className="px-6 sm:px-10 md:px-6 lg:px-[3.5vw] xl:px-[7vw] 2xl:px-[11vw] text-center md:text-left">
             <TitleReveal
               as="h1"
               id="hero-title"
@@ -70,8 +128,8 @@ export function HeroSection() {
               Development That Worx!
             </TitleReveal>
             <FadeIn delay={0.5}>
-              <p className="mt-2 text-body md:text-small lg:text-h3 xl:text-body 2xl:text-h3 text-dry-sage/80 whitespace-nowrap">
-                Websites & Applicaties op maat
+              <p className="mt-2 text-body md:text-small lg:text-h3 xl:text-body 2xl:text-h3 text-dry-sage opacity-80">
+                Websites, apps en automatiseringen op maat, voor bedrijven die vooruit kijken.
               </p>
             </FadeIn>
             <FadeIn delay={0.9}>
@@ -97,9 +155,24 @@ export function HeroSection() {
                   <h2 className="text-[1.4rem] lg:text-[1.6rem] font-bold text-cornsilk leading-tight pr-12">
                     Hoe scoort jouw website?
                   </h2>
-                  <p className="mt-2 text-body text-cornsilk leading-snug">
-                    Gratis analyse en advies op basis van je URL
+                  <p className="mt-2 text-body leading-snug" style={{ color: 'rgba(254,250,220,0.70)' }}>
+                    Vul je website link (URL) in en laat onze AI agent je website onderzoeken!
                   </p>
+
+                  <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-caption" style={{ color: 'rgba(254,250,220,0.45)' }}>
+                    <li className="flex items-center gap-1.5">
+                      <span className="text-dry-sage">&#10003;</span> Snelheid
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <span className="text-dry-sage">&#10003;</span> SEO
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <span className="text-dry-sage">&#10003;</span> Design
+                    </li>
+                    <li className="flex items-center gap-1.5">
+                      <span className="text-dry-sage">&#10003;</span> Content
+                    </li>
+                  </ul>
 
                   {/* Form */}
                   <form onSubmit={handleUrlSubmit} className="mt-6 flex flex-col gap-3">
@@ -116,7 +189,7 @@ export function HeroSection() {
                   </form>
 
                   {/* Trust line */}
-                  <p className="mt-4 text-center text-caption text-grey-olive/60 tracking-wide">
+                  <p className="-mb-4 lg:-mb-5 mt-3 lg:mt-4 text-center text-caption text-grey-olive/60 tracking-wide">
                     <span className="text-dry-sage/90">Gratis</span> - 30 seconden
                   </p>
                 </div>
@@ -125,9 +198,14 @@ export function HeroSection() {
           </div>
         </section>
 
-        <div ref={dienstenRef} className="absolute bottom-0 inset-x-0 py-6 md:py-8">
+        <div ref={dienstenRef} className="absolute -bottom-1 inset-x-0 flex justify-center z-20">
           <nav
-            className="flex justify-center gap-x-12 gap-y-3 flex-wrap px-6"
+            ref={navRef}
+            className="relative inline-flex justify-center gap-x-8 gap-y-3 flex-wrap px-16 lg:px-20 xl:px-24 h-14 md:h-16 lg:h-[4.5rem] items-center opacity-0 backdrop-blur-xl"
+            style={{
+              clipPath: 'polygon(30px 0, calc(100% - 30px) 0, 100% 100%, 0 100%)',
+              background: 'linear-gradient(180deg, rgba(4,7,17,0.6) 0%, rgb(4,7,17) 100%)',
+            }}
             aria-label="Diensten"
           >
             {DIENSTEN.map(({ label, href }) => (

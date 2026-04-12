@@ -11,11 +11,10 @@ interface WordProps {
 }
 
 const Word = ({ children, progress, range, className }: WordProps) => {
-  const opacity = useTransform(progress, range, [0, 1]);
+  const opacity = useTransform(progress, range, [0.2, 1]);
 
   return (
-    <span className={`relative mr-1 ${className ?? ''}`}>
-      <span className="absolute opacity-20">{children}</span>
+    <span className={`mr-1 ${className ?? ''}`}>
       <motion.span style={{ opacity }}>{children}</motion.span>
     </span>
   );

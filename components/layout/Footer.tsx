@@ -52,7 +52,30 @@ export function Footer() {
               </a>
             </div>
           </div>
-          <div />
+          <div>
+            <h3 className="text-small font-semibold text-cornsilk mb-4">Contact</h3>
+            <ul className="flex flex-col gap-3">
+              <li>
+                <a
+                  href="mailto:sander@blitzworx.nl"
+                  className="text-small hover:text-cornsilk transition-colors"
+                >
+                  sander@blitzworx.nl
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+31613026280"
+                  className="text-small hover:text-cornsilk transition-colors"
+                >
+                  06 13 02 62 80
+                </a>
+              </li>
+              <li className="text-small text-dry-sage">
+                KvK 98139789
+              </li>
+            </ul>
+          </div>
           <div className="flex flex-row gap-6 sm:gap-16 text-left">
             <nav aria-label="Footer navigatie">
               <h3 className="text-small font-semibold text-cornsilk mb-4">Pagina&apos;s</h3>
@@ -83,7 +106,7 @@ export function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-ebony">
           <p className="text-caption text-grey-olive">
-            © {currentYear} BLITZWORX. Alle rechten voorbehouden.
+            © {currentYear} BLITZWORX. Alle rechten voorbehouden. KvK 98139789
           </p>
         </div>
       </div>
