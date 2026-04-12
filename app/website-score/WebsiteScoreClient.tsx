@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, FormEvent, useEffect } from 'react';
+import { useState, useRef, FormEvent, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
@@ -19,8 +19,9 @@ const LOADING_STEPS = [
   { label: 'AI analyse genereren' },
 ];
 
-// Accelerating delays: fast start, slows down for heavier steps
 const STEP_DELAYS = [1500, 1500, 1500, 3000, 3000, 0];
+const POLL_INTERVAL_MS = 3000;
+const POLL_MAX_ATTEMPTS = 60; // 3 minutes max
 
 function CheckIcon() {
   return (
@@ -83,8 +84,10 @@ export function WebsiteScoreClient() {
   const [emailError, setEmailError] = useState('');
   const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
   const [newsletterOptIn, setNewsletterOptIn] = useState(false);
+  const [jobId, setJobId] = useState<string | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pollRef = useRef<NodeJS.Timeout | null>(null);
   const autoStartedRef = useRef(false);
   const searchParams = useSearchParams();
 
@@ -109,7 +112,47 @@ export function WebsiteScoreClient() {
   useEffect(() => {
     return () => {
       if (intervalRef.current) clearTimeout(intervalRef.current);
+      if (pollRef.current) clearTimeout(pollRef.current);
     };
+  }, []);
+
+  const pollForResults = useCallback((id: string, attempt = 0) => {
+    if (attempt >= POLL_MAX_ATTEMPTS) {
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+      setError('De analyse duurt te lang. Probeer het later opnieuw.');
+      setPhase('input');
+      return;
+    }
+
+    pollRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/tools/website-score?jobId=${id}`);
+        const data = await res.json();
+
+        if (data.status === 'completed' && data.result) {
+          if (intervalRef.current) clearTimeout(intervalRef.current);
+          setResults(data.result);
+          setPhase('results');
+          setTimeout(() => {
+            resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 200);
+          return;
+        }
+
+        if (data.status === 'failed') {
+          if (intervalRef.current) clearTimeout(intervalRef.current);
+          setError(data.error || 'Analyse mislukt. Probeer het opnieuw.');
+          setPhase('input');
+          return;
+        }
+
+        // Still pending/processing - poll again
+        pollForResults(id, attempt + 1);
+      } catch {
+        // Network error - retry
+        pollForResults(id, attempt + 1);
+      }
+    }, POLL_INTERVAL_MS);
   }, []);
 
   async function handleSubmit(e?: FormEvent) {
@@ -124,11 +167,11 @@ export function WebsiteScoreClient() {
     setPhase('loading');
     setLoadingStep(0);
 
-    // Accelerating step progression: fast start, slower for heavy steps
+    // Accelerating step progression
     let step = 0;
     function scheduleNext() {
       const delay = STEP_DELAYS[step];
-      if (delay <= 0) return; // Last step stays active until API responds
+      if (delay <= 0) return;
       intervalRef.current = setTimeout(() => {
         step++;
         setLoadingStep(step);
@@ -138,6 +181,7 @@ export function WebsiteScoreClient() {
     scheduleNext();
 
     try {
+      // Start the job
       const res = await fetch('/api/tools/website-score', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -145,20 +189,16 @@ export function WebsiteScoreClient() {
       });
       const data = await res.json();
 
-      if (intervalRef.current) clearTimeout(intervalRef.current);
-
       if (!res.ok) {
+        if (intervalRef.current) clearTimeout(intervalRef.current);
         setError(data.error || 'Er ging iets mis.');
         setPhase('input');
         return;
       }
 
-      setResults(data);
-      setPhase('results');
-
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
+      // Got a jobId - start polling
+      setJobId(data.jobId);
+      pollForResults(data.jobId);
     } catch {
       if (intervalRef.current) clearTimeout(intervalRef.current);
       setError('Verbindingsfout. Controleer je internet en probeer opnieuw.');
@@ -177,10 +217,11 @@ export function WebsiteScoreClient() {
 
     setIsUnlocked(true);
 
+    // Trigger email send + lead enrollment via the unlock flow
     fetch('/api/tools/website-score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, email, newsletterOptIn }),
+      body: JSON.stringify({ url, email, newsletterOptIn, jobId }),
     }).catch((err) => {
       console.error('Email delivery failed:', err);
     });
@@ -195,6 +236,7 @@ export function WebsiteScoreClient() {
     setIsUnlocked(false);
     setError('');
     setEmailError('');
+    setJobId(null);
   }
 
   return (
