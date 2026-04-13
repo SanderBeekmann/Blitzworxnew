@@ -112,7 +112,7 @@ export async function POST(request: Request) {
 
     // Trigger background function (await to ensure it fires before response)
     try {
-      const workerRes = await fetch(`${SITE_URL}/.netlify/functions/website-score-worker`, {
+      const workerRes = await fetch(`${SITE_URL}/.netlify/functions/website-score-worker-background`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ jobId: job.id, url }),

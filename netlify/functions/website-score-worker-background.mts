@@ -67,5 +67,5 @@ export default async function handler(req: Request) {
 }
 
 export const config: Config = {
-  path: "/.netlify/functions/website-score-worker",
+  path: "/.netlify/functions/website-score-worker-background",
 };
