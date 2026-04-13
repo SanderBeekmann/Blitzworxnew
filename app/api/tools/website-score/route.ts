@@ -110,14 +110,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Kon analyse niet starten.' }, { status: 500 });
     }
 
-    // Trigger background function (fire-and-forget)
-    fetch(`${SITE_URL}/.netlify/functions/website-score-worker`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ jobId: job.id, url }),
-    }).catch((err) => {
+    // Trigger background function (await to ensure it fires before response)
+    try {
+      const workerRes = await fetch(`${SITE_URL}/.netlify/functions/website-score-worker`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId: job.id, url }),
+      });
+      console.log('Worker triggered:', workerRes.status);
+    } catch (err) {
       console.error('Failed to trigger worker:', err);
-    });
+      // Update job as failed so frontend doesn't poll forever
+      await supabase
+        .from('website_score_jobs')
+        .update({ status: 'failed', error: 'Worker kon niet gestart worden.', updated_at: new Date().toISOString() })
+        .eq('id', job.id);
+      return NextResponse.json({ error: 'Kon analyse niet starten.' }, { status: 500 });
+    }
 
     return NextResponse.json({ jobId: job.id, status: 'pending' });
   } catch (err) {
