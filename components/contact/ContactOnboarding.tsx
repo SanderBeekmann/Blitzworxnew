@@ -3,6 +3,7 @@
 import { useState, FormEvent, useEffect, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { packages, addons, type Package } from '@/components/sections/maintenance/packages';
 
 const PROJECT_STEPS = 5;
 const SERVICE_STEPS = 3;
@@ -16,19 +17,8 @@ const PROJECT_TYPES = [
   { id: 'other', label: 'Anders' },
 ] as const;
 
-const SERVICE_OPTIONS = [
-  { id: 'onderhoud', label: 'Onderhoud', price: '€40/maand', description: 'Tot 2 uur aanpassingen per maand' },
-  { id: 'hosting', label: 'Hosting', price: '€10/maand', description: 'Beheerde hosting met backups & SSL' },
-  { id: 'domein', label: 'Domeinbeheer', price: '€5/maand', description: 'Registratie, DNS & verlenging' },
-  { id: 'email', label: 'E-mail op eigen domein', price: '€15/user/maand', description: 'Outlook of Gmail op jouw domein' },
-] as const;
-
-const COMBI_SERVICES = ['onderhoud', 'hosting', 'domein'];
-
-const PAKKET_PRESELECT: Record<string, string[]> = {
-  compleet: ['onderhoud', 'hosting', 'domein'],
-  email: ['email'],
-};
+type PackageId = Package['id'];
+const VALID_PACKAGE_IDS: PackageId[] = ['start', 'groei', 'schaal'];
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -72,8 +62,10 @@ function getCalendarDays(year: number, month: number) {
 function ContactOnboardingInner() {
   const searchParams = useSearchParams();
   const pakketParam = searchParams.get('pakket');
-  const hasDiensten = searchParams.has('diensten') || !!pakketParam;
-  const preselectedServices = pakketParam ? PAKKET_PRESELECT[pakketParam] ?? [] : [];
+  const preselectedPackage = pakketParam && VALID_PACKAGE_IDS.includes(pakketParam as PackageId)
+    ? (pakketParam as PackageId)
+    : null;
+  const hasDiensten = searchParams.has('diensten') || !!preselectedPackage;
 
   // Mode: 'project' (5 steps) or 'diensten' (3 steps)
   const [mode, setMode] = useState<'project' | 'diensten'>(hasDiensten ? 'diensten' : 'project');
@@ -82,7 +74,8 @@ function ContactOnboardingInner() {
   const [step, setStep] = useState(1);
   const [projectTypes, setProjectTypes] = useState<string[]>([]);
   const [otherText, setOtherText] = useState('');
-  const [selectedServices, setSelectedServices] = useState<string[]>(preselectedServices);
+  const [selectedPackage, setSelectedPackage] = useState<PackageId | null>(preselectedPackage);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', company: '', message: '' });
   const [preferredDate, setPreferredDate] = useState<string | null>(null);
   const [preferredTime, setPreferredTime] = useState<string | null>(null);
@@ -95,21 +88,13 @@ function ContactOnboardingInner() {
   const now = useMemo(() => new Date(), []);
   const [calendarMonth, setCalendarMonth] = useState({ year: now.getFullYear(), month: now.getMonth() });
 
-  const isCombi = COMBI_SERVICES.every((s) => selectedServices.includes(s));
-
-  function toggleService(id: string) {
-    setSelectedServices((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
+  function toggleAddon(name: string) {
+    setSelectedAddons((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
     );
   }
 
-  function toggleCombi() {
-    if (isCombi) {
-      setSelectedServices((prev) => prev.filter((s) => !COMBI_SERVICES.includes(s)));
-    } else {
-      setSelectedServices((prev) => Array.from(new Set([...prev, ...COMBI_SERVICES])));
-    }
-  }
+  const selectedPackageData = selectedPackage ? packages.find((p) => p.id === selectedPackage) : null;
 
   useEffect(() => {
     if (mode === 'project' && step === 4) {
@@ -129,7 +114,7 @@ function ContactOnboardingInner() {
     const err: Record<string, string> = {};
 
     if (mode === 'diensten' && step === 1) {
-      if (selectedServices.length === 0) err.services = 'Selecteer minimaal een dienst';
+      if (!selectedPackage) err.pakket = 'Kies een pakket';
     }
 
     if (mode === 'project' && step === 2 || mode === 'diensten' && step === 2) {
@@ -162,6 +147,7 @@ function ContactOnboardingInner() {
     if (mode === 'project' && step === 1 && projectTypes.length === 0) return;
     if (mode === 'project' && step === 1 && projectTypes.includes('other') && otherText.trim().length < 2) return;
     if (mode === 'diensten' && step === 1 && !validateStep()) return;
+    if (mode === 'diensten' && step === 1 && !selectedPackage) return;
     if (step === 2 && !validateStep()) return;
     if (mode === 'project' && (step === 3 || step === 4) && !validateStep()) return;
     setDirection('forward');
@@ -202,8 +188,15 @@ function ContactOnboardingInner() {
             email: formData.email.trim(),
             phone: formData.phone.trim(),
             company: formData.company.trim(),
-            message: `Diensten aanvraag: ${selectedServices.map((s) => SERVICE_OPTIONS.find((o) => o.id === s)?.label ?? s).join(', ')}${isCombi ? ' (combipakket)' : ''}`,
-            projectType: 'diensten',
+            message: (() => {
+              const pkg = packages.find((p) => p.id === selectedPackage);
+              const base = pkg ? `Pakket: ${pkg.name} (\u20ac${pkg.price}/maand)` : 'Pakket: -';
+              const addonLine = selectedAddons.length
+                ? `\nAdd-ons: ${selectedAddons.join(', ')}`
+                : '';
+              return `${base}${addonLine}`;
+            })(),
+            projectType: `onderhoud-${selectedPackage ?? 'onbekend'}`,
           }
         : {
             name: formData.name.trim(),
@@ -228,6 +221,8 @@ function ContactOnboardingInner() {
       setFormData({ name: '', email: '', phone: '', company: '', message: '' });
       setProjectTypes([]);
       setOtherText('');
+      setSelectedPackage(null);
+      setSelectedAddons([]);
       setPreferredDate(null);
       setPreferredTime(null);
       setStep(1);
@@ -288,10 +283,10 @@ function ContactOnboardingInner() {
 
       <div className="relative">
         <p className="text-caption font-mono tracking-[0.2em] uppercase text-dry-sage/50 mb-2">
-          {mode === 'diensten' ? 'Diensten aanvragen' : 'Start je project'}
+          {mode === 'diensten' ? 'Pakket aanvragen' : 'Start je project'}
         </p>
         <h2 className="text-h2 md:text-h2-lg font-bold text-cornsilk">
-          {mode === 'diensten' ? 'Welke diensten wil je afnemen?' : 'Waar kan ik je mee helpen?'}
+          {mode === 'diensten' ? 'Welk pakket past bij jou?' : 'Waar kan ik je mee helpen?'}
         </h2>
 
         <div className="mt-6 h-1 rounded-full bg-ebony/40 overflow-hidden mb-8" aria-hidden>
@@ -345,88 +340,83 @@ function ContactOnboardingInner() {
           </div>
         )}
 
-        {/* Step 1: Service selection (diensten mode) */}
+        {/* Step 1: Package + add-ons selection (diensten mode) */}
         {step === 1 && mode === 'diensten' && (
-          <div key="step-1-diensten" className={`space-y-4 ${hasNavigated ? (direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left') : ''}`}>
-            {/* Combipakket toggle */}
-            <button
-              type="button"
-              onClick={toggleCombi}
-              className={`w-full text-left p-4 rounded-md border transition-all duration-300 ${
-                isCombi
-                  ? 'border-cornsilk bg-cornsilk/5'
-                  : 'border-ebony hover:border-grey-olive'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                  isCombi ? 'border-cornsilk bg-cornsilk' : 'border-grey-olive/50'
-                }`}>
-                  {isCombi && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-                      <path d="M5 12l5 5L20 7" stroke="#040711" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <span className="block text-body font-medium text-cornsilk">Combipakket</span>
-                  <span className="block text-caption text-grey-olive/60">Onderhoud + Hosting + Domeinbeheer</span>
-                </div>
-                <div className="text-right shrink-0">
-                  <span className="block text-body font-bold text-cornsilk">€50/maand</span>
-                  <span className="block text-caption text-grey-olive/40 line-through">€55 los</span>
-                </div>
-              </div>
-            </button>
-
-            <div className="w-full h-px bg-ebony/40 my-2" aria-hidden />
-            <p className="text-caption text-grey-olive/50">Of selecteer losse diensten:</p>
-
-            {/* Individual services */}
-            {SERVICE_OPTIONS.map(({ id, label, price, description }) => {
-              const checked = selectedServices.includes(id);
-              const isPartOfCombi = COMBI_SERVICES.includes(id);
-              const dimmed = isCombi && isPartOfCombi;
-
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => {
-                    if (dimmed) return;
-                    toggleService(id);
-                  }}
-                  className={`w-full text-left p-4 rounded-md border transition-all duration-300 ${
-                    dimmed
-                      ? 'border-ebony/30 opacity-40 cursor-not-allowed'
-                      : checked
+          <div key="step-1-diensten" className={`space-y-6 ${hasNavigated ? (direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left') : ''}`}>
+            <div className="space-y-3">
+              <p className="text-caption font-mono tracking-[0.2em] uppercase text-grey-olive/60">Pakket</p>
+              {packages.map((pkg) => {
+                const checked = selectedPackage === pkg.id;
+                return (
+                  <button
+                    key={pkg.id}
+                    type="button"
+                    onClick={() => setSelectedPackage(pkg.id)}
+                    className={`w-full text-left p-4 rounded-md border transition-all duration-300 ${
+                      checked
                         ? 'border-cornsilk bg-cornsilk/5'
                         : 'border-ebony hover:border-grey-olive'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
-                      checked ? 'border-cornsilk bg-cornsilk' : 'border-grey-olive/50'
-                    }`}>
-                      {checked && (
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
-                          <path d="M5 12l5 5L20 7" stroke="#040711" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      )}
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                        checked ? 'border-cornsilk' : 'border-grey-olive/50'
+                      }`}>
+                        {checked && <span className="w-2.5 h-2.5 rounded-full bg-cornsilk" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-body font-medium text-cornsilk">{pkg.name}</span>
+                          {pkg.badge && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-cornsilk text-ink text-[0.65rem] font-mono tracking-[0.1em] uppercase font-medium">
+                              {pkg.badge}
+                            </span>
+                          )}
+                        </div>
+                        <span className="block text-caption text-grey-olive/60 mt-0.5">{pkg.pitch}</span>
+                      </div>
+                      <span className="text-small text-dry-sage/80 shrink-0">&euro;{pkg.price}/mnd</span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="block text-small font-medium text-cornsilk">{label}</span>
-                      <span className="block text-caption text-grey-olive/50">{description}</span>
-                    </div>
-                    <span className="text-small text-dry-sage/70 shrink-0">{price}</span>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
+              {errors.pakket && (
+                <p className="text-small text-red-400" role="alert">{errors.pakket}</p>
+              )}
+            </div>
 
-            {errors.services && (
-              <p className="text-small text-red-600" role="alert">{errors.services}</p>
-            )}
+            <div className="space-y-3">
+              <p className="text-caption font-mono tracking-[0.2em] uppercase text-grey-olive/60">Add-ons (optioneel)</p>
+              {addons.map((addon) => {
+                const checked = selectedAddons.includes(addon.name);
+                return (
+                  <button
+                    key={addon.name}
+                    type="button"
+                    onClick={() => toggleAddon(addon.name)}
+                    className={`w-full text-left p-3 rounded-md border transition-all duration-300 ${
+                      checked
+                        ? 'border-dry-sage/50 bg-dry-sage/5'
+                        : 'border-ebony hover:border-grey-olive'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                        checked ? 'border-dry-sage bg-dry-sage' : 'border-grey-olive/50'
+                      }`}>
+                        {checked && (
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+                            <path d="M5 12l5 5L20 7" stroke="#040711" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="flex-1 text-small text-cornsilk/90">{addon.name}</span>
+                      <span className="text-caption text-dry-sage/70 shrink-0">{addon.price}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
 
@@ -683,10 +673,16 @@ function ContactOnboardingInner() {
           <div key="step-3-diensten" className={`space-y-6 ${direction === 'forward' ? 'animate-slide-in-right' : 'animate-slide-in-left'}`}>
             <div className="p-4 rounded-md border border-ebony bg-ink/50 space-y-3">
               <p className="text-small text-grey-olive">
-                <span className="text-dry-sage">Diensten:</span>{' '}
-                {selectedServices.map((s) => SERVICE_OPTIONS.find((o) => o.id === s)?.label ?? s).join(', ')}
-                {isCombi && ' (combipakket)'}
+                <span className="text-dry-sage">Pakket:</span>{' '}
+                {selectedPackageData
+                  ? `${selectedPackageData.name} (\u20ac${selectedPackageData.price}/mnd)`
+                  : '-'}
               </p>
+              {selectedAddons.length > 0 && (
+                <p className="text-small text-grey-olive">
+                  <span className="text-dry-sage">Add-ons:</span> {selectedAddons.join(', ')}
+                </p>
+              )}
               <p className="text-small text-grey-olive">
                 <span className="text-dry-sage">Naam:</span> {formData.name}
               </p>
@@ -767,7 +763,7 @@ function ContactOnboardingInner() {
               onClick={handleNext}
               disabled={
                 (mode === 'project' && step === 1 && (projectTypes.length === 0 || (projectTypes.includes('other') && otherText.trim().length < 2))) ||
-                (mode === 'diensten' && step === 1 && selectedServices.length === 0)
+                (mode === 'diensten' && step === 1 && !selectedPackage)
               }
               className="inline-flex items-center justify-center min-h-[44px] px-6 py-3 bg-dry-sage text-ink font-medium rounded-md hover:bg-cornsilk disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
