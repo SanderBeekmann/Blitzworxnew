@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { TitleReveal } from '@/components/animations/TitleReveal';
 import { MagicText } from '@/components/ui/MagicText';
@@ -51,13 +50,16 @@ function MarqueeRow({ photos, direction }: { photos: Photo[]; direction: 'left' 
                 key={`${copy}-${i}`}
                 className="relative shrink-0 w-56 md:w-72 aspect-[4/5] bg-ebony/15 overflow-hidden rounded-sm mr-4"
               >
-                <Image
+                {/* Plain <img> avoids the per-image IntersectionObserver Next/Image attaches.
+                    The marquee moves 69 nodes continuously; observers thrash otherwise. */}
+                <img
                   src={photo.src}
-                  alt={photo.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 448px, 576px"
-                  quality={85}
+                  alt={copy === 0 ? photo.alt : ''}
+                  aria-hidden={copy !== 0}
+                  loading={copy === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover"
+                  draggable={false}
                 />
               </div>
             ))}

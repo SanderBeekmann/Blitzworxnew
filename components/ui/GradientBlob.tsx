@@ -9,10 +9,15 @@ interface GradientBlobProps {
 export function GradientBlob({ className = '', duration = 20, delay = 0 }: GradientBlobProps) {
   return (
     <div
-      className={`absolute rounded-full blur-3xl pointer-events-none select-none ${className}`}
+      className={`absolute rounded-full pointer-events-none select-none ${className}`}
       style={{
-        background: 'radial-gradient(ellipse at center, var(--ebony), transparent 80%)',
+        // Bake the "blur" into the gradient stops instead of filter: blur(48px).
+        // filter: blur repaints the whole element every frame during scroll/animation
+        // and was the primary cause of jank around the marquee.
+        background:
+          'radial-gradient(ellipse at center, var(--ebony) 0%, color-mix(in srgb, var(--ebony) 50%, transparent) 40%, transparent 80%)',
         animation: `blob-drift ${duration}s ease-in-out ${delay}s infinite alternate`,
+        willChange: 'transform',
       }}
       aria-hidden
     />

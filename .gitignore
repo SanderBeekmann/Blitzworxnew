@@ -33,3 +33,9 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Local-only image backups (not shipped)
+public/assets/images/photos/_original_backup/

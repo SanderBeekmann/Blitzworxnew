@@ -254,9 +254,23 @@ export function HowItWorxSection() {
     }
 
     let rafId: number | null = null;
+    let isInRange = false;
     const totalScroll = track.scrollWidth - window.innerWidth;
 
+    // Only run the expensive per-frame work when the wrapper is near the viewport.
+    // Without this, the scroll handler does getBoundingClientRect + style writes
+    // on every scroll event for the entire page — blocking the main thread even
+    // when the user is reading sections far below.
+    const io = new IntersectionObserver(
+      (entries) => {
+        isInRange = entries[0]?.isIntersecting ?? false;
+      },
+      { rootMargin: '200px 0px 200px 0px' },
+    );
+    io.observe(wrapper);
+
     const onScroll = () => {
+      if (!isInRange) return;
       if (rafId !== null) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
@@ -315,6 +329,7 @@ export function HowItWorxSection() {
     window.addEventListener('resize', onScroll);
 
     return () => {
+      io.disconnect();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);

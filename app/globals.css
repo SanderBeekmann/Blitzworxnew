@@ -249,10 +249,16 @@
 
 .animate-marquee-left {
   animation: marquee-left 48s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .animate-marquee-right {
   animation: marquee-right 43s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
