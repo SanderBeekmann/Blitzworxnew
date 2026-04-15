@@ -28,13 +28,16 @@ export async function GET(request: Request) {
   // Only pick up approved emails that have never been sent.
   // sent_at IS NULL prevents picking up rows that succeeded at Resend but
   // failed to update the DB row afterward.
+  // scheduled_send_at NULL is treated as "send ASAP" - older rows created
+  // before the generate route started setting a schedule, or rows from the
+  // output-router approval flow which does not schedule.
   const { data: dueEmails, error: queryErr } = await supabase
     .from('sequence_emails')
     .select('id, sequence_id, step, subject, body_html, body_text, scheduled_send_at')
     .eq('status', 'approved')
     .is('sent_at', null)
-    .lte('scheduled_send_at', nowIso)
-    .order('scheduled_send_at', { ascending: true })
+    .or(`scheduled_send_at.is.null,scheduled_send_at.lte.${nowIso}`)
+    .order('scheduled_send_at', { ascending: true, nullsFirst: true })
     .limit(BATCH_SIZE);
 
   if (queryErr) {
