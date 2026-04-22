@@ -4,10 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/admin/leads', label: 'Leads' },
-  { href: '/admin/klanten', label: 'Klanten' },
   { href: '/admin/podcasts', label: 'Podcasts' },
-  { href: '/admin/agenda', label: 'Agenda' },
 ];
 
 export default function AdminShell({
@@ -27,7 +24,7 @@ export default function AdminShell({
       <header className="sticky top-0 z-10 border-b border-[#545c52] bg-[#040711]/95 backdrop-blur-sm">
         <div className="container-narrow flex items-center justify-between h-14 px-4 sm:px-6">
           <Link
-            href="/admin/leads"
+            href="/admin/podcasts"
             className="text-lg font-semibold text-[#fefadc] hover:text-[#cacaaa] transition-colors"
           >
             Blitzworx Admin
