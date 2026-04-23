@@ -29,16 +29,20 @@ export async function GET(request: Request) {
   const bookedSet = new Set<string>();
   if (supabase) {
     try {
-      const { data: bookedSlots, error } = await supabase
-        .from('leads')
-        .select('preferred_date, preferred_time')
-        .not('preferred_date', 'is', null)
-        .not('preferred_time', 'is', null);
+      const fromKey = formatDateKey(startDate);
+      const toKey = formatDateKey(endDate);
+      const { data: events, error } = await supabase
+        .from('calendar_events')
+        .select('datum, start_tijd, status')
+        .gte('datum', fromKey)
+        .lte('datum', toKey)
+        .not('status', 'eq', 'geannuleerd');
 
-      if (!error && bookedSlots) {
-        for (const row of bookedSlots) {
-          if (row.preferred_date && row.preferred_time) {
-            bookedSet.add(`${row.preferred_date}T${row.preferred_time}`);
+      if (!error && events) {
+        for (const row of events) {
+          if (row.datum && row.start_tijd) {
+            const time = String(row.start_tijd).slice(0, 5);
+            bookedSet.add(`${row.datum}T${time}`);
           }
         }
       }
@@ -48,7 +52,6 @@ export async function GET(request: Request) {
   }
 
   try {
-
     const result: Record<string, string[]> = {};
     const daysCount = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     const dates = getDateRange(Math.max(1, daysCount), startDate);
