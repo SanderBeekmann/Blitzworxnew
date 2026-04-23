@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FadeIn } from '@/components/animations/FadeIn';
 import { MagicText } from '@/components/ui/MagicText';
 import { TitleReveal } from '@/components/animations/TitleReveal';
@@ -9,6 +9,9 @@ import { PackageCard } from './maintenance/PackageCard';
 import { CompareModal } from './maintenance/CompareModal';
 import { AddonsModal } from './maintenance/AddonsModal';
 import { packages } from './maintenance/packages';
+
+const AUTO_ADVANCE_MS = 5000;
+const SLIDE_DURATION = 0.7;
 
 type Variant = 'homepage' | 'full';
 
@@ -114,10 +117,8 @@ interface VariantProps {
 function FullVariant({ onOpenCompare, onOpenAddons }: VariantProps) {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
-        {packages.map((pkg) => (
-          <PackageCard key={pkg.id} pkg={pkg} />
-        ))}
+      <div className="maintenance-animate opacity-0 motion-reduce:opacity-100">
+        <PackageSlideshow />
       </div>
 
       <FadeIn delay={0.2}>
@@ -149,6 +150,217 @@ function FullVariant({ onOpenCompare, onOpenAddons }: VariantProps) {
         </div>
       </FadeIn>
     </>
+  );
+}
+
+function PackageSlideshow() {
+  const [index, setIndex] = useState(0);
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  const directionRef = useRef<1 | -1>(1);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const gsapRef = useRef<typeof import('gsap').gsap | null>(null);
+  const initializedRef = useRef(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const computePosition = useCallback((i: number, current: number) => {
+    const n = packages.length;
+    let offset = i - current;
+    if (Math.abs(offset) > n / 2) {
+      offset = offset > 0 ? offset - n : offset + n;
+    }
+
+    if (offset === 0) {
+      return {
+        xPercent: 0,
+        scale: 1,
+        opacity: 1,
+        filter: 'blur(0px)',
+        zIndex: 30,
+        pointerEvents: 'auto' as const,
+      };
+    }
+    if (offset === -1 || offset === 1) {
+      return {
+        xPercent: offset * 46,
+        scale: 0.78,
+        opacity: 0.45,
+        filter: 'blur(6px)',
+        zIndex: 20,
+        pointerEvents: 'none' as const,
+      };
+    }
+    return {
+      xPercent: offset * 70,
+      scale: 0.55,
+      opacity: 0,
+      filter: 'blur(10px)',
+      zIndex: 10,
+      pointerEvents: 'none' as const,
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const apply = (gsap: typeof import('gsap').gsap, animated: boolean) => {
+      if (cancelled) return;
+      const dir = directionRef.current;
+      slideRefs.current.forEach((el, i) => {
+        if (!el) return;
+        const props = computePosition(i, index);
+        if (!animated) {
+          gsap.set(el, props);
+          return;
+        }
+        gsap.killTweensOf(el);
+        const currentX = Number(gsap.getProperty(el, 'xPercent')) || 0;
+        const wraps =
+          (dir === 1 && currentX < 0 && props.xPercent > 0) ||
+          (dir === -1 && currentX > 0 && props.xPercent < 0);
+        if (wraps) {
+          const exitSide = currentX < 0 ? -120 : 120;
+          const half = SLIDE_DURATION / 2;
+          const tl = gsap.timeline();
+          tl.to(el, {
+            xPercent: exitSide,
+            opacity: 0,
+            scale: 0.55,
+            filter: 'blur(10px)',
+            duration: half,
+            ease: 'power2.in',
+          });
+          tl.set(el, { xPercent: -exitSide });
+          tl.to(el, { ...props, duration: half, ease: 'power2.out' });
+        } else {
+          gsap.to(el, { ...props, duration: SLIDE_DURATION, ease: 'power3.inOut' });
+        }
+      });
+    };
+
+    if (gsapRef.current) {
+      apply(gsapRef.current, !prefersReduced && initializedRef.current);
+      initializedRef.current = true;
+    } else {
+      import('gsap').then(({ gsap }) => {
+        if (cancelled) return;
+        gsapRef.current = gsap;
+        apply(gsap, false);
+        initializedRef.current = true;
+      });
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [index, prefersReduced, computePosition]);
+
+  const go = useCallback((dir: 1 | -1) => {
+    directionRef.current = dir;
+    setIndex((prev) => (prev + dir + packages.length) % packages.length);
+  }, []);
+
+  const jumpTo = useCallback((target: number) => {
+    setIndex((prev) => {
+      if (prev === target) return prev;
+      directionRef.current = target > prev ? 1 : -1;
+      return target;
+    });
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      directionRef.current = 1;
+      setIndex((prev) => (prev + 1) % packages.length);
+    }, AUTO_ADVANCE_MS);
+    return () => window.clearInterval(timer);
+  }, [index]);
+
+  return (
+    <div className="relative mx-auto max-w-5xl" aria-roledescription="carousel">
+      <div
+        className="mb-8 flex items-center justify-center gap-3"
+        role="tablist"
+        aria-label="Pakket selectie"
+      >
+        {packages.map((pkg, i) => {
+          const active = i === index;
+          return (
+            <button
+              key={pkg.id}
+              type="button"
+              onClick={() => jumpTo(i)}
+              role="tab"
+              aria-selected={active}
+              aria-label={`Toon pakket ${pkg.name}`}
+              className={`rounded-full transition-all duration-500 ${
+                active
+                  ? 'w-8 h-2.5 bg-cornsilk shadow-[0_0_12px_rgba(254,250,220,0.35)]'
+                  : 'w-2.5 h-2.5 bg-[rgba(254,250,220,0.35)] hover:bg-[rgba(254,250,220,0.7)]'
+              }`}
+            />
+          );
+        })}
+        <span className="sr-only" aria-live="polite">
+          Pakket {index + 1} van {packages.length}
+        </span>
+      </div>
+
+      <div className="relative grid grid-cols-1 py-10 md:py-12">
+        {packages.map((pkg, i) => {
+          const isActive = i === index;
+          return (
+            <div
+              key={pkg.id}
+              ref={(el) => {
+                slideRefs.current[i] = el;
+              }}
+              className="col-start-1 row-start-1 flex justify-center will-change-transform"
+              style={{ opacity: i === 0 ? 1 : 0 }}
+              aria-hidden={!isActive}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} van ${packages.length}: ${pkg.name}`}
+            >
+              <PackageCard pkg={pkg} />
+            </div>
+          );
+        })}
+      </div>
+
+      <SlideArrow direction="prev" onClick={() => go(-1)} />
+      <SlideArrow direction="next" onClick={() => go(1)} />
+    </div>
+  );
+}
+
+function SlideArrow({ direction, onClick }: { direction: 'prev' | 'next'; onClick: () => void }) {
+  const isPrev = direction === 'prev';
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={isPrev ? 'Vorig pakket' : 'Volgend pakket'}
+      className={`absolute top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-11 h-11 rounded-full border border-white/15 bg-ink/60 backdrop-blur-md text-cornsilk/80 hover:text-cornsilk hover:border-cornsilk/40 hover:bg-ink/80 transition-colors duration-300 ${
+        isPrev ? 'left-2 md:left-6' : 'right-2 md:right-6'
+      }`}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <path
+          d={isPrev ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6'}
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </button>
   );
 }
 

@@ -1,7 +1,7 @@
 export type Feature = string | { text: string; info: string };
 
 export interface Package {
-  id: 'start' | 'groei' | 'schaal';
+  id: 'anker' | 'start' | 'groei' | 'schaal';
   name: string;
   price: number;
   pitch: string;
@@ -12,6 +12,33 @@ export interface Package {
 }
 
 export const packages: Package[] = [
+  {
+    id: 'anker',
+    name: 'Basis',
+    price: 25,
+    pitch: 'Voor een site die gewoon stevig online moet blijven liggen, zonder extra’s. Alleen het noodzakelijke.',
+    features: [
+      {
+        text: 'Hosting',
+        info: 'Je website draait op een beheerde hostingomgeving met SSL-certificaat en automatische updates van de serveromgeving.',
+      },
+      {
+        text: 'Uptime garantie met 24/7 monitoring',
+        info: 'Actieve bewaking van je site rond de klok. Gaat je site offline, dan krijg ik direct een melding en pak ik het op.',
+      },
+      {
+        text: 'Bugfixes inbegrepen',
+        info: 'Werkt er iets niet zoals het hoort op je bestaande site? Dan los ik het op, zonder losse factuur.',
+      },
+      {
+        text: '30 minuten contentaanpassingen per maand',
+        info: 'Kleine tekst- en beeldwijzigingen op bestaande pagina’s, zoals een nieuwe openingstijd, een team-update of een andere afbeelding.',
+      },
+      'Support per e-mail binnen 3 werkdagen',
+    ],
+    ideal: '“Klaar-is-klaar” sites die nooit meer veranderen: een portfolio, digitaal visitekaartje of een tijdelijke projectpagina.',
+    highlighted: false,
+  },
   {
     id: 'start',
     name: 'Start',
@@ -35,7 +62,7 @@ export const packages: Package[] = [
       },
       'Support per e-mail binnen 2 werkdagen',
     ],
-    ideal: 'Bedrijven met een vaste site die stabiel en veilig moet blijven draaien.',
+    ideal: 'Bedrijfssites die af en toe een update nodig hebben: nieuwe openingstijden, een aangepaste prijs, een verse teamfoto of een kleine tekstwijziging.',
     highlighted: false,
   },
   {
@@ -105,20 +132,21 @@ export const packages: Package[] = [
 
 export interface ComparisonRow {
   label: string;
-  values: [string, string, string];
+  values: [string, string, string, string];
 }
 
 export const comparisonRows: ComparisonRow[] = [
-  { label: 'Prijs per maand', values: ['€49', '€129', '€279'] },
-  { label: 'Hosting en security', values: ['Ja', 'Ja', 'Ja'] },
-  { label: 'Dagelijkse backups', values: ['Ja', 'Ja', 'Ja'] },
-  { label: 'Uptime monitoring', values: ['Ja', 'Ja', 'Ja'] },
-  { label: 'Wijzigingen per maand', values: ['1 uur', '3 uur', '6 uur'] },
-  { label: 'SEO-artikelen per maand', values: ['-', '2', '3'] },
-  { label: 'Maandelijkse rapportage', values: ['-', 'Ja', 'Ja + advies'] },
-  { label: 'Database', values: ['Gratis versie', 'Basis Supabase', 'Management'] },
-  { label: 'Strategiegesprek', values: ['-', '-', 'Per kwartaal'] },
-  { label: 'Max support-responstijd', values: ['2 werkdagen', '1 werkdag', '4 werkuren'] },
+  { label: 'Prijs per maand', values: ['€25', '€49', '€129', '€279'] },
+  { label: 'Hosting en security', values: ['Ja', 'Ja', 'Ja', 'Ja'] },
+  { label: 'Uptime monitoring', values: ['Ja', 'Ja', 'Ja', 'Ja'] },
+  { label: 'Bugfixes inbegrepen', values: ['Ja', 'Ja', 'Ja', 'Ja'] },
+  { label: 'Dagelijkse backups', values: ['-', 'Ja', 'Ja', 'Ja'] },
+  { label: 'Wijzigingen per maand', values: ['30 min', '1 uur', '3 uur', '6 uur'] },
+  { label: 'SEO-artikelen per maand', values: ['-', '-', '2', '3'] },
+  { label: 'Maandelijkse rapportage', values: ['-', '-', 'Ja', 'Ja + advies'] },
+  { label: 'Database', values: ['-', 'Gratis versie', 'Basis Supabase', 'Management'] },
+  { label: 'Strategiegesprek', values: ['-', '-', '-', 'Per kwartaal'] },
+  { label: 'Max support-responstijd', values: ['3 werkdagen', '2 werkdagen', '1 werkdag', '4 werkuren'] },
 ];
 
 export interface Addon {
