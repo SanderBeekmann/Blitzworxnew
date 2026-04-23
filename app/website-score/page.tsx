@@ -43,7 +43,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'Hoe vaak kan ik mijn website testen?',
     answer:
-      'Je kunt je website zo vaak testen als je wilt. Resultaten worden 5 minuten gecached, dus als je net wijzigingen hebt doorgevoerd, wacht dan even voordat je opnieuw test.',
+      'Resultaten per website worden 30 dagen gecached zodat je altijd dezelfde score ziet. Na die periode wordt een verse analyse gedraaid. Heb je net wijzigingen doorgevoerd? Neem contact op, dan vernieuwen we de scan handmatig.',
   },
 ];
 

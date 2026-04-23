@@ -55,20 +55,20 @@ export function PackageCard({ pkg }: PackageCardProps) {
   const isHighlighted = pkg.highlighted;
 
   return (
-    <div className="maintenance-animate opacity-0 motion-reduce:opacity-100 group relative h-full flex">
+    <div className="group relative flex w-full max-w-[22rem] md:max-w-[24rem] mx-auto">
       {isHighlighted && (
         <div
-          className="absolute -inset-10 blur-3xl pointer-events-none"
+          className="absolute -inset-8 blur-3xl pointer-events-none"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 50%, rgba(254,250,220,0.28) 0%, rgba(254,250,220,0.12) 40%, transparent 75%)',
+              'radial-gradient(ellipse at 50% 50%, rgba(254,250,220,0.22) 0%, rgba(254,250,220,0.09) 40%, transparent 75%)',
           }}
           aria-hidden
         />
       )}
 
       <div
-        className={`relative flex-1 flex flex-col rounded-lg p-8 lg:p-10 border backdrop-blur-xl transition-colors duration-500 ${
+        className={`relative flex-1 flex flex-col rounded-lg p-6 border backdrop-blur-xl transition-colors duration-500 ${
           isHighlighted
             ? 'border-cornsilk/25 group-hover:border-cornsilk/40'
             : 'border-white/[0.08] group-hover:border-white/[0.15]'
@@ -80,41 +80,41 @@ export function PackageCard({ pkg }: PackageCardProps) {
         }}
       >
         {pkg.badge && (
-          <span className="absolute top-5 right-5 lg:top-6 lg:right-6 inline-flex items-center px-2.5 py-1 rounded-full bg-cornsilk text-ink text-caption font-mono tracking-[0.15em] uppercase font-medium shadow-[0_4px_20px_rgba(254,250,220,0.35)]">
+          <span className="absolute top-4 right-4 inline-flex items-center px-2 py-0.5 rounded-full bg-cornsilk text-ink text-[0.6rem] font-mono tracking-[0.12em] uppercase font-medium shadow-[0_4px_20px_rgba(254,250,220,0.35)]">
             {pkg.badge}
           </span>
         )}
 
-        <span className="inline-flex items-center gap-2 text-caption font-mono tracking-[0.3em] uppercase text-cornsilk/70 mb-5">
+        <span className="inline-flex items-center gap-2 text-caption font-mono tracking-[0.3em] uppercase text-cornsilk/70 mb-4">
           {pkg.name}
         </span>
 
-        <div className="flex items-baseline gap-2 mb-3">
-          <span className="text-body text-grey-olive/50">&euro;</span>
-          <span className="text-[3rem] md:text-[3.25rem] font-bold text-cornsilk leading-none tracking-tight">
+        <div className="flex items-baseline gap-1.5 mb-2">
+          <span className="text-small text-grey-olive/50">&euro;</span>
+          <span className="text-[2.25rem] font-bold text-cornsilk leading-none tracking-tight">
             {pkg.price}
           </span>
-          <span className="text-body text-grey-olive/50">/maand</span>
+          <span className="text-small text-grey-olive/50">/maand</span>
         </div>
 
-        <p className="text-small text-dry-sage/70 leading-relaxed mb-6 min-h-[3rem]">
+        <p className="text-small text-dry-sage/70 leading-relaxed mb-5 min-h-[3rem]">
           {pkg.pitch}
         </p>
 
-        <div className="w-full h-px bg-white/10 mb-6" aria-hidden />
+        <div className="w-full h-px bg-white/10 mb-5" aria-hidden />
 
-        <ul className="space-y-3 mb-8 flex-1">
+        <ul className="space-y-2.5 mb-6 flex-1">
           {pkg.features.map((feature) => {
             const key = typeof feature === 'string' ? feature : feature.text;
             return <FeatureItem key={key} feature={feature} />;
           })}
         </ul>
 
-        <div className="mb-6">
+        <div className="mb-5">
           <span className="block text-caption font-mono tracking-[0.15em] uppercase text-grey-olive/50 mb-1">
             Ideaal voor
           </span>
-          <span className="text-small text-dry-sage/60 italic">{pkg.ideal}</span>
+          <span className="text-caption text-dry-sage/60 italic leading-snug">{pkg.ideal}</span>
         </div>
 
         <Button

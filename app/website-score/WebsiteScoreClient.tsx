@@ -116,6 +116,31 @@ export function WebsiteScoreClient() {
     };
   }, []);
 
+  const showResults = useCallback((result: ScoreResponse) => {
+    setResults(result);
+    setPhase('results');
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+  }, []);
+
+  const fetchResultOnce = useCallback(async (id: string): Promise<boolean> => {
+    const res = await fetch(`/api/tools/website-score?jobId=${id}`);
+    const data = await res.json();
+    if (data.status === 'completed' && data.result) {
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+      showResults(data.result);
+      return true;
+    }
+    if (data.status === 'failed') {
+      if (intervalRef.current) clearTimeout(intervalRef.current);
+      setError(data.error || 'Analyse mislukt. Probeer het opnieuw.');
+      setPhase('input');
+      return true;
+    }
+    return false;
+  }, [showResults]);
+
   const pollForResults = useCallback((id: string, attempt = 0) => {
     if (attempt >= POLL_MAX_ATTEMPTS) {
       if (intervalRef.current) clearTimeout(intervalRef.current);
@@ -126,34 +151,13 @@ export function WebsiteScoreClient() {
 
     pollRef.current = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/tools/website-score?jobId=${id}`);
-        const data = await res.json();
-
-        if (data.status === 'completed' && data.result) {
-          if (intervalRef.current) clearTimeout(intervalRef.current);
-          setResults(data.result);
-          setPhase('results');
-          setTimeout(() => {
-            resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 200);
-          return;
-        }
-
-        if (data.status === 'failed') {
-          if (intervalRef.current) clearTimeout(intervalRef.current);
-          setError(data.error || 'Analyse mislukt. Probeer het opnieuw.');
-          setPhase('input');
-          return;
-        }
-
-        // Still pending/processing - poll again
-        pollForResults(id, attempt + 1);
+        const done = await fetchResultOnce(id);
+        if (!done) pollForResults(id, attempt + 1);
       } catch {
-        // Network error - retry
         pollForResults(id, attempt + 1);
       }
     }, POLL_INTERVAL_MS);
-  }, []);
+  }, [fetchResultOnce]);
 
   async function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
@@ -196,8 +200,17 @@ export function WebsiteScoreClient() {
         return;
       }
 
-      // Got a jobId - start polling
+      // Got a jobId
       setJobId(data.jobId);
+
+      // Cache hit: result already available
+      if (data.status === 'completed') {
+        setLoadingStep(LOADING_STEPS.length - 1);
+        await fetchResultOnce(data.jobId);
+        return;
+      }
+
+      // Fresh job - start polling
       pollForResults(data.jobId);
     } catch {
       if (intervalRef.current) clearTimeout(intervalRef.current);
@@ -206,7 +219,7 @@ export function WebsiteScoreClient() {
     }
   }
 
-  function handleEmailSubmit(e: FormEvent) {
+  async function handleEmailSubmit(e: FormEvent) {
     e.preventDefault();
     setEmailError('');
 
@@ -215,16 +228,27 @@ export function WebsiteScoreClient() {
       return;
     }
 
-    setIsUnlocked(true);
+    setIsSubmittingEmail(true);
+    try {
+      const res = await fetch('/api/tools/website-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, email, newsletterOptIn, jobId }),
+      });
+      const data = await res.json();
 
-    // Trigger email send + lead enrollment via the unlock flow
-    fetch('/api/tools/website-score', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, email, newsletterOptIn, jobId }),
-    }).catch((err) => {
-      console.error('Email delivery failed:', err);
-    });
+      if (!res.ok || !data.ok) {
+        setEmailError(data.error || 'Ontgrendelen mislukt. Probeer het opnieuw.');
+        return;
+      }
+
+      if (data.result) setResults(data.result);
+      setIsUnlocked(true);
+    } catch {
+      setEmailError('Verbindingsfout. Probeer het opnieuw.');
+    } finally {
+      setIsSubmittingEmail(false);
+    }
   }
 
   function handleReset() {

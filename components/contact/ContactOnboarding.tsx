@@ -18,7 +18,7 @@ const PROJECT_TYPES = [
 ] as const;
 
 type PackageId = Package['id'];
-const VALID_PACKAGE_IDS: PackageId[] = ['start', 'groei', 'schaal'];
+const VALID_PACKAGE_IDS: PackageId[] = ['anker', 'start', 'groei', 'schaal'];
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -147,6 +147,7 @@ function ContactOnboardingInner() {
     if (mode === 'project' && step === 1 && projectTypes.length === 0) return;
     if (mode === 'project' && step === 1 && projectTypes.includes('other') && otherText.trim().length < 2) return;
     if (mode === 'diensten' && step === 1 && !validateStep()) return;
+    if (mode === 'diensten' && step === 1 && !selectedPackage) return;
     if (mode === 'diensten' && step === 1 && !selectedPackage) return;
     if (step === 2 && !validateStep()) return;
     if (mode === 'project' && (step === 3 || step === 4) && !validateStep()) return;
@@ -782,6 +783,14 @@ function ContactOnboardingInner() {
       </form>
       </div>
     </div>
+  );
+}
+
+export function ContactOnboarding() {
+  return (
+    <Suspense fallback={null}>
+      <ContactOnboardingInner />
+    </Suspense>
   );
 }
 

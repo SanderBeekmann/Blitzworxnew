@@ -14,13 +14,21 @@ const MB_API_TOKEN = process.env.MONEYBIRD_API_TOKEN;
 const MB_ADMIN_ID = process.env.MONEYBIRD_ADMINISTRATION_ID;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://blitzworx.nl';
 
+const CACHE_TTL_DAYS = 30;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX_JOBS = 3;
+const CLIENT_COOKIE_NAME = 'bw_client';
+const CLIENT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
 function normalizeUrl(raw: string): string {
   let url = raw.trim();
   if (!/^https?:\/\//i.test(url)) {
     url = `https://${url}`;
   }
   const parsed = new URL(url);
-  return `${parsed.protocol}//${parsed.host}${parsed.pathname}`.replace(/\/$/, '');
+  const host = parsed.host.toLowerCase().replace(/^www\./, '');
+  const pathname = parsed.pathname.replace(/\/$/, '') || '';
+  return `${parsed.protocol}//${host}${pathname}`;
 }
 
 function isBlockedDomain(url: string): boolean {
@@ -31,7 +39,50 @@ function isBlockedDomain(url: string): boolean {
   return false;
 }
 
-// ── GET: Poll job status ──
+function getClientIp(request: Request): string | null {
+  const fwd = request.headers.get('x-forwarded-for');
+  if (fwd) return fwd.split(',')[0].trim() || null;
+  return request.headers.get('x-real-ip') || null;
+}
+
+function readClientCookie(request: Request): string | null {
+  const header = request.headers.get('cookie') || '';
+  const match = header.match(new RegExp(`(?:^|;\\s*)${CLIENT_COOKIE_NAME}=([A-Za-z0-9-]+)`));
+  return match ? match[1] : null;
+}
+
+function buildClientCookie(clientId: string): string {
+  return `${CLIENT_COOKIE_NAME}=${clientId}; Path=/; Max-Age=${CLIENT_COOKIE_MAX_AGE}; SameSite=Lax; Secure; HttpOnly`;
+}
+
+function firstSentence(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+  const match = trimmed.match(/^[\s\S]*?[.!?](?=\s|$)/);
+  return (match ? match[0] : trimmed.split(/\n/)[0] || trimmed).trim();
+}
+
+function toPreview(full: any) {
+  if (!full) return null;
+  const summary: string = full.aiAnalysis?.executiveSummary || '';
+  return {
+    url: full.url,
+    overall: full.overall,
+    scannedAt: full.scannedAt,
+    categories: (full.categories || []).map((c: any) => ({
+      id: c.id,
+      label: c.label,
+      score: c.score,
+      advice: '',
+      issues: [],
+    })),
+    aiAnalysis: summary
+      ? { executiveSummary: firstSentence(summary), contentFindings: [] }
+      : null,
+  };
+}
+
+// ── GET: Poll job status (returns preview-only until unlocked) ──
 export async function GET(request: NextRequest) {
   const jobId = request.nextUrl.searchParams.get('jobId');
 
@@ -54,7 +105,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (job.status === 'completed') {
-    return NextResponse.json({ status: 'completed', result: job.result });
+    return NextResponse.json({ status: 'completed', result: toPreview(job.result) });
   }
 
   if (job.status === 'failed') {
@@ -71,7 +122,7 @@ export async function POST(request: Request) {
     const rawUrl = body.url;
     const email = body.email?.trim() || null;
     const newsletterOptIn = body.newsletterOptIn === true;
-    const consentIp = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || null;
+    const ip = getClientIp(request);
 
     if (!rawUrl?.trim()) {
       return NextResponse.json({ error: 'Vul een URL in.' }, { status: 400 });
@@ -90,7 +141,7 @@ export async function POST(request: Request) {
 
     // ── Email unlock flow (results already exist) ──
     if (email && body.jobId) {
-      return handleEmailUnlock(body.jobId, email, url, newsletterOptIn, consentIp);
+      return handleEmailUnlock(body.jobId, email, url, newsletterOptIn, ip);
     }
 
     // ── Start new analysis job ──
@@ -98,10 +149,64 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Service niet beschikbaar.' }, { status: 503 });
     }
 
+    // Ensure a stable per-browser identifier (cookie)
+    let clientId = readClientCookie(request);
+    let setCookieHeader: string | null = null;
+    if (!clientId) {
+      clientId = crypto.randomUUID();
+      setCookieHeader = buildClientCookie(clientId);
+    }
+
+    // ── URL cache: reuse recent completed job for this URL ──
+    const cacheCutoff = new Date(Date.now() - CACHE_TTL_DAYS * 24 * 60 * 60 * 1000).toISOString();
+    const { data: cached } = await supabase
+      .from('website_score_jobs')
+      .select('id')
+      .eq('url', url)
+      .eq('status', 'completed')
+      .gt('created_at', cacheCutoff)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (cached?.id) {
+      const res = NextResponse.json({ jobId: cached.id, status: 'completed' });
+      if (setCookieHeader) res.headers.set('Set-Cookie', setCookieHeader);
+      return res;
+    }
+
+    // ── Rate limit: cap new jobs per IP and per client cookie in the window ──
+    const rateLimitCutoff = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+    const counts = await Promise.all([
+      ip
+        ? supabase
+            .from('website_score_jobs')
+            .select('id', { count: 'exact', head: true })
+            .eq('ip_address', ip)
+            .gt('created_at', rateLimitCutoff)
+        : Promise.resolve({ count: 0 } as any),
+      supabase
+        .from('website_score_jobs')
+        .select('id', { count: 'exact', head: true })
+        .eq('client_id', clientId)
+        .gt('created_at', rateLimitCutoff),
+    ]);
+    const overLimit = counts.some((c: any) => (c?.count ?? 0) >= RATE_LIMIT_MAX_JOBS);
+    if (overLimit) {
+      const res = NextResponse.json(
+        {
+          error: 'Je hebt onlangs meerdere websites getest. Wacht een paar minuten voor je opnieuw analyseert.',
+        },
+        { status: 429 }
+      );
+      if (setCookieHeader) res.headers.set('Set-Cookie', setCookieHeader);
+      return res;
+    }
+
     // Create job record
     const { data: job, error: insertError } = await supabase
       .from('website_score_jobs')
-      .insert({ url, status: 'pending' })
+      .insert({ url, status: 'pending', ip_address: ip, client_id: clientId })
       .select('id')
       .single();
 
@@ -128,7 +233,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Kon analyse niet starten.' }, { status: 500 });
     }
 
-    return NextResponse.json({ jobId: job.id, status: 'pending' });
+    const res = NextResponse.json({ jobId: job.id, status: 'pending' });
+    if (setCookieHeader) res.headers.set('Set-Cookie', setCookieHeader);
+    return res;
   } catch (err) {
     console.error('Website score API error:', err);
     return NextResponse.json({ error: 'Er ging iets mis. Probeer het later opnieuw.' }, { status: 500 });
@@ -160,6 +267,12 @@ async function handleEmailUnlock(
   }
 
   const response = job.result;
+
+  // Mark job as unlocked (stores the email that unlocked, and time)
+  await supabase
+    .from('website_score_jobs')
+    .update({ email, unlocked_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .eq('id', jobId);
 
   // Store in website_scans
   let scanId: string | null = null;
@@ -220,7 +333,7 @@ async function handleEmailUnlock(
     console.error('CRM lead creation failed:', err);
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, result: response });
 }
 
 // ── Email rendering ──

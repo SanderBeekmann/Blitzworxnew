@@ -81,6 +81,14 @@ function clampScore(value: number): number {
   return Math.round(Math.min(10, Math.max(0, value)) * 10) / 10;
 }
 
+// Map a CrUX overall_category to a 0-10 score. Deterministic field data.
+function cruxCategoryToScore(category: string | undefined): number | null {
+  if (category === 'FAST') return 9;
+  if (category === 'AVERAGE') return 6;
+  if (category === 'SLOW') return 3;
+  return null;
+}
+
 const CATEGORY_TO_LIGHTHOUSE: Record<string, string[]> = {
   snelheid: ['performance'],
   seo: ['seo'],
@@ -118,7 +126,13 @@ async function fetchPageSpeed(url: string, apiKey: string): Promise<any | null> 
 }
 
 function extractScores(data: any) {
-  const speed = clampScore((data.lighthouseResult?.categories?.performance?.score ?? 0) * 10);
+  // Snelheid: prefer CrUX field data (deterministic 28-day window). Fall back to Lighthouse lab score.
+  const lhSpeed = clampScore((data.lighthouseResult?.categories?.performance?.score ?? 0) * 10);
+  const cruxCategory =
+    data.loadingExperience?.overall_category || data.originLoadingExperience?.overall_category;
+  const cruxScore = cruxCategoryToScore(cruxCategory);
+  const speed = cruxScore !== null ? clampScore(cruxScore * 0.6 + lhSpeed * 0.4) : lhSpeed;
+
   const seo = clampScore((data.lighthouseResult?.categories?.seo?.score ?? 0) * 10);
   const accessibility = clampScore((data.lighthouseResult?.categories?.accessibility?.score ?? 0) * 10);
 
@@ -356,7 +370,7 @@ Schrijf in het Nederlands, spreek de ondernemer aan met "je". Alleen JSON, geen 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 4096,
-      temperature: 0.3,
+      temperature: 0,
       messages: [{ role: 'user', content: prompt }],
     });
 
@@ -434,10 +448,11 @@ export async function runFullAnalysis(url: string): Promise<AnalysisResult> {
   const ownSeo = seoCheck ? (seoCheck.passedCount / seoCheck.totalChecks) * 10 : lhScores.seo;
   const ownSec = secCheck ? (secCheck.passedCount / secCheck.totalChecks) * 10 : lhScores.beveiliging;
 
+  // Own checks are deterministic (DOM/header inspection); weight them higher than Lighthouse.
   const scores = {
     ...lhScores,
-    seo: clampScore(lhScores.seo * 0.3 + ownSeo * 0.7),
-    beveiliging: clampScore(lhScores.beveiliging * 0.4 + ownSec * 0.6),
+    seo: clampScore(lhScores.seo * 0.2 + ownSeo * 0.8),
+    beveiliging: clampScore(lhScores.beveiliging * 0.3 + ownSec * 0.7),
   };
 
   const overall = clampScore(scores.snelheid * 0.4 + scores.seo * 0.3 + scores.beveiliging * 0.2 + scores.toegankelijkheid * 0.1);

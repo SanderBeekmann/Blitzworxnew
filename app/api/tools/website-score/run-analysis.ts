@@ -39,8 +39,19 @@ function clampScore(value: number): number {
   return Math.round(Math.min(10, Math.max(0, value)) * 10) / 10;
 }
 
+function cruxCategoryToScore(category: string | undefined): number | null {
+  if (category === 'FAST') return 9;
+  if (category === 'AVERAGE') return 6;
+  if (category === 'SLOW') return 3;
+  return null;
+}
+
 function extractSpeedScore(data: any): number {
-  return clampScore((data.lighthouseResult?.categories?.performance?.score ?? 0) * 10);
+  const lh = clampScore((data.lighthouseResult?.categories?.performance?.score ?? 0) * 10);
+  const cruxCategory =
+    data.loadingExperience?.overall_category || data.originLoadingExperience?.overall_category;
+  const crux = cruxCategoryToScore(cruxCategory);
+  return crux !== null ? clampScore(crux * 0.6 + lh * 0.4) : lh;
 }
 
 function extractSeoScore(data: any): number {
@@ -210,10 +221,11 @@ export async function runFullAnalysis(url: string): Promise<AnalysisResult> {
   const ownSeo = seoCheck ? (seoCheck.passedCount / seoCheck.totalChecks) * 10 : lighthouseScores.seo;
   const ownSec = securityCheck ? (securityCheck.passedCount / securityCheck.totalChecks) * 10 : lighthouseScores.beveiliging;
 
+  // Own checks are deterministic (DOM/header inspection); weight them higher than Lighthouse.
   const scores = {
     ...lighthouseScores,
-    seo: clampScore(lighthouseScores.seo * 0.3 + ownSeo * 0.7),
-    beveiliging: clampScore(lighthouseScores.beveiliging * 0.4 + ownSec * 0.6),
+    seo: clampScore(lighthouseScores.seo * 0.2 + ownSeo * 0.8),
+    beveiliging: clampScore(lighthouseScores.beveiliging * 0.3 + ownSec * 0.7),
   };
 
   const overall = clampScore(

@@ -281,7 +281,7 @@ async function callClaude(prompt: string): Promise<string | null> {
     const response = await client.messages.create({
       model: MODEL_ID,
       max_tokens: 4096,
-      temperature: 0.3,
+      temperature: 0,
       messages: [{ role: 'user', content: prompt }],
     });
 
