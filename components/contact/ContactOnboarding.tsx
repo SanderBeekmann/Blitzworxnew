@@ -793,11 +793,3 @@ export function ContactOnboarding() {
     </Suspense>
   );
 }
-
-export function ContactOnboarding() {
-  return (
-    <Suspense fallback={null}>
-      <ContactOnboardingInner />
-    </Suspense>
-  );
-}
