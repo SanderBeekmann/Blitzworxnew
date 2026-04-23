@@ -285,7 +285,7 @@ function PackageSlideshow() {
   return (
     <div className="relative mx-auto max-w-5xl" aria-roledescription="carousel">
       <div
-        className="mb-8 flex items-center justify-center gap-3"
+        className="mb-8 flex items-center justify-center gap-2"
         role="tablist"
         aria-label="Pakket selectie"
       >
@@ -301,8 +301,8 @@ function PackageSlideshow() {
               aria-label={`Toon pakket ${pkg.name}`}
               className={`rounded-full transition-all duration-500 ${
                 active
-                  ? 'w-8 h-2.5 bg-cornsilk shadow-[0_0_12px_rgba(254,250,220,0.35)]'
-                  : 'w-2.5 h-2.5 bg-[rgba(254,250,220,0.35)] hover:bg-[rgba(254,250,220,0.7)]'
+                  ? 'w-5 h-1.5 bg-cornsilk shadow-[0_0_8px_rgba(254,250,220,0.35)]'
+                  : 'w-1.5 h-1.5 bg-[rgba(254,250,220,0.35)] hover:bg-[rgba(254,250,220,0.7)]'
               }`}
             />
           );
