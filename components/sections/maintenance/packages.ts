@@ -36,7 +36,7 @@ export const packages: Package[] = [
       },
       'Support per e-mail binnen 3 werkdagen',
     ],
-    ideal: '“Klaar-is-klaar” sites die nooit meer veranderen: een portfolio, digitaal visitekaartje of een tijdelijke projectpagina.',
+    ideal: 'Websites die stevig online blijven staan en verder geen aandacht nodig hebben: een portfolio, digitaal visitekaartje of een tijdelijke projectpagina.',
     highlighted: false,
   },
   {
