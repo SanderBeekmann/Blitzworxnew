@@ -2,7 +2,9 @@
 import type { Metadata } from 'next';
 import { gilroy } from '@/app/fonts';
 import './globals.css';
+import { Suspense } from 'react';
 import { SiteShell } from '@/components/layout/SiteShell';
+import { TrackingBeacon } from '@/components/tracking/TrackingBeacon';
 import { siteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -170,6 +172,9 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <Suspense fallback={null}>
+          <TrackingBeacon />
+        </Suspense>
         <SiteShell>{children}</SiteShell>
       </body>
     </html>
