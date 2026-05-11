@@ -16,12 +16,8 @@ export const packages: Package[] = [
     id: 'anker',
     name: 'Basis',
     price: 25,
-    pitch: 'Voor een site die gewoon stevig online moet blijven liggen, zonder extra’s. Alleen het noodzakelijke.',
+    pitch: 'Voor een site die gewoon stevig online moet blijven liggen, zonder extra’s. Alleen het noodzakelijke. Hosting regel je zelf.',
     features: [
-      {
-        text: 'Hosting',
-        info: 'Je website draait op een beheerde hostingomgeving met SSL-certificaat en automatische updates van de serveromgeving.',
-      },
       {
         text: 'Uptime garantie met 24/7 monitoring',
         info: 'Actieve bewaking van je site rond de klok. Gaat je site offline, dan krijg ik direct een melding en pak ik het op.',
@@ -137,7 +133,7 @@ export interface ComparisonRow {
 
 export const comparisonRows: ComparisonRow[] = [
   { label: 'Prijs per maand', values: ['€25', '€49', '€129', '€279'] },
-  { label: 'Hosting en security', values: ['Ja', 'Ja', 'Ja', 'Ja'] },
+  { label: 'Hosting en security', values: ['-', 'Ja', 'Ja', 'Ja'] },
   { label: 'Uptime monitoring', values: ['Ja', 'Ja', 'Ja', 'Ja'] },
   { label: 'Bugfixes inbegrepen', values: ['Ja', 'Ja', 'Ja', 'Ja'] },
   { label: 'Dagelijkse backups', values: ['-', 'Ja', 'Ja', 'Ja'] },
